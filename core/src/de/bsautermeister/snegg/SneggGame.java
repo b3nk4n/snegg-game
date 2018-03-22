@@ -29,4 +29,8 @@ public class SneggGame extends Game {
 		assetManager.dispose();
 		batch.dispose();
 	}
+
+	public AssetManager getAssetManager() {
+		return assetManager;
+	}
 }
