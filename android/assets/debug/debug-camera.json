@@ -1,0 +1,19 @@
+{
+  "maxZoomIn": "0.25",
+  "maxZoomOut": "30",
+  "moveSpeed": "40",
+  "zoomSpeed": "2",
+
+  // move keys
+  "leftKey": "A",
+  "rightKey": "D",
+  "upKey": "W",
+  "downKey": "S",
+
+  // zoom keys
+  "zoomInKey": ",",
+  "zoomOutKey": ".",
+
+  // also backspace
+  "resetKey": "Delete"
+}
