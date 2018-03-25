@@ -4,7 +4,7 @@
   "moveSpeed": "40",
   "zoomSpeed": "2",
 
-  // move keys
+  // update keys
   "leftKey": "A",
   "rightKey": "D",
   "upKey": "W",

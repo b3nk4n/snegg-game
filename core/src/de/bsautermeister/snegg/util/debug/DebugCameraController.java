@@ -79,7 +79,7 @@ public class DebugCameraController {
         float moveSpeed = info.getMoveSpeed() * delta;
         float zoomSpeed = info.getZoomSpeed() * delta;
 
-        // move control
+        // update control
         if (info.isLeftPressed()) {
             moveLeft(moveSpeed);
         }

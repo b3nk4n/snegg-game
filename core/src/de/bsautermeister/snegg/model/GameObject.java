@@ -21,17 +21,27 @@ public abstract class GameObject {
         updateCollusionBounds();
     }
 
+    public void moveX(float deltaX) {
+        x += deltaX;
+        updateCollusionBounds();
+    }
+
+    public void moveY(float deltaY) {
+        y += deltaY;
+        updateCollusionBounds();
+    }
+
     public void setSize(float width, float height) {
         this.width = width;
         this.height = height;
         updateCollusionBounds();
     }
 
-    private void updateCollusionBounds() {
-        collisionBounds.set(x, y, width, height);
-    }
-
     public Rectangle getCollisionBounds() {
         return collisionBounds;
+    }
+
+    protected void updateCollusionBounds() {
+        collisionBounds.set(x, y, width, height);
     }
 }
