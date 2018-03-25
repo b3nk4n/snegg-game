@@ -15,8 +15,18 @@ public abstract class GameObject {
         collisionBounds = new Rectangle(x, y, width, height);
     }
 
-    public void setPosition(float x, float y) {
+    public void setXY(float x, float y) {
         this.x = x;
+        this.y = y;
+        updateCollusionBounds();
+    }
+
+    public void setX(float x) {
+        this.x = x;
+        updateCollusionBounds();
+    }
+
+    public void setY(float y) {
         this.y = y;
         updateCollusionBounds();
     }
@@ -43,5 +53,21 @@ public abstract class GameObject {
 
     protected void updateCollusionBounds() {
         collisionBounds.set(x, y, width, height);
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
     }
 }

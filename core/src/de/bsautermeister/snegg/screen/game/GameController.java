@@ -26,6 +26,22 @@ public class GameController {
             timer -= GameConfig.MOVE_TIME;
 
             snakeHead.update();
+
+            checkSnakeOutOfBounds();
+        }
+    }
+
+    private void checkSnakeOutOfBounds() {
+        if (snakeHead.getX() >= GameConfig.WORLD_WIDTH) {
+            snakeHead.setX(0);
+        } else if (snakeHead.getX() < 0) {
+            snakeHead.setX(GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SIZE);
+        }
+
+        if (snakeHead.getY() >= GameConfig.WORLD_HEIGHT) {
+            snakeHead.setY(0);
+        } else if (snakeHead.getY() < 0) {
+            snakeHead.setY(GameConfig.WORLD_HEIGHT - GameConfig.SNAKE_SIZE);
         }
     }
 
