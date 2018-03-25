@@ -9,10 +9,10 @@ public abstract class GameObject {
     protected float width = 1f;
     protected float height = 1f;
 
-    protected Rectangle collusionBounds;
+    protected Rectangle collisionBounds;
 
     public GameObject() {
-        collusionBounds = new Rectangle(x, y, width, height);
+        collisionBounds = new Rectangle(x, y, width, height);
     }
 
     public void setPosition(float x, float y) {
@@ -28,6 +28,10 @@ public abstract class GameObject {
     }
 
     private void updateCollusionBounds() {
-        collusionBounds.set(x, y, width, height);
+        collisionBounds.set(x, y, width, height);
+    }
+
+    public Rectangle getCollisionBounds() {
+        return collisionBounds;
     }
 }
