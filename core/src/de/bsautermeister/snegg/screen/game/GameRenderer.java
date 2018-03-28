@@ -9,7 +9,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
+import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
 import de.bsautermeister.snegg.util.GdxUtils;
 import de.bsautermeister.snegg.util.ViewportUtils;
@@ -63,7 +65,15 @@ public class GameRenderer implements Disposable {
     }
 
     private void drawDebug() {
-        SnakeHead head = controller.getHead();
+        Snake snake = controller.getSnake();
+
+        for (BodyPart bodyPart : snake.getBodyParts()) {
+            renderer.setColor(Color.YELLOW);
+            Rectangle bodyBounds = bodyPart.getCollisionBounds();
+            renderer.rect(bodyBounds.getX(), bodyBounds.getY(), bodyBounds.getWidth(), bodyBounds.getHeight());
+        }
+
+        SnakeHead head = snake.getHead();
         Rectangle headBounds = head.getCollisionBounds();
         renderer.setColor(Color.GREEN);
         renderer.rect(headBounds.getX(), headBounds.getY(), headBounds.getWidth(), headBounds.getHeight());
