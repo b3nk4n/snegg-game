@@ -2,9 +2,11 @@ package de.bsautermeister.snegg.screen.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.model.Coin;
 import de.bsautermeister.snegg.model.Direction;
 import de.bsautermeister.snegg.model.SnakeHead;
 
@@ -13,6 +15,8 @@ public class GameController {
 
     private SnakeHead snakeHead;
     private float timer;
+
+    private Coin coin;
 
     public GameController() {
         snakeHead = new SnakeHead();
@@ -29,6 +33,8 @@ public class GameController {
 
             checkSnakeOutOfBounds();
         }
+
+        spawnCoin();
     }
 
     private void checkSnakeOutOfBounds() {
@@ -62,7 +68,22 @@ public class GameController {
         }
     }
 
+    private void spawnCoin() {
+        if (coin.isAvailable()) {
+            return;
+        }
+
+        float coinX = MathUtils.random((int)(GameConfig.WORLD_WIDTH - GameConfig.COIN_SIZE));
+        float coinY = MathUtils.random((int)(GameConfig.WORLD_HEIGHT - GameConfig.COIN_SIZE));
+        coin.setAvailable(true);
+        coin.setXY(coinX, coinY);
+    }
+
     public SnakeHead getHead() {
         return snakeHead;
+    }
+
+    public Coin getCoin() {
+        return coin;
     }
 }
