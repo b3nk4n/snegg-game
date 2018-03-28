@@ -1,6 +1,10 @@
 package de.bsautermeister.snegg.config;
 
+import com.badlogic.gdx.utils.Logger;
+
 public class GameConfig {
+    public static final int LOG_LEVEL = Logger.DEBUG;
+
     public static final float WIDTH = 800f;
     public static final float HEIGHT = 480f;
 

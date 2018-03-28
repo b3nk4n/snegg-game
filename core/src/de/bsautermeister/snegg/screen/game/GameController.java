@@ -8,13 +8,14 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
 import de.bsautermeister.snegg.model.Direction;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
 
 public class GameController {
-    private static final Logger LOG = new Logger(GameController.class.getName());
+    private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
 
     private Snake snake;
     private float timer;
@@ -61,6 +62,27 @@ public class GameController {
     private void checkCollision() {
         // coin collision
         SnakeHead head = snake.getHead();
+        checkHeadCoinCollision(head, coin);
+        for (BodyPart bodyPart : snake.getBodyParts()) {
+            checkHeadBodyPartCollision(head, bodyPart);
+        }
+    }
+
+    private void checkHeadBodyPartCollision(SnakeHead head, BodyPart bodyPart) {
+        if (bodyPart.isJustAdded()) {
+            bodyPart.setJustAdded(false);
+            return;
+        }
+
+        Rectangle headBounds = head.getCollisionBounds();
+        Rectangle bodyBounds = bodyPart.getCollisionBounds();
+
+        if (Intersector.overlaps(headBounds, bodyBounds)) {
+            LOG.debug("Collision of head with body-part");
+        }
+    }
+
+    private void checkHeadCoinCollision(SnakeHead head, Coin coin) {
         Rectangle headBounds = head.getCollisionBounds();
         Rectangle coinBounds = coin.getCollisionBounds();
 
