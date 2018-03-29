@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import de.bsautermeister.snegg.screen.game.GameScreen;
+import de.bsautermeister.snegg.screen.loading.LoadingScreen;
 
 public class SneggGame extends Game {
 
@@ -20,7 +20,7 @@ public class SneggGame extends Game {
 		assetManager = new AssetManager();
 		batch = new SpriteBatch();
 
-		setScreen(new GameScreen(this));
+		setScreen(new LoadingScreen(this));
 	}
 
 	@Override
