@@ -21,4 +21,20 @@ public enum Direction {
     public boolean isRight() {
         return this == RIGHT;
     }
+
+    public Direction opposite() {
+        if (isLeft())
+            return RIGHT;
+        if (isRight())
+            return LEFT;
+        if (isUp())
+            return DOWN;
+        if (isDown())
+            return UP;
+        throw new IllegalArgumentException("No opposite of direction=" + this);
+    }
+
+    public boolean isOpposite(Direction direction) {
+        return this.opposite() == direction;
+    }
 }

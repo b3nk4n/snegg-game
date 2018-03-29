@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
 
+import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
@@ -25,23 +26,41 @@ public class GameController {
     public GameController() {
         snake = new Snake();
         coin = new Coin();
+        restart();
     }
 
     public void update(float delta) {
-        checkInput();
-        checkDebugInput();
+        if (GameManager.INSTANCE.isPlaying()) {
+            checkInput();
+            checkDebugInput();
 
-        timer += delta;
-        if (timer >= GameConfig.MOVE_TIME) {
-            timer -= GameConfig.MOVE_TIME;
+            timer += delta;
+            if (timer >= GameConfig.MOVE_TIME) {
+                timer -= GameConfig.MOVE_TIME;
 
-            snake.update();
+                snake.update();
 
-            checkSnakeOutOfBounds();
-            checkCollision();
+                checkSnakeOutOfBounds();
+                checkCollision();
+            }
+
+            spawnCoin();
+        } else {
+            checkForRestart();
         }
+    }
 
-        spawnCoin();
+    private void checkForRestart() {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            restart();
+        }
+    }
+
+    private void restart() {
+        GameManager.INSTANCE.setPlaying();
+        snake.reset();
+        coin.setAvailable(false);
+        timer = 0;
     }
 
     private void checkSnakeOutOfBounds() {
@@ -79,6 +98,7 @@ public class GameController {
 
         if (Intersector.overlaps(headBounds, bodyBounds)) {
             LOG.debug("Collision of head with body-part");
+            GameManager.INSTANCE.setGameOver();
         }
     }
 

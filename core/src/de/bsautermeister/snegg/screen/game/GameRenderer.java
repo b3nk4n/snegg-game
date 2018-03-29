@@ -79,9 +79,11 @@ public class GameRenderer implements Disposable {
         renderer.rect(headBounds.getX(), headBounds.getY(), headBounds.getWidth(), headBounds.getHeight());
 
         Coin coin = controller.getCoin();
-        Rectangle coinBounds = coin.getCollisionBounds();
-        renderer.setColor(Color.BLUE);
-        renderer.rect(coinBounds.getX(), coinBounds.getY(), coinBounds.getWidth(), coinBounds.getHeight());
+        if (coin.isAvailable()) {
+            Rectangle coinBounds = coin.getCollisionBounds();
+            renderer.setColor(Color.BLUE);
+            renderer.rect(coinBounds.getX(), coinBounds.getY(), coinBounds.getWidth(), coinBounds.getHeight());
+        }
     }
 
     public void resize(int width, int height) {
