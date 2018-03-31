@@ -33,4 +33,8 @@ public class SneggGame extends Game {
 	public AssetManager getAssetManager() {
 		return assetManager;
 	}
+
+	public SpriteBatch getBatch() {
+		return batch;
+	}
 }
