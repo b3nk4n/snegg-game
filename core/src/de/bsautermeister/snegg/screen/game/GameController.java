@@ -30,6 +30,8 @@ public class GameController {
     }
 
     public void update(float delta) {
+        GameManager.INSTANCE.updateDisplayScore(delta);
+
         if (GameManager.INSTANCE.isPlaying()) {
             checkInput();
             checkDebugInput();
@@ -71,10 +73,10 @@ public class GameController {
             snakeHead.setX(GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SIZE);
         }
 
-        if (snakeHead.getY() >= GameConfig.WORLD_HEIGHT) {
+        if (snakeHead.getY() >= GameConfig.MAX_Y) {
             snakeHead.setY(0);
         } else if (snakeHead.getY() < 0) {
-            snakeHead.setY(GameConfig.WORLD_HEIGHT - GameConfig.SNAKE_SIZE);
+            snakeHead.setY(GameConfig.MAX_Y - GameConfig.SNAKE_SIZE);
         }
     }
 
@@ -111,6 +113,7 @@ public class GameController {
         if (coin.isAvailable() && overlap) {
             snake.insertBodyPart();
             coin.setAvailable(false);
+            GameManager.INSTANCE.incrementScore(GameConfig.COIN_SCORE);
         }
     }
 
@@ -143,7 +146,7 @@ public class GameController {
         }
 
         float coinX = MathUtils.random((int)(GameConfig.WORLD_WIDTH - GameConfig.COIN_SIZE));
-        float coinY = MathUtils.random((int)(GameConfig.WORLD_HEIGHT - GameConfig.COIN_SIZE));
+        float coinY = MathUtils.random((int)(GameConfig.MAX_Y - GameConfig.COIN_SIZE));
         coin.setAvailable(true);
         coin.setXY(coinX, coinY);
     }

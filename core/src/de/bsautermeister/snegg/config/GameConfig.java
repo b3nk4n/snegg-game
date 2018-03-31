@@ -22,6 +22,10 @@ public final class GameConfig {
     public static final float SNAKE_SPEED = 1f;
 
     public static final float COIN_SIZE = 1f;
+    public static final int COIN_SCORE = 25;
+
+    private static final float Y_OFFSET = 2f;
+    public static final float MAX_Y = WORLD_HEIGHT - Y_OFFSET;
 
     private GameConfig() { }
 }
