@@ -1,0 +1,27 @@
+
+ui.png
+size: 1024,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+play-button
+  rotate: false
+  xy: 569, 2
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+quit-button
+  rotate: false
+  xy: 731, 2
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+title
+  rotate: false
+  xy: 2, 67
+  size: 565, 35
+  orig: 565, 35
+  offset: 0, 0
+  index: -1
