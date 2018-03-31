@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Disposable;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bsautermeister.snegg.assets.AssetDescriptors;
+import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.model.BodyPart;
@@ -38,6 +41,11 @@ public class GameRenderer implements Disposable {
     private BitmapFont font;
     private GlyphLayout layout;
 
+    private TextureRegion backgroundRegion;
+    private TextureRegion bodyRegion;
+    private TextureRegion headRegion;
+    private TextureRegion coinRegion;
+
     private DebugCameraController debugCameraController;
 
     public GameRenderer(SpriteBatch batch, AssetManager assetManager, GameController controller) {
@@ -56,6 +64,12 @@ public class GameRenderer implements Disposable {
         font = assetManager.get(AssetDescriptors.UI_FONT);
         layout = new GlyphLayout();
 
+        TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.GAME_PLAY_ATLAS);
+        backgroundRegion = gamePlayAtlas.findRegion(RegionNames.BACKGROUND);
+        headRegion = gamePlayAtlas.findRegion(RegionNames.HEAD);
+        bodyRegion = gamePlayAtlas.findRegion(RegionNames.BODY);
+        coinRegion = gamePlayAtlas.findRegion(RegionNames.COIN);
+
         debugCameraController = new DebugCameraController();
         debugCameraController.setStartPosition(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y);
     }
@@ -66,8 +80,36 @@ public class GameRenderer implements Disposable {
 
         GdxUtils.clearScreen();
 
+        renderGame();
         renderHud();
         renderDebug();
+    }
+
+    private void renderGame() {
+        viewport.apply();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        
+        drawGame();
+        
+        batch.end();
+    }
+
+    private void drawGame() {
+        batch.draw(backgroundRegion, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
+
+        Snake snake = controller.getSnake();
+        for (BodyPart bodyPart : snake.getBodyParts()) {
+            batch.draw(bodyRegion, bodyPart.getX(), bodyPart.getY(), bodyPart.getWidth(), bodyPart.getHeight());
+        }
+
+        SnakeHead head = snake.getHead();
+        batch.draw(headRegion, head.getX(), head.getY(), head.getWidth(), head.getHeight());
+
+        Coin coin = controller.getCoin();
+        if (coin.isAvailable()) {
+            batch.draw(coinRegion, coin.getX(), coin.getY(), coin.getWidth(), coin.getHeight());
+        }
     }
 
     private void renderHud() {
