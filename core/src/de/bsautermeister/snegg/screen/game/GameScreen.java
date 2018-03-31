@@ -4,6 +4,8 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 
 import de.bsautermeister.snegg.SneggGame;
+import de.bsautermeister.snegg.common.GameManager;
+import de.bsautermeister.snegg.screen.menu.MenuScreen;
 
 public class GameScreen extends ScreenAdapter {
     private final SneggGame game;
@@ -27,6 +29,10 @@ public class GameScreen extends ScreenAdapter {
     public void render(float delta) {
         controller.update(delta);
         renderer.render(delta);
+
+        if (GameManager.INSTANCE.isGameOver()) {
+            game.setScreen(new MenuScreen(game));
+        }
     }
 
     @Override

@@ -82,7 +82,7 @@ public class GameRenderer implements Disposable {
 
         renderGame();
         renderHud();
-        renderDebug();
+        //renderDebug();
     }
 
     private void renderGame() {

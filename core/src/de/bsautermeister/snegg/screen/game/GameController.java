@@ -26,7 +26,7 @@ public class GameController {
     public GameController() {
         snake = new Snake();
         coin = new Coin();
-        restart();
+        reset();
     }
 
     public void update(float delta) {
@@ -54,11 +54,11 @@ public class GameController {
 
     private void checkForRestart() {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            restart();
+            reset();
         }
     }
 
-    private void restart() {
+    private void reset() {
         GameManager.INSTANCE.reset();
         snake.reset();
         coin.setAvailable(false);

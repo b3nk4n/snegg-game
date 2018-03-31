@@ -11,6 +11,7 @@ import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.game.GameScreen;
+import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.util.GdxUtils;
 
 public class LoadingScreen extends ScreenAdapter {
@@ -27,7 +28,7 @@ public class LoadingScreen extends ScreenAdapter {
     private float progress;
     private float waitTime = 0.75f;
 
-    private boolean changeToGameScreen;
+    private boolean changeScreen;
 
     public LoadingScreen(SneggGame game) {
         this.game = game;
@@ -71,14 +72,14 @@ public class LoadingScreen extends ScreenAdapter {
             waitTime -= delta;
 
             if (waitTime <= 0) {
-                changeToGameScreen = true;
+                changeScreen = true;
             }
         }
     }
 
     private void checkChangeScreen() {
-        if (changeToGameScreen) {
-            game.setScreen(new GameScreen(game));
+        if (changeScreen) {
+            game.setScreen(new MenuScreen(game));
         }
     }
 
