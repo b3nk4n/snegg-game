@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.listeners.CollisionListener;
 import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
 import de.bsautermeister.snegg.model.Direction;
@@ -23,7 +24,10 @@ public class GameController {
 
     private Coin coin;
 
-    public GameController() {
+    private CollisionListener collisionListener;
+
+    public GameController(CollisionListener collisionListener) {
+        this.collisionListener = collisionListener;
         snake = new Snake();
         coin = new Coin();
         reset();
@@ -101,6 +105,7 @@ public class GameController {
         if (Intersector.overlaps(headBounds, bodyBounds)) {
             GameManager.INSTANCE.saveHighscore();
             GameManager.INSTANCE.setGameOver();
+            collisionListener.lose();
         }
     }
 
@@ -114,6 +119,7 @@ public class GameController {
             snake.insertBodyPart();
             coin.setAvailable(false);
             GameManager.INSTANCE.incrementScore(GameConfig.COIN_SCORE);
+            collisionListener.hitCoin();
         }
     }
 

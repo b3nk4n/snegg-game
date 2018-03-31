@@ -14,5 +14,10 @@ public final class AssetPaths {
         String UI = "ui/ui.json";
     }
 
+    public interface Sounds {
+        String COIN = "sounds/coin.wav";
+        String LOSE = "sounds/lose.wav";
+    }
+
     private AssetPaths() {}
 }

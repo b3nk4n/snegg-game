@@ -2,9 +2,12 @@ package de.bsautermeister.snegg.screen.game;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 
 import de.bsautermeister.snegg.SneggGame;
+import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.common.GameManager;
+import de.bsautermeister.snegg.listeners.CollisionListener;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 
 public class GameScreen extends ScreenAdapter {
@@ -14,14 +17,34 @@ public class GameScreen extends ScreenAdapter {
     private GameRenderer renderer;
     private GameController controller;
 
+    private final CollisionListener collisionListener;
+
+    private Sound coinSound;
+    private Sound loseSound;
+
     public GameScreen(SneggGame game) {
         this.game = game;
         this.assetManager = game.getAssetManager();
+
+        collisionListener = new CollisionListener() {
+            @Override
+            public void hitCoin() {
+                coinSound.play();
+            }
+
+            @Override
+            public void lose() {
+                loseSound.play();
+            }
+        };
     }
 
     @Override
     public void show() {
-        controller = new GameController();
+        coinSound = assetManager.get(AssetDescriptors.Sounds.COIN);
+        loseSound = assetManager.get(AssetDescriptors.Sounds.LOSE);
+
+        controller = new GameController(collisionListener);
         renderer = new GameRenderer(game.getBatch(), assetManager, controller);
     }
 
