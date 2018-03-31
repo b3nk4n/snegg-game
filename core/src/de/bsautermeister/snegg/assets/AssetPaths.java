@@ -1,11 +1,18 @@
 package de.bsautermeister.snegg.assets;
 
 public final class AssetPaths {
-    public static final String UI_FONT = "ui/fonts/oswald-32.fnt";
 
-    public static final String GAME_PLAY_ATLAS = "gameplay/gameplay.atlas";
+    public interface Fonts {
+        String UI = "ui/fonts/oswald-32.fnt";
+    }
 
-    public static final String UI_SKIN = "ui/ui.json";
+    public interface Atlas {
+        String GAME_PLAY = "gameplay/gameplay.atlas";
+    }
+
+    public interface Skins {
+        String UI = "ui/ui.json";
+    }
 
     private AssetPaths() {}
 }

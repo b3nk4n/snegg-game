@@ -61,10 +61,10 @@ public class GameRenderer implements Disposable {
         hudViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
         renderer = new ShapeRenderer();
 
-        font = assetManager.get(AssetDescriptors.UI_FONT);
+        font = assetManager.get(AssetDescriptors.Fonts.UI);
         layout = new GlyphLayout();
 
-        TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.GAME_PLAY_ATLAS);
+        TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.Atlas.GAME_PLAY);
         backgroundRegion = gamePlayAtlas.findRegion(RegionNames.BACKGROUND);
         headRegion = gamePlayAtlas.findRegion(RegionNames.HEAD);
         bodyRegion = gamePlayAtlas.findRegion(RegionNames.BODY);

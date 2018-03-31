@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.config.GameConfig;
-import de.bsautermeister.snegg.screen.game.GameScreen;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.util.GdxUtils;
 
@@ -45,9 +44,9 @@ public class LoadingScreen extends ScreenAdapter {
     }
 
     private void loadAssets() {
-        assetManager.load(AssetDescriptors.UI_FONT);
-        assetManager.load(AssetDescriptors.GAME_PLAY_ATLAS);
-        assetManager.load(AssetDescriptors.UI_SKIN);
+        assetManager.load(AssetDescriptors.Fonts.UI);
+        assetManager.load(AssetDescriptors.Atlas.GAME_PLAY);
+        assetManager.load(AssetDescriptors.Skins.UI);
     }
 
     @Override

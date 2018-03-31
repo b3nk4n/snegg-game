@@ -6,14 +6,20 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public final class AssetDescriptors {
-    public static final AssetDescriptor<BitmapFont> UI_FONT =
-            new AssetDescriptor<BitmapFont>(AssetPaths.UI_FONT, BitmapFont.class);
+    public interface Fonts {
+        AssetDescriptor<BitmapFont> UI =
+                new AssetDescriptor<BitmapFont>(AssetPaths.Fonts.UI, BitmapFont.class);
+    }
 
-    public static final AssetDescriptor<TextureAtlas> GAME_PLAY_ATLAS =
-            new AssetDescriptor<TextureAtlas>(AssetPaths.GAME_PLAY_ATLAS, TextureAtlas.class);
+    public interface Atlas {
+        AssetDescriptor<TextureAtlas> GAME_PLAY =
+                new AssetDescriptor<TextureAtlas>(AssetPaths.Atlas.GAME_PLAY, TextureAtlas.class);
+    }
 
-    public static final AssetDescriptor<Skin> UI_SKIN =
-            new AssetDescriptor<Skin>(AssetPaths.UI_SKIN, Skin.class);
+    public interface Skins {
+        AssetDescriptor<Skin> UI =
+                new AssetDescriptor<Skin>(AssetPaths.Skins.UI, Skin.class);
+    }
 
     private AssetDescriptors() {}
 }
