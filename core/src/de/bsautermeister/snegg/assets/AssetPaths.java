@@ -18,6 +18,7 @@ public final class AssetPaths {
         String COIN = "sounds/coin.wav";
         String LOSE = "sounds/lose.wav";
         String FRUIT = "sounds/fruit.wav";
+        String FRUIT_SPAWN = "sounds/spawn.wav";
     }
 
     private AssetPaths() {}

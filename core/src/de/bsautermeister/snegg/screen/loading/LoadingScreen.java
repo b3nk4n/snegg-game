@@ -50,6 +50,7 @@ public class LoadingScreen extends ScreenAdapter {
         assetManager.load(AssetDescriptors.Sounds.COIN);
         assetManager.load(AssetDescriptors.Sounds.LOSE);
         assetManager.load(AssetDescriptors.Sounds.FRUIT);
+        assetManager.load(AssetDescriptors.Sounds.FRUIT_SPAWN);
     }
 
     @Override

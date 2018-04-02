@@ -7,7 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.common.GameManager;
-import de.bsautermeister.snegg.listeners.CollisionListener;
+import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 
 public class GameScreen extends ScreenAdapter {
@@ -17,17 +17,18 @@ public class GameScreen extends ScreenAdapter {
     private GameRenderer renderer;
     private GameController controller;
 
-    private final CollisionListener collisionListener;
+    private final GameListener collisionListener;
 
     private Sound coinSound;
     private Sound loseSound;
     private Sound fruitSound;
+    private Sound spawnFruitSound;
 
     public GameScreen(GameApp game) {
         this.game = game;
         this.assetManager = game.getAssetManager();
 
-        collisionListener = new CollisionListener() {
+        collisionListener = new GameListener() {
             @Override
             public void hitCoin() {
                 coinSound.play();
@@ -36,6 +37,11 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void hitFruit() {
                 fruitSound.play();
+            }
+
+            @Override
+            public void spawnFruit() {
+                spawnFruitSound.play();
             }
 
             @Override
@@ -50,6 +56,7 @@ public class GameScreen extends ScreenAdapter {
         coinSound = assetManager.get(AssetDescriptors.Sounds.COIN);
         loseSound = assetManager.get(AssetDescriptors.Sounds.LOSE);
         fruitSound = assetManager.get(AssetDescriptors.Sounds.FRUIT);
+        spawnFruitSound = assetManager.get(AssetDescriptors.Sounds.FRUIT_SPAWN);
 
         controller = new GameController(collisionListener);
         renderer = new GameRenderer(game.getBatch(), assetManager, controller);

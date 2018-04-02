@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Logger;
 import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
-import de.bsautermeister.snegg.listeners.CollisionListener;
+import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
 import de.bsautermeister.snegg.model.Direction;
@@ -30,10 +30,10 @@ public class GameController implements Updateable {
     private Fruit fruit;
     private float fruitSpanDelayTimer;
 
-    private CollisionListener collisionListener;
+    private GameListener gameListener;
 
-    public GameController(CollisionListener collisionListener) {
-        this.collisionListener = collisionListener;
+    public GameController(GameListener gameListener) {
+        this.gameListener = gameListener;
         snake = new Snake();
         coin = new Coin();
         fruit = new Fruit();
@@ -121,7 +121,7 @@ public class GameController implements Updateable {
         if (Intersector.overlaps(headBounds, bodyBounds)) {
             GameManager.INSTANCE.saveHighscore();
             GameManager.INSTANCE.setGameOver();
-            collisionListener.lose();
+            gameListener.lose();
         }
     }
 
@@ -135,7 +135,7 @@ public class GameController implements Updateable {
             snake.insertBodyPart();
             GameManager.INSTANCE.incrementScore(coin.getScore());
             spawnCoin();
-            collisionListener.hitCoin();
+            gameListener.hitCoin();
 
             collectedCoins++;
             if (collectedCoins % GameConfig.FRUIT_SPAWN_INTERVAL == 0) {
@@ -155,7 +155,7 @@ public class GameController implements Updateable {
         if (!fruit.isCollected() && overlap) {
             GameManager.INSTANCE.incrementScore(fruit.getScore());
             fruit.collect();
-            collisionListener.hitFruit();
+            gameListener.hitFruit();
         }
     }
 
@@ -192,6 +192,7 @@ public class GameController implements Updateable {
         Vector2 pos = getRandomFreePosition();
         fruit.release();
         fruit.setXY(pos.x, pos.y);
+        gameListener.spawnFruit();
     }
 
     private Vector2 getRandomFreePosition() {
