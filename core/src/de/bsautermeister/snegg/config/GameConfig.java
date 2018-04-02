@@ -26,6 +26,7 @@ public final class GameConfig {
     public static final int FRUIT_START_SCORE = 100;
     public static final int FRUIT_END_SCORE = 10;
     public static final int FRUIT_SPAWN_INTERVAL = 5;
+    public static final float FRUIT_MIN_SPAWN_DELAY = 1f;
     public static final float FRUIT_MAX_SPAWN_DELAY = 5f;
     public static final float FRUIT_LIFETIME = 15f;
 

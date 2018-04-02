@@ -22,11 +22,12 @@ public class GameController implements Updateable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
 
     private Snake snake;
-    private float timer;
+    private float snakeMoveTimer;
 
     private int collectedCoins;
     private Coin coin;
     private Fruit fruit;
+    private float fruitSpanDelayTimer;
 
     private CollisionListener collisionListener;
 
@@ -38,6 +39,14 @@ public class GameController implements Updateable {
         reset();
     }
 
+    private void reset() {
+        GameManager.INSTANCE.reset();
+        collectedCoins = 0;
+        spawnCoin();
+        snakeMoveTimer = 0;
+        fruitSpanDelayTimer = Float.MAX_VALUE;
+    }
+
     @Override
     public void update(float delta) {
         GameManager.INSTANCE.updateDisplayScore(delta);
@@ -46,9 +55,9 @@ public class GameController implements Updateable {
             checkInput();
             checkDebugInput();
 
-            timer += delta;
-            if (timer >= GameConfig.MOVE_TIME) {
-                timer -= GameConfig.MOVE_TIME;
+            snakeMoveTimer += delta;
+            if (snakeMoveTimer >= GameConfig.MOVE_TIME) {
+                snakeMoveTimer -= GameConfig.MOVE_TIME;
 
                 snake.update(delta);
 
@@ -56,10 +65,13 @@ public class GameController implements Updateable {
                 checkCollision();
             }
 
-            if (coin.isCollected()) {
-                spawnCoin();
-            }
             coin.update(delta);
+
+            fruitSpanDelayTimer -= delta;
+            if (fruitSpanDelayTimer <= 0) {
+                fruitSpanDelayTimer = Float.MAX_VALUE;
+                spawnFruit();
+            }
             fruit.update(delta);
         } else {
             checkForRestart();
@@ -70,13 +82,6 @@ public class GameController implements Updateable {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             reset();
         }
-    }
-
-    private void reset() {
-        GameManager.INSTANCE.reset();
-        collectedCoins = 0;
-        coin.reset();
-        timer = 0;
     }
 
     private void checkSnakeOutOfBounds() {
@@ -128,12 +133,14 @@ public class GameController implements Updateable {
         if (!coin.isCollected() && overlap) {
             snake.insertBodyPart();
             GameManager.INSTANCE.incrementScore(coin.getScore());
-            coin.collect();
+            spawnCoin();
             collisionListener.hitCoin();
 
             collectedCoins++;
             if (collectedCoins % GameConfig.FRUIT_SPAWN_INTERVAL == 0) {
-                spawnFruit();
+                fruitSpanDelayTimer = MathUtils.random(
+                        GameConfig.FRUIT_MIN_SPAWN_DELAY,
+                        GameConfig.FRUIT_MAX_SPAWN_DELAY);
             }
         }
     }
