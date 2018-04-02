@@ -107,7 +107,7 @@ public class GameRenderer implements Disposable {
         batch.draw(headRegion, head.getX(), head.getY(), head.getWidth(), head.getHeight());
 
         Coin coin = controller.getCoin();
-        if (coin.isAvailable()) {
+        if (!coin.isCollected()) {
             batch.draw(coinRegion, coin.getX(), coin.getY(), coin.getWidth(), coin.getHeight());
         }
     }
@@ -163,7 +163,7 @@ public class GameRenderer implements Disposable {
         renderer.rect(headBounds.getX(), headBounds.getY(), headBounds.getWidth(), headBounds.getHeight());
 
         Coin coin = controller.getCoin();
-        if (coin.isAvailable()) {
+        if (!coin.isCollected()) {
             Rectangle coinBounds = coin.getCollisionBounds();
             renderer.setColor(Color.BLUE);
             renderer.rect(coinBounds.getX(), coinBounds.getY(), coinBounds.getWidth(), coinBounds.getHeight());

@@ -50,7 +50,9 @@ public class GameController {
                 checkCollision();
             }
 
-            spawnCoin();
+            if (coin.isCollected()) {
+                spawnCoin();
+            }
         } else {
             checkForRestart();
         }
@@ -64,8 +66,7 @@ public class GameController {
 
     private void reset() {
         GameManager.INSTANCE.reset();
-        snake.reset();
-        coin.setAvailable(false);
+        coin.reset();
         timer = 0;
     }
 
@@ -115,10 +116,10 @@ public class GameController {
 
         boolean overlap = Intersector.overlaps(headBounds, coinBounds);
 
-        if (coin.isAvailable() && overlap) {
+        if (!coin.isCollected() && overlap) {
             snake.insertBodyPart();
-            coin.setAvailable(false);
-            GameManager.INSTANCE.incrementScore(GameConfig.COIN_SCORE);
+            GameManager.INSTANCE.incrementScore(coin.getScore());
+            coin.collect();
             collisionListener.hitCoin();
         }
     }
@@ -147,13 +148,9 @@ public class GameController {
     }
 
     private void spawnCoin() {
-        if (coin.isAvailable()) {
-            return;
-        }
-
         float coinX = MathUtils.random((int)(GameConfig.WORLD_WIDTH - GameConfig.COIN_SIZE));
         float coinY = MathUtils.random((int)(GameConfig.MAX_Y - GameConfig.COIN_SIZE));
-        coin.setAvailable(true);
+        coin.free();
         coin.setXY(coinX, coinY);
     }
 
