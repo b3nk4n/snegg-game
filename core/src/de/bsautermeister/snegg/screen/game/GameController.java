@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.common.GameManager;
@@ -182,17 +183,45 @@ public class GameController implements Updateable {
     }
 
     private void spawnCoin() {
-        float x = MathUtils.random((int)(GameConfig.WORLD_WIDTH - GameConfig.COLLECTIBLE_SIZE));
-        float y = MathUtils.random((int)(GameConfig.MAX_Y - GameConfig.COLLECTIBLE_SIZE));
+        Vector2 pos = getRandomFreePosition();
         coin.release();
-        coin.setXY(x, y);
+        coin.setXY(pos.x, pos.y);
     }
 
     private void spawnFruit() {
-        float x = MathUtils.random((int)(GameConfig.WORLD_WIDTH - GameConfig.COLLECTIBLE_SIZE));
-        float y = MathUtils.random((int)(GameConfig.MAX_Y - GameConfig.COLLECTIBLE_SIZE));
+        Vector2 pos = getRandomFreePosition();
         fruit.release();
-        fruit.setXY(x, y);
+        fruit.setXY(pos.x, pos.y);
+    }
+
+    private Vector2 getRandomFreePosition() {
+        int x;
+        int y;
+        do {
+            x = MathUtils.random((int)(GameConfig.WORLD_WIDTH - GameConfig.COLLECTIBLE_SIZE));
+            y = MathUtils.random((int)(GameConfig.MAX_Y - GameConfig.COLLECTIBLE_SIZE));
+        } while (isPositionBlocked(x, y));
+
+        return new Vector2(x, y);
+    }
+
+    private boolean isPositionBlocked(int x, int y) {
+        SnakeHead head = snake.getHead();
+        if (head.getX() == x && head.getY() == y)
+            return true;
+
+        for (BodyPart body : snake.getBodyParts()) {
+            if (body.getX() == x || head.getY() == y)
+                return true;
+        }
+
+        if (coin.getX() == x && coin.getY() == y)
+            return true;
+
+        if (fruit.getX() == x && fruit.getY() == y)
+            return true;
+
+        return false;
     }
 
     public Snake getSnake() {
