@@ -27,6 +27,8 @@ public final class AssetDescriptors {
                 new AssetDescriptor<Sound>(AssetPaths.Sounds.COIN, Sound.class);
         AssetDescriptor<Sound> LOSE =
                 new AssetDescriptor<Sound>(AssetPaths.Sounds.LOSE, Sound.class);
+        AssetDescriptor<Sound> FRUIT =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.FRUIT, Sound.class);
     }
 
     private AssetDescriptors() {}

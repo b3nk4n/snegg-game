@@ -21,6 +21,7 @@ public class GameScreen extends ScreenAdapter {
 
     private Sound coinSound;
     private Sound loseSound;
+    private Sound fruitSound;
 
     public GameScreen(GameApp game) {
         this.game = game;
@@ -34,7 +35,7 @@ public class GameScreen extends ScreenAdapter {
 
             @Override
             public void hitFruit() {
-                // TODO play fruit hit sound
+                fruitSound.play();
             }
 
             @Override
@@ -48,6 +49,7 @@ public class GameScreen extends ScreenAdapter {
     public void show() {
         coinSound = assetManager.get(AssetDescriptors.Sounds.COIN);
         loseSound = assetManager.get(AssetDescriptors.Sounds.LOSE);
+        fruitSound = assetManager.get(AssetDescriptors.Sounds.FRUIT);
 
         controller = new GameController(collisionListener);
         renderer = new GameRenderer(game.getBatch(), assetManager, controller);

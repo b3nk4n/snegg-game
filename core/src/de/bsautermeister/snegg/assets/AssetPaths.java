@@ -17,6 +17,7 @@ public final class AssetPaths {
     public interface Sounds {
         String COIN = "sounds/coin.wav";
         String LOSE = "sounds/lose.wav";
+        String FRUIT = "sounds/fruit.wav";
     }
 
     private AssetPaths() {}
