@@ -2,7 +2,9 @@ package de.bsautermeister.snegg.model;
 
 import com.badlogic.gdx.math.Rectangle;
 
-public abstract class GameObject {
+import de.bsautermeister.snegg.common.Resettable;
+
+public abstract class GameObject implements Resettable {
     protected float x;
     protected float y;
 

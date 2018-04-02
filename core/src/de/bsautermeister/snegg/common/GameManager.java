@@ -5,7 +5,7 @@ import com.badlogic.gdx.Preferences;
 
 import de.bsautermeister.snegg.SneggGame;
 
-public class GameManager {
+public class GameManager implements Resettable {
     public static final GameManager INSTANCE = new GameManager();
 
     private static final String HIGHSCORE_KEY = "highscore";

@@ -7,6 +7,11 @@ public class BodyPart extends GameObject {
 
     public BodyPart() {
         setSize(GameConfig.SNAKE_SIZE, GameConfig.SNAKE_SIZE);
+        reset();
+    }
+
+    @Override
+    public void reset() {
         justAdded = true;
     }
 

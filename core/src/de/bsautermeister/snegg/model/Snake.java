@@ -2,9 +2,10 @@ package de.bsautermeister.snegg.model;
 
 import com.badlogic.gdx.utils.Array;
 
+import de.bsautermeister.snegg.common.Resettable;
 import de.bsautermeister.snegg.config.GameConfig;
 
-public class Snake {
+public class Snake implements Resettable {
     private Direction lastDirection;
     private Direction direction;
 
@@ -17,10 +18,12 @@ public class Snake {
         reset();
     }
 
+    @Override
     public void reset() {
         bodyParts.clear();
         direction = Direction.RIGHT;
         lastDirection = Direction.RIGHT;
+        head.reset();
         head.setXY(0, 0);
     }
 

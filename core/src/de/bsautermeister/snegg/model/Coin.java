@@ -10,6 +10,7 @@ public class Coin extends GameObject implements Collectible {
         reset();
     }
 
+    @Override
     public void reset() {
         collected = true;
     }
