@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import de.bsautermeister.snegg.config.GameConfig;
 
 public class Snake {
+    private Direction lastDirection;
     private Direction direction;
 
     private final SnakeHead head;
@@ -19,6 +20,7 @@ public class Snake {
     public void reset() {
         bodyParts.clear();
         direction = Direction.RIGHT;
+        lastDirection = Direction.RIGHT;
         head.setXY(0, 0);
     }
 
@@ -37,6 +39,7 @@ public class Snake {
         } else if (direction.isDown()) {
             head.moveY(-GameConfig.SNAKE_SPEED);
         }
+        lastDirection = direction;
     }
 
     private void updateBodyParts() {
@@ -62,7 +65,7 @@ public class Snake {
     }
 
     public void setDirection(Direction direction) {
-        if (!this.direction.isOpposite(direction)) {
+        if (!this.lastDirection.isOpposite(direction)) {
             this.direction = direction;
         }
     }
