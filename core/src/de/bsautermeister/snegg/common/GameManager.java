@@ -3,7 +3,6 @@ package de.bsautermeister.snegg.common;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
-import de.bsautermeister.snegg.SneggGame;
 
 public class GameManager implements Resettable {
     public static final GameManager INSTANCE = new GameManager();
@@ -20,7 +19,7 @@ public class GameManager implements Resettable {
     private Preferences prefs;
 
     private GameManager() {
-        prefs = Gdx.app.getPreferences(SneggGame.class.getSimpleName());
+        prefs = Gdx.app.getPreferences("SneggGame");
         highScore = prefs.getInteger(HIGHSCORE_KEY, 0);
         displayHighScore = highScore;
         reset();

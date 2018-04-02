@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
+import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.util.GdxUtils;
@@ -17,7 +17,7 @@ public class LoadingScreen extends ScreenAdapter {
     private static final float PROGESS_BAR_WIDTH = GameConfig.HUD_WIDTH / 2f;
     private static final float PROGESS_BAR_HEIGHT = 66f;
 
-    private final SneggGame game;
+    private final GameApp game;
     private final AssetManager assetManager;
 
     private OrthographicCamera camera;
@@ -29,7 +29,7 @@ public class LoadingScreen extends ScreenAdapter {
 
     private boolean changeScreen;
 
-    public LoadingScreen(SneggGame game) {
+    public LoadingScreen(GameApp game) {
         this.game = game;
         this.assetManager = game.getAssetManager();
     }

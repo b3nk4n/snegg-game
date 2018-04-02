@@ -17,16 +17,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.assets.Styles;
+import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.game.GameScreen;
 import de.bsautermeister.snegg.util.GdxUtils;
 
 public class MenuScreen extends ScreenAdapter {
-    private final SneggGame game;
+    private final GameApp game;
     private final AssetManager assetManager;
 
     private Viewport viewport;
@@ -34,7 +34,7 @@ public class MenuScreen extends ScreenAdapter {
     private Skin skin;
     private TextureAtlas atlas;
 
-    public MenuScreen(SneggGame game) {
+    public MenuScreen(GameApp game) {
         this.game = game;
         this.assetManager = game.getAssetManager();
     }
