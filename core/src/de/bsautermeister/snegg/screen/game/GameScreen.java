@@ -33,6 +33,11 @@ public class GameScreen extends ScreenAdapter {
             }
 
             @Override
+            public void hitFruit() {
+                // TODO play fruit hit sound
+            }
+
+            @Override
             public void lose() {
                 loseSound.play();
             }

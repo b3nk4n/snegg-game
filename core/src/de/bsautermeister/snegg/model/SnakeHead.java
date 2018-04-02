@@ -12,4 +12,9 @@ public class SnakeHead extends GameObject {
     public void reset() {
 
     }
+
+    @Override
+    public void update(float delta) {
+
+    }
 }

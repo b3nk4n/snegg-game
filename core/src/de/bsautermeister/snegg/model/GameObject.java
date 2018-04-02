@@ -3,8 +3,9 @@ package de.bsautermeister.snegg.model;
 import com.badlogic.gdx.math.Rectangle;
 
 import de.bsautermeister.snegg.common.Resettable;
+import de.bsautermeister.snegg.common.Updateable;
 
-public abstract class GameObject implements Resettable {
+public abstract class GameObject implements Resettable, Updateable {
     protected float x;
     protected float y;
 
@@ -16,6 +17,8 @@ public abstract class GameObject implements Resettable {
     public GameObject() {
         collisionBounds = new Rectangle(x, y, width, height);
     }
+
+    public abstract void update(float delta);
 
     public void setXY(float x, float y) {
         this.x = x;

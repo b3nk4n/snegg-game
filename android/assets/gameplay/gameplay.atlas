@@ -32,3 +32,10 @@ head
   orig: 64, 64
   offset: 0, 0
   index: -1
+orange
+  rotate: false
+  xy: 804, 286
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

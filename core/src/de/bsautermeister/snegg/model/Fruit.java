@@ -1,11 +1,15 @@
 package de.bsautermeister.snegg.model;
 
+import com.badlogic.gdx.math.Interpolation;
+
 import de.bsautermeister.snegg.config.GameConfig;
 
-public class Coin extends GameObject implements Collectible {
+public class Fruit extends GameObject implements Collectible {
     private boolean collected;
+    private float lifetime;
 
-    public Coin() {
+
+    public Fruit() {
         setSize(GameConfig.COLLECTIBLE_SIZE, GameConfig.COLLECTIBLE_SIZE);
         reset();
     }
@@ -17,12 +21,19 @@ public class Coin extends GameObject implements Collectible {
 
     @Override
     public void update(float delta) {
+        lifetime -= delta;
 
+        if (lifetime <= 0) {
+            collect();
+        }
     }
 
     @Override
     public int getScore() {
-        return GameConfig.COIN_SCORE;
+        return Math.round(Interpolation.linear.apply(
+                GameConfig.FRUIT_END_SCORE,
+                GameConfig.FRUIT_START_SCORE,
+                lifetime / GameConfig.FRUIT_LIFETIME));
     }
 
     @Override
@@ -38,5 +49,6 @@ public class Coin extends GameObject implements Collectible {
     @Override
     public void release() {
         collected = false;
+        lifetime = GameConfig.FRUIT_LIFETIME;
     }
 }

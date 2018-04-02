@@ -15,6 +15,11 @@ public class BodyPart extends GameObject {
         justAdded = true;
     }
 
+    @Override
+    public void update(float delta) {
+
+    }
+
     public boolean isJustAdded() {
         return justAdded;
     }

@@ -20,6 +20,7 @@ import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
+import de.bsautermeister.snegg.model.Fruit;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
 import de.bsautermeister.snegg.util.GdxUtils;
@@ -45,6 +46,7 @@ public class GameRenderer implements Disposable {
     private TextureRegion bodyRegion;
     private TextureRegion headRegion;
     private TextureRegion coinRegion;
+    private TextureRegion orangeRegion;
 
     private DebugCameraController debugCameraController;
 
@@ -69,6 +71,7 @@ public class GameRenderer implements Disposable {
         headRegion = gamePlayAtlas.findRegion(RegionNames.HEAD);
         bodyRegion = gamePlayAtlas.findRegion(RegionNames.BODY);
         coinRegion = gamePlayAtlas.findRegion(RegionNames.COIN);
+        orangeRegion = gamePlayAtlas.findRegion(RegionNames.ORANGE);
 
         debugCameraController = new DebugCameraController();
         debugCameraController.setStartPosition(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y);
@@ -109,6 +112,11 @@ public class GameRenderer implements Disposable {
         Coin coin = controller.getCoin();
         if (!coin.isCollected()) {
             batch.draw(coinRegion, coin.getX(), coin.getY(), coin.getWidth(), coin.getHeight());
+        }
+
+        Fruit fruit = controller.getFruit();
+        if (!fruit.isCollected()) {
+            batch.draw(orangeRegion, fruit.getX(), fruit.getY(), fruit.getWidth(), fruit.getHeight());
         }
     }
 

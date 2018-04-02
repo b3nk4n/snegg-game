@@ -4,5 +4,5 @@ interface Collectible {
     int getScore();
     boolean isCollected();
     void collect();
-    void free();
+    void release();
 }

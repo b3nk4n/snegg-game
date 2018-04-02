@@ -3,9 +3,10 @@ package de.bsautermeister.snegg.model;
 import com.badlogic.gdx.utils.Array;
 
 import de.bsautermeister.snegg.common.Resettable;
+import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
 
-public class Snake implements Resettable {
+public class Snake implements Resettable, Updateable {
     private Direction lastDirection;
     private Direction direction;
 
@@ -27,7 +28,8 @@ public class Snake implements Resettable {
         head.setXY(0, 0);
     }
 
-    public void update() {
+    @Override
+    public void update(float delta) {
         updateBodyParts();
         updateHead();
     }

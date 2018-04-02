@@ -8,21 +8,25 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.common.GameManager;
+import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.listeners.CollisionListener;
 import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
 import de.bsautermeister.snegg.model.Direction;
+import de.bsautermeister.snegg.model.Fruit;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
 
-public class GameController {
+public class GameController implements Updateable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
 
     private Snake snake;
     private float timer;
 
+    private int collectedCoins;
     private Coin coin;
+    private Fruit fruit;
 
     private CollisionListener collisionListener;
 
@@ -30,9 +34,11 @@ public class GameController {
         this.collisionListener = collisionListener;
         snake = new Snake();
         coin = new Coin();
+        fruit = new Fruit();
         reset();
     }
 
+    @Override
     public void update(float delta) {
         GameManager.INSTANCE.updateDisplayScore(delta);
 
@@ -44,7 +50,7 @@ public class GameController {
             if (timer >= GameConfig.MOVE_TIME) {
                 timer -= GameConfig.MOVE_TIME;
 
-                snake.update();
+                snake.update(delta);
 
                 checkSnakeOutOfBounds();
                 checkCollision();
@@ -53,6 +59,8 @@ public class GameController {
             if (coin.isCollected()) {
                 spawnCoin();
             }
+            coin.update(delta);
+            fruit.update(delta);
         } else {
             checkForRestart();
         }
@@ -66,6 +74,7 @@ public class GameController {
 
     private void reset() {
         GameManager.INSTANCE.reset();
+        collectedCoins = 0;
         coin.reset();
         timer = 0;
     }
@@ -86,9 +95,9 @@ public class GameController {
     }
 
     private void checkCollision() {
-        // coin collision
         SnakeHead head = snake.getHead();
         checkHeadCoinCollision(head, coin);
+        checkHeadFruitCollision(head, fruit);
         for (BodyPart bodyPart : snake.getBodyParts()) {
             checkHeadBodyPartCollision(head, bodyPart);
         }
@@ -121,6 +130,24 @@ public class GameController {
             GameManager.INSTANCE.incrementScore(coin.getScore());
             coin.collect();
             collisionListener.hitCoin();
+
+            collectedCoins++;
+            if (collectedCoins % GameConfig.FRUIT_SPAWN_INTERVAL == 0) {
+                spawnFruit();
+            }
+        }
+    }
+
+    private void checkHeadFruitCollision(SnakeHead head, Fruit fruit) {
+        Rectangle headBounds = head.getCollisionBounds();
+        Rectangle fruitBounds = fruit.getCollisionBounds();
+
+        boolean overlap = Intersector.overlaps(headBounds, fruitBounds);
+
+        if (!fruit.isCollected() && overlap) {
+            GameManager.INSTANCE.incrementScore(fruit.getScore());
+            fruit.collect();
+            collisionListener.hitFruit();
         }
     }
 
@@ -148,10 +175,17 @@ public class GameController {
     }
 
     private void spawnCoin() {
-        float coinX = MathUtils.random((int)(GameConfig.WORLD_WIDTH - GameConfig.COIN_SIZE));
-        float coinY = MathUtils.random((int)(GameConfig.MAX_Y - GameConfig.COIN_SIZE));
-        coin.free();
-        coin.setXY(coinX, coinY);
+        float x = MathUtils.random((int)(GameConfig.WORLD_WIDTH - GameConfig.COLLECTIBLE_SIZE));
+        float y = MathUtils.random((int)(GameConfig.MAX_Y - GameConfig.COLLECTIBLE_SIZE));
+        coin.release();
+        coin.setXY(x, y);
+    }
+
+    private void spawnFruit() {
+        float x = MathUtils.random((int)(GameConfig.WORLD_WIDTH - GameConfig.COLLECTIBLE_SIZE));
+        float y = MathUtils.random((int)(GameConfig.MAX_Y - GameConfig.COLLECTIBLE_SIZE));
+        fruit.release();
+        fruit.setXY(x, y);
     }
 
     public Snake getSnake() {
@@ -160,5 +194,9 @@ public class GameController {
 
     public Coin getCoin() {
         return coin;
+    }
+
+    public Fruit getFruit() {
+        return fruit;
     }
 }
