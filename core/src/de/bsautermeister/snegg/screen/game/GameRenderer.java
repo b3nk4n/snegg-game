@@ -103,26 +103,22 @@ public class GameRenderer implements Disposable {
 
         Snake snake = controller.getSnake();
         for (BodyPart bodyPart : snake.getBodyParts()) {
+            float bodyX = bodyPart.getX();
+            float cloneX = getWorldWrapX(bodyX);
+            float bodyY = bodyPart.getY();
+            float cloneY = getWorldWrapY(bodyY);
+            if (cloneX != bodyX || cloneY != bodyY) {
+                batch.draw(headRegion, cloneX, cloneY, bodyPart.getWidth(), bodyPart.getHeight());
+            }
             batch.draw(bodyRegion, bodyPart.getX(), bodyPart.getY(), bodyPart.getWidth(), bodyPart.getHeight());
         }
 
         SnakeHead head = snake.getHead();
+
         float headX = head.getX();
+        float cloneX = getWorldWrapX(headX);
         float headY = head.getY();
-
-        float cloneX = headX;
-        float cloneY = headY;
-        if (headX < 0) {
-            cloneX = headX + GameConfig.WORLD_WIDTH;
-        } else if (headX > GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SIZE) {
-            cloneX = headX - GameConfig.WORLD_WIDTH;
-        }
-        if (headY < 0) {
-            cloneY = headY + GameConfig.MAX_Y;
-        } else if (headY > GameConfig.MAX_Y - GameConfig.SNAKE_SIZE) {
-            cloneY = headY - GameConfig.MAX_Y;
-        }
-
+        float cloneY = getWorldWrapY(headY);
         if (cloneX != headX || cloneY != headY) {
             batch.draw(headRegion, cloneX, cloneY, head.getWidth(), head.getHeight());
         }
@@ -137,6 +133,26 @@ public class GameRenderer implements Disposable {
         if (!fruit.isCollected()) {
             batch.draw(orangeRegion, fruit.getX(), fruit.getY(), fruit.getWidth(), fruit.getHeight());
         }
+    }
+
+    private float getWorldWrapX(float headX) {
+        float cloneX = headX;
+        if (headX < 0) {
+            cloneX = headX + GameConfig.WORLD_WIDTH;
+        } else if (headX > GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SIZE) {
+            cloneX = headX - GameConfig.WORLD_WIDTH;
+        }
+        return cloneX;
+    }
+
+    private float getWorldWrapY(float headY) {
+        float cloneY = headY;
+        if (headY < 0) {
+            cloneY = headY + GameConfig.MAX_Y;
+        } else if (headY > GameConfig.MAX_Y - GameConfig.SNAKE_SIZE) {
+            cloneY = headY - GameConfig.MAX_Y;
+        }
+        return cloneY;
     }
 
     private void renderHud() {
