@@ -47,22 +47,24 @@ public class Snake implements Resettable, Updateable {
 
     private void headMovementStep() {
         if (direction.isRight()) {
-            head.smoothMoveX(GameConfig.SNAKE_SPEED);
+            head.moveX(GameConfig.SNAKE_SPEED);
         } else if (direction.isLeft()) {
-            head.smoothMoveX(-GameConfig.SNAKE_SPEED);
+            head.moveX(-GameConfig.SNAKE_SPEED);
         } else if (direction.isUp()) {
-            head.smoothMoveY(GameConfig.SNAKE_SPEED);
+            head.moveY(GameConfig.SNAKE_SPEED);
         } else if (direction.isDown()) {
-            head.smoothMoveY(-GameConfig.SNAKE_SPEED);
+            head.moveY(-GameConfig.SNAKE_SPEED);
         }
         lastDirection = direction;
     }
 
     private void bodyPartsMovementStep() {
         if (bodyParts.size > 0) {
-            BodyPart tail = bodyParts.removeIndex(0);
-            tail.setXY(head.getX(), head.getY());
-            bodyParts.add(tail);
+            GameObject prev = getHead();
+            for (BodyPart body : bodyParts) {
+                body.setXY(prev.getX(), prev.getY());
+                prev = body;
+            }
         }
     }
 
@@ -72,8 +74,15 @@ public class Snake implements Resettable, Updateable {
 
     public void insertBodyPart() {
         BodyPart bodyPart = new BodyPart();
-        bodyPart.setXY(head.getX(), head.getY());
-        bodyParts.insert(0, bodyPart);
+
+        if (bodyParts.size == 0) {
+            bodyPart.gotoXY(head.getX(), head.getY());
+        } else {
+            BodyPart lastBodyPart = bodyParts.get(bodyParts.size - 1);
+            bodyPart.gotoXY(lastBodyPart.getX(), lastBodyPart.getY());
+        }
+
+        bodyParts.add(bodyPart);
     }
 
     public Array<BodyPart> getBodyParts() {

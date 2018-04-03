@@ -59,6 +59,7 @@ public class GameController implements Updateable {
             checkCollision();
 
             snake.update(delta);
+
             coin.update(delta);
 
             fruitSpanDelayTimer -= delta;
