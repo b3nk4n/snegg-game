@@ -10,6 +10,8 @@ public class Snake implements Resettable, Updateable {
     private Direction lastDirection;
     private Direction direction;
 
+    private float snakeMoveTimer;
+
     private final SnakeHead head;
     private final Array<BodyPart> bodyParts;
     
@@ -24,30 +26,39 @@ public class Snake implements Resettable, Updateable {
         bodyParts.clear();
         direction = Direction.RIGHT;
         lastDirection = Direction.RIGHT;
+        snakeMoveTimer = 0f;
         head.reset();
-        head.setXY(0, 0);
     }
 
     @Override
     public void update(float delta) {
-        updateBodyParts();
-        updateHead();
+        snakeMoveTimer += delta;
+        if (snakeMoveTimer >= GameConfig.MOVE_TIME) {
+            snakeMoveTimer -= GameConfig.MOVE_TIME;
+            bodyPartsMovementStep();
+            headMovementStep();
+        }
+
+        head.update(delta);
+        for (BodyPart body : bodyParts) {
+            body.update(delta);
+        }
     }
 
-    private void updateHead() {
+    private void headMovementStep() {
         if (direction.isRight()) {
-            head.moveX(GameConfig.SNAKE_SPEED);
+            head.smoothMoveX(GameConfig.SNAKE_SPEED);
         } else if (direction.isLeft()) {
-            head.moveX(-GameConfig.SNAKE_SPEED);
+            head.smoothMoveX(-GameConfig.SNAKE_SPEED);
         } else if (direction.isUp()) {
-            head.moveY(GameConfig.SNAKE_SPEED);
+            head.smoothMoveY(GameConfig.SNAKE_SPEED);
         } else if (direction.isDown()) {
-            head.moveY(-GameConfig.SNAKE_SPEED);
+            head.smoothMoveY(-GameConfig.SNAKE_SPEED);
         }
         lastDirection = direction;
     }
 
-    private void updateBodyParts() {
+    private void bodyPartsMovementStep() {
         if (bodyParts.size > 0) {
             BodyPart tail = bodyParts.removeIndex(0);
             tail.setXY(head.getX(), head.getY());

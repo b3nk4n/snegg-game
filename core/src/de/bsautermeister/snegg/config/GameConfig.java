@@ -21,6 +21,9 @@ public final class GameConfig {
     public static final float MOVE_TIME = 0.2f;
     public static final float SNAKE_SPEED = 1f;
 
+    public static final float HEAD_TRANSITION_PROGRESS = 0.1f;
+    public static final float BODY_TRANSITION_PROGRESS = 0.05f;
+
     public static final float COLLECTIBLE_SIZE = 1f;
     public static final int COIN_SCORE = 25;
     public static final int FRUIT_START_SCORE = 100;

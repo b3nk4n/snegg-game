@@ -23,7 +23,6 @@ public class GameController implements Updateable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
 
     private Snake snake;
-    private float snakeMoveTimer;
 
     private int collectedCoins;
     private Coin coin;
@@ -44,7 +43,6 @@ public class GameController implements Updateable {
         GameManager.INSTANCE.reset();
         collectedCoins = 0;
         spawnCoin();
-        snakeMoveTimer = 0;
         fruitSpanDelayTimer = Float.MAX_VALUE;
     }
 
@@ -56,16 +54,10 @@ public class GameController implements Updateable {
             checkInput();
             checkDebugInput();
 
-            snakeMoveTimer += delta;
-            if (snakeMoveTimer >= GameConfig.MOVE_TIME) {
-                snakeMoveTimer -= GameConfig.MOVE_TIME;
+            checkSnakeOutOfBounds();
+            checkCollision();
 
-                snake.update(delta);
-
-                checkSnakeOutOfBounds();
-                checkCollision();
-            }
-
+            snake.update(delta);
             coin.update(delta);
 
             fruitSpanDelayTimer -= delta;
@@ -105,7 +97,7 @@ public class GameController implements Updateable {
         checkHeadCoinCollision(head, coin);
         checkHeadFruitCollision(head, fruit);
         for (BodyPart bodyPart : snake.getBodyParts()) {
-            checkHeadBodyPartCollision(head, bodyPart);
+            //checkHeadBodyPartCollision(head, bodyPart);
         }
     }
 
