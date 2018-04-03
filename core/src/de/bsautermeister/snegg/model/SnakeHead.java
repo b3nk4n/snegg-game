@@ -36,4 +36,14 @@ public class SnakeHead extends GameObject {
     public void smoothMoveY(float deltaY) {
         this.targetY += deltaY;
     }
+
+    public void gotoX(float x) {
+        this.targetX = x;
+        setX(x);
+    }
+
+    public void gotoY(float y) {
+        this.targetY = y;
+        setY(y);
+    }
 }

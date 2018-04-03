@@ -21,6 +21,7 @@ import de.bsautermeister.snegg.model.SnakeHead;
 
 public class GameController implements Updateable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
+    private static final float EPS = 0.025f;
 
     private Snake snake;
 
@@ -79,16 +80,16 @@ public class GameController implements Updateable {
 
     private void checkSnakeOutOfBounds() {
         SnakeHead snakeHead = snake.getHead();
-        if (snakeHead.getX() >= GameConfig.WORLD_WIDTH) {
-            snakeHead.setX(0);
-        } else if (snakeHead.getX() < 0) {
-            snakeHead.setX(GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SIZE);
+        if (snakeHead.getX() >= GameConfig.WORLD_WIDTH - EPS) {
+            snakeHead.gotoX(0);
+        } else if (snakeHead.getX() < -GameConfig.SNAKE_SIZE + EPS) {
+            snakeHead.gotoX(GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SIZE);
         }
 
-        if (snakeHead.getY() >= GameConfig.MAX_Y) {
-            snakeHead.setY(0);
-        } else if (snakeHead.getY() < 0) {
-            snakeHead.setY(GameConfig.MAX_Y - GameConfig.SNAKE_SIZE);
+        if (snakeHead.getY() >= GameConfig.MAX_Y - EPS) {
+            snakeHead.gotoY(0);
+        } else if (snakeHead.getY() < -GameConfig.SNAKE_SIZE + EPS) {
+            snakeHead.gotoY(GameConfig.MAX_Y - GameConfig.SNAKE_SIZE);
         }
     }
 

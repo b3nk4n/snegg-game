@@ -107,7 +107,26 @@ public class GameRenderer implements Disposable {
         }
 
         SnakeHead head = snake.getHead();
-        batch.draw(headRegion, head.getX(), head.getY(), head.getWidth(), head.getHeight());
+        float headX = head.getX();
+        float headY = head.getY();
+
+        float cloneX = headX;
+        float cloneY = headY;
+        if (headX < 0) {
+            cloneX = headX + GameConfig.WORLD_WIDTH;
+        } else if (headX > GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SIZE) {
+            cloneX = headX - GameConfig.WORLD_WIDTH;
+        }
+        if (headY < 0) {
+            cloneY = headY + GameConfig.MAX_Y;
+        } else if (headY > GameConfig.MAX_Y - GameConfig.SNAKE_SIZE) {
+            cloneY = headY - GameConfig.MAX_Y;
+        }
+
+        if (cloneX != headX || cloneY != headY) {
+            batch.draw(headRegion, cloneX, cloneY, head.getWidth(), head.getHeight());
+        }
+        batch.draw(headRegion, headX, headY, head.getWidth(), head.getHeight());
 
         Coin coin = controller.getCoin();
         if (!coin.isCollected()) {
