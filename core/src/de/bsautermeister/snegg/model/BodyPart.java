@@ -6,13 +6,14 @@ public class BodyPart extends SmoothGameObject {
     private boolean justAdded;
 
     public BodyPart() {
-        super(GameConfig.BODY_TRANSITION_SPEED);
+        super(GameConfig.MOVE_TIME / 2f, 0.1f);
         setSize(GameConfig.SNAKE_SIZE, GameConfig.SNAKE_SIZE);
         reset();
     }
 
     @Override
     public void reset() {
+        super.reset();
         justAdded = true;
     }
 
