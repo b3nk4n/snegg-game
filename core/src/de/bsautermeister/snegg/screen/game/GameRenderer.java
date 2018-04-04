@@ -99,8 +99,31 @@ public class GameRenderer implements Disposable {
     }
 
     private void drawGame() {
-        batch.draw(backgroundRegion, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
+        drawBackground();
+        drawCoin();
+        drawFruit();
+        drawSnake();
+    }
 
+    private void drawBackground() {
+        batch.draw(backgroundRegion, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
+    }
+
+    private void drawFruit() {
+        Fruit fruit = controller.getFruit();
+        if (!fruit.isCollected()) {
+            batch.draw(orangeRegion, fruit.getX(), fruit.getY(), fruit.getWidth(), fruit.getHeight());
+        }
+    }
+
+    private void drawCoin() {
+        Coin coin = controller.getCoin();
+        if (!coin.isCollected()) {
+            batch.draw(coinRegion, coin.getX(), coin.getY(), coin.getWidth(), coin.getHeight());
+        }
+    }
+
+    private void drawSnake() {
         Snake snake = controller.getSnake();
         for (BodyPart bodyPart : snake.getBodyParts()) {
             float bodyX = bodyPart.getX();
@@ -123,16 +146,6 @@ public class GameRenderer implements Disposable {
             batch.draw(headRegion, cloneX, cloneY, head.getWidth(), head.getHeight());
         }
         batch.draw(headRegion, headX, headY, head.getWidth(), head.getHeight());
-
-        Coin coin = controller.getCoin();
-        if (!coin.isCollected()) {
-            batch.draw(coinRegion, coin.getX(), coin.getY(), coin.getWidth(), coin.getHeight());
-        }
-
-        Fruit fruit = controller.getFruit();
-        if (!fruit.isCollected()) {
-            batch.draw(orangeRegion, fruit.getX(), fruit.getY(), fruit.getWidth(), fruit.getHeight());
-        }
     }
 
     private float getWorldWrapX(float headX) {
