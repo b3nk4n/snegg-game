@@ -23,6 +23,7 @@ public class GameController implements Updateable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
     private static final float EPS = 0.025f;
 
+    private float snakeMoveTimer;
     private Snake snake;
 
     private int collectedCoins;
@@ -45,6 +46,8 @@ public class GameController implements Updateable {
         collectedCoins = 0;
         spawnCoin();
         fruitSpanDelayTimer = Float.MAX_VALUE;
+        snakeMoveTimer = 0f;
+        snake.reset();
     }
 
     @Override
@@ -55,8 +58,14 @@ public class GameController implements Updateable {
             checkInput();
             checkDebugInput();
 
-            checkSnakeOutOfBounds();
-            checkCollision();
+            checkSnakeOutOfBounds(); // TODO maybe we do not need an extended map bounds, when we also check this only before/after each animation?
+
+            snakeMoveTimer += delta;
+            if (snakeMoveTimer >= GameConfig.MOVE_TIME) {
+                snakeMoveTimer -= GameConfig.MOVE_TIME;
+                snake.movementStep();
+                checkCollision();
+            }
 
             snake.update(delta);
 

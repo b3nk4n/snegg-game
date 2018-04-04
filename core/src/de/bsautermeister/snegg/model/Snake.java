@@ -10,8 +10,6 @@ public class Snake implements Resettable, Updateable {
     private Direction lastDirection;
     private Direction direction;
 
-    private float snakeMoveTimer;
-
     private final SnakeHead head;
     private final Array<BodyPart> bodyParts;
     
@@ -26,23 +24,20 @@ public class Snake implements Resettable, Updateable {
         bodyParts.clear();
         direction = Direction.RIGHT;
         lastDirection = Direction.RIGHT;
-        snakeMoveTimer = 0f;
         head.reset();
     }
 
     @Override
     public void update(float delta) {
-        snakeMoveTimer += delta;
-        if (snakeMoveTimer >= GameConfig.MOVE_TIME) {
-            snakeMoveTimer -= GameConfig.MOVE_TIME;
-            bodyPartsMovementStep();
-            headMovementStep();
-        }
-
         head.update(delta);
         for (BodyPart body : bodyParts) {
             body.update(delta);
         }
+    }
+
+    public void movementStep() {
+        bodyPartsMovementStep();
+        headMovementStep();
     }
 
     private void headMovementStep() {
