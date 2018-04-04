@@ -108,7 +108,7 @@ public class GameController implements Updateable {
         checkHeadCoinCollision(head, coin);
         checkHeadFruitCollision(head, fruit);
         for (BodyPart bodyPart : snake.getBodyParts()) {
-            //checkHeadBodyPartCollision(head, bodyPart);
+            checkHeadBodyPartCollision(head, bodyPart);
         }
     }
 
