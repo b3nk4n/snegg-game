@@ -1,5 +1,6 @@
 package de.bsautermeister.snegg.screen.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Intersector;
@@ -16,13 +17,15 @@ import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
 import de.bsautermeister.snegg.model.Direction;
 import de.bsautermeister.snegg.model.Fruit;
-import de.bsautermeister.snegg.model.SmoothGameObject;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
 
 
 public class GameController implements Updateable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
+
+    private float gameTime;
+    private float currentMoveTime;
 
     private float snakeMoveTimer;
     private Snake snake;
@@ -47,6 +50,8 @@ public class GameController implements Updateable {
         collectedCoins = 0;
         spawnCoin();
         fruitSpanDelayTimer = Float.MAX_VALUE;
+        gameTime = 0f;
+        currentMoveTime = GameConfig.MOVE_TIME;
         snakeMoveTimer = 0f;
         snake.reset();
     }
@@ -56,11 +61,17 @@ public class GameController implements Updateable {
         GameManager.INSTANCE.updateDisplayScore(delta);
 
         if (GameManager.INSTANCE.isPlaying()) {
+            gameTime += delta;
+            currentMoveTime -= delta * GameConfig.DIFFICULTY_LOWERING_MOVE_TIME_FACTOR;
+            currentMoveTime = Math.max(GameConfig.MIN_MOVE_TIME, currentMoveTime);
+
+            LOG.info(String.valueOf(currentMoveTime));
+
             checkInput();
             checkDebugInput();
 
             snakeMoveTimer += delta;
-            if (snakeMoveTimer >= GameConfig.MOVE_TIME) {
+            if (snakeMoveTimer >= currentMoveTime) {
                 snakeMoveTimer = 0;
 
                 snake.movementStep();
@@ -84,6 +95,10 @@ public class GameController implements Updateable {
         } else {
             checkForRestart();
         }
+    }
+
+    public float getCurrentMoveTime() {
+        return currentMoveTime;
     }
 
     private void checkForRestart() {
