@@ -16,12 +16,13 @@ import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
 import de.bsautermeister.snegg.model.Direction;
 import de.bsautermeister.snegg.model.Fruit;
+import de.bsautermeister.snegg.model.SmoothGameObject;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
 
+
 public class GameController implements Updateable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
-    private static final float EPS = 0.025f;
 
     private float snakeMoveTimer;
     private Snake snake;
@@ -58,12 +59,15 @@ public class GameController implements Updateable {
             checkInput();
             checkDebugInput();
 
-            checkSnakeOutOfBounds(); // TODO maybe we do not need an extended map bounds, when we also check this only before/after each animation?
-
             snakeMoveTimer += delta;
             if (snakeMoveTimer >= GameConfig.MOVE_TIME) {
-                snakeMoveTimer -= GameConfig.MOVE_TIME;
+                snakeMoveTimer = 0;
+
                 snake.movementStep();
+
+                snake.checkSnakeHeadOutOfBounds();
+                snake.checkSnakeBodyPartsOutOfBounds();
+
                 checkCollision();
             }
 
@@ -85,21 +89,6 @@ public class GameController implements Updateable {
     private void checkForRestart() {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             reset();
-        }
-    }
-
-    private void checkSnakeOutOfBounds() {
-        SnakeHead snakeHead = snake.getHead();
-        if (snakeHead.getX() >= GameConfig.WORLD_WIDTH - EPS) {
-            snakeHead.gotoX(0);
-        } else if (snakeHead.getX() < -GameConfig.SNAKE_SIZE + EPS) {
-            snakeHead.gotoX(GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SIZE);
-        }
-
-        if (snakeHead.getY() >= GameConfig.MAX_Y - EPS) {
-            snakeHead.gotoY(0);
-        } else if (snakeHead.getY() < -GameConfig.SNAKE_SIZE + EPS) {
-            snakeHead.gotoY(GameConfig.MAX_Y - GameConfig.SNAKE_SIZE);
         }
     }
 

@@ -85,7 +85,7 @@ public class GameRenderer implements Disposable {
 
         renderGame();
         renderHud();
-        //renderDebug();
+        renderDebug();
     }
 
     private void renderGame() {
@@ -131,7 +131,7 @@ public class GameRenderer implements Disposable {
             float bodyY = bodyPart.getY();
             float cloneY = getWorldWrapY(bodyY);
             if (cloneX != bodyX || cloneY != bodyY) {
-                batch.draw(headRegion, cloneX, cloneY, bodyPart.getWidth(), bodyPart.getHeight());
+                batch.draw(bodyRegion, cloneX, cloneY, bodyPart.getWidth(), bodyPart.getHeight());
             }
             batch.draw(bodyRegion, bodyPart.getX(), bodyPart.getY(), bodyPart.getWidth(), bodyPart.getHeight());
         }

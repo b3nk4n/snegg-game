@@ -28,7 +28,7 @@ public abstract class SmoothGameObject extends GameObject {
     public void update(float delta) {
         transitionTimestep += delta;
         float progress = Math.min(1.0f, (transitionTimestep - transitionDelay) / transitionDuration);
-
+        //float progress = 1;
         if (progress > 0) {
             float x = Interpolation.smooth.apply(sourceX, targetX, progress);
             float y = Interpolation.smooth.apply(sourceY, targetY, progress);
@@ -82,22 +82,27 @@ public abstract class SmoothGameObject extends GameObject {
     }
 
     public void gotoXY(float x, float y) {
+        float diffX = targetX - sourceX;
+        float diffY = targetY - sourceY;
+
         this.sourceX = x;
         this.sourceY = y;
-        this.targetX = x;
-        this.targetY = y;
+        this.targetX = x + diffX;
+        this.targetY = y + diffY;
         super.setXY(x, y);
     }
 
     public void gotoX(float x) {
+        float diff = targetX - sourceX;
         this.sourceX = x;
-        this.targetX = x;
+        this.targetX = x + diff;
         super.setX(x);
     }
 
     public void gotoY(float y) {
+        float diff = targetY - sourceY;
         this.sourceY = y;
-        this.targetY = y;
+        this.targetY = y + diff;
         super.setY(y);
     }
 }
