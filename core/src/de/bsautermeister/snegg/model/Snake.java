@@ -102,7 +102,9 @@ public class Snake implements Resettable, Updateable {
     }
 
     public void insertBodyPart() {
-        BodyPart bodyPart = new BodyPart();
+        // TODO make sure total transition delay is never bigger than the MOVE_TIME
+        float transitionDelay = 0.01f + 0.01f * bodyParts.size;
+        BodyPart bodyPart = new BodyPart(transitionDelay);
 
         float x, y;
         if (bodyParts.size == 0) {

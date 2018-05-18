@@ -5,8 +5,8 @@ import de.bsautermeister.snegg.config.GameConfig;
 public class BodyPart extends SmoothGameObject {
     private boolean justAdded;
 
-    public BodyPart() {
-        super(GameConfig.MOVE_TIME / 2f, 0.1f);
+    public BodyPart(float transitionDelay) {
+        super(GameConfig.MOVE_TIME / 2f, transitionDelay);
         setSize(GameConfig.SNAKE_SIZE, GameConfig.SNAKE_SIZE);
         reset();
     }
