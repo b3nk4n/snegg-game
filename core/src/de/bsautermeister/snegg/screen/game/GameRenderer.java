@@ -1,6 +1,7 @@
 package de.bsautermeister.snegg.screen.game;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -34,7 +36,7 @@ public class GameRenderer implements Disposable {
     private final AssetManager assetManager;
     private final GameController controller;
 
-    private OrthographicCamera camera;
+    private static OrthographicCamera camera;
     private Viewport viewport;
     private Viewport hudViewport;
     private ShapeRenderer renderer;
@@ -237,5 +239,13 @@ public class GameRenderer implements Disposable {
     public void dispose() {
         renderer.dispose();
         font.dispose();
+    }
+
+    public static Vector3 projectToWorld(float x, float y) {
+        return camera.unproject(new Vector3(x, y, 0));
+    }
+
+    public static Vector3 projectToScreen(float x, float y) {
+        return camera.project(new Vector3(x, y, 0));
     }
 }

@@ -129,4 +129,8 @@ public class Snake implements Resettable, Updateable {
             this.direction = direction;
         }
     }
+
+    public Direction getDirection() {
+        return direction;
+    }
 }

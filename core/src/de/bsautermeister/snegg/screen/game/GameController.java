@@ -1,12 +1,12 @@
 package de.bsautermeister.snegg.screen.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.common.GameManager;
@@ -67,7 +67,8 @@ public class GameController implements Updateable {
 
             LOG.info(String.valueOf(currentMoveTime));
 
-            checkInput();
+            checkTouchInput();
+            checkKeyboardInput();
             checkDebugInput();
 
             snakeMoveTimer += delta;
@@ -166,7 +167,37 @@ public class GameController implements Updateable {
         }
     }
 
-    private void checkInput() {
+    private void checkTouchInput() {
+        if (Gdx.input.isTouched() && Gdx.input.justTouched()) {
+            float x = Gdx.input.getX();
+            float y = Gdx.input.getY();
+
+            Vector3 touchPosition = GameRenderer.projectToWorld(x, y);
+            float headX = snake.getHead().getX();
+            float headY = snake.getHead().getY();
+
+            switch (snake.getDirection()) {
+                case UP:
+                case DOWN:
+                    if (touchPosition.x < headX) {
+                        snake.setDirection(Direction.LEFT);
+                    } else if (touchPosition.x > headX) {
+                        snake.setDirection(Direction.RIGHT);
+                    }
+                    break;
+                case RIGHT:
+                case LEFT:
+                    if (touchPosition.y < headY) {
+                        snake.setDirection(Direction.DOWN);
+                    } else if (touchPosition.y > headY) {
+                        snake.setDirection(Direction.UP);
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void checkKeyboardInput() {
         boolean leftPressed = Gdx.input.isKeyPressed(Input.Keys.LEFT);
         boolean rightPressed = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
         boolean upPressed = Gdx.input.isKeyPressed(Input.Keys.UP);
