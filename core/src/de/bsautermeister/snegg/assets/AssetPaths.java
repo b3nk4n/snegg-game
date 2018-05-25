@@ -7,7 +7,8 @@ public final class AssetPaths {
     }
 
     public interface Atlas {
-        String GAME_PLAY = "gameplay/gameplay.atlas";
+        String LOADING = "loading/loading.atlas";
+        String GAMEPLAY = "gameplay/gameplay.atlas";
     }
 
     public interface Skins {

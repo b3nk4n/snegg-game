@@ -13,8 +13,11 @@ public final class AssetDescriptors {
     }
 
     public interface Atlas {
-        AssetDescriptor<TextureAtlas> GAME_PLAY =
-                new AssetDescriptor<TextureAtlas>(AssetPaths.Atlas.GAME_PLAY, TextureAtlas.class);
+        AssetDescriptor<TextureAtlas> LOADING =
+                new AssetDescriptor<TextureAtlas>(AssetPaths.Atlas.LOADING, TextureAtlas.class);
+
+        AssetDescriptor<TextureAtlas> GAMEPLAY =
+                new AssetDescriptor<TextureAtlas>(AssetPaths.Atlas.GAMEPLAY, TextureAtlas.class);
     }
 
     public interface Skins {

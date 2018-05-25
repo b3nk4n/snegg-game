@@ -44,7 +44,7 @@ public class MenuScreen extends ScreenAdapter {
         viewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
         stage = new Stage(viewport, game.getBatch());
         skin = assetManager.get(AssetDescriptors.Skins.UI);
-        atlas = assetManager.get(AssetDescriptors.Atlas.GAME_PLAY);
+        atlas = assetManager.get(AssetDescriptors.Atlas.GAMEPLAY);
 
         Gdx.input.setInputProcessor(stage);
         Actor ui = createUI();

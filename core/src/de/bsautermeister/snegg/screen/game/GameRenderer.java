@@ -1,7 +1,6 @@
 package de.bsautermeister.snegg.screen.game;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -68,7 +67,7 @@ public class GameRenderer implements Disposable {
         font = assetManager.get(AssetDescriptors.Fonts.UI);
         layout = new GlyphLayout();
 
-        TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.Atlas.GAME_PLAY);
+        TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.Atlas.GAMEPLAY);
         backgroundRegion = gamePlayAtlas.findRegion(RegionNames.BACKGROUND);
         headRegion = gamePlayAtlas.findRegion(RegionNames.HEAD);
         bodyRegion = gamePlayAtlas.findRegion(RegionNames.BODY);
