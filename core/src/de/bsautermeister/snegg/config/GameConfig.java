@@ -5,14 +5,14 @@ import com.badlogic.gdx.utils.Logger;
 public final class GameConfig {
     public static final int LOG_LEVEL = Logger.DEBUG;
 
-    public static final float WIDTH = 480f;
-    public static final float HEIGHT = 800f;
+    public static final float WIDTH = 720;
+    public static final float HEIGHT = 1280;
 
-    public static final float HUD_WIDTH = 480f; // still world units!
-    public static final float HUD_HEIGHT = 800f; // still world units!
+    public static final float HUD_WIDTH = 720; // still world units!
+    public static final float HUD_HEIGHT = 1280; // still world units!
 
-    public static final float WORLD_WIDTH = 15.0f;
-    public static final float WORLD_HEIGHT = 25.0f;
+    public static final float WORLD_WIDTH = 18.0f;
+    public static final float WORLD_HEIGHT = 32.0f;
 
     public static final float WORLD_CENTER_X = WORLD_WIDTH / 2f;
     public static final float WORLD_CENTER_Y = WORLD_HEIGHT / 2f;
