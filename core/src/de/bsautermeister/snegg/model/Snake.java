@@ -25,6 +25,7 @@ public class Snake implements Resettable, Updateable {
     @Override
     public void reset() {
         bodyParts.clear();
+        insertBodyPart();
         direction = Direction.RIGHT;
         lastDirection = Direction.RIGHT;
         head.reset();
