@@ -1,19 +1,15 @@
 package de.bsautermeister.snegg.screen.game;
 
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.listeners.GameListener;
+import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 
-public class GameScreen extends ScreenAdapter {
-    private final GameApp game;
-    private final AssetManager assetManager;
-
+public class GameScreen extends ScreenBase {
     private GameRenderer renderer;
     private GameController controller;
 
@@ -25,8 +21,7 @@ public class GameScreen extends ScreenAdapter {
     private Sound spawnFruitSound;
 
     public GameScreen(GameApp game) {
-        this.game = game;
-        this.assetManager = game.getAssetManager();
+        super(game);
 
         collisionListener = new GameListener() {
             @Override
@@ -53,13 +48,13 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        coinSound = assetManager.get(AssetDescriptors.Sounds.COIN);
-        loseSound = assetManager.get(AssetDescriptors.Sounds.LOSE);
-        fruitSound = assetManager.get(AssetDescriptors.Sounds.FRUIT);
-        spawnFruitSound = assetManager.get(AssetDescriptors.Sounds.FRUIT_SPAWN);
+        coinSound = getAsset(AssetDescriptors.Sounds.COIN);
+        loseSound = getAsset(AssetDescriptors.Sounds.LOSE);
+        fruitSound = getAsset(AssetDescriptors.Sounds.FRUIT);
+        spawnFruitSound = getAsset(AssetDescriptors.Sounds.FRUIT_SPAWN);
 
         controller = new GameController(collisionListener);
-        renderer = new GameRenderer(game.getBatch(), assetManager, controller);
+        renderer = new GameRenderer(getBatch(), getAssetManager(), controller);
     }
 
     @Override
@@ -68,18 +63,13 @@ public class GameScreen extends ScreenAdapter {
         renderer.render(delta);
 
         if (GameManager.INSTANCE.isGameOver()) {
-            game.setScreen(new MenuScreen(game));
+            setScreen(new MenuScreen(getGame()));
         }
     }
 
     @Override
     public void resize(int width, int height) {
         renderer.resize(width, height);
-    }
-
-    @Override
-    public void hide() {
-        dispose();
     }
 
     @Override

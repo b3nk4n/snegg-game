@@ -22,29 +22,26 @@ import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.assets.Styles;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.game.GameScreen;
 import de.bsautermeister.snegg.util.GdxUtils;
 
-public class MenuScreen extends ScreenAdapter {
-    private final GameApp game;
-    private final AssetManager assetManager;
-
+public class MenuScreen extends ScreenBase {
     private Viewport viewport;
     private Stage stage;
     private Skin skin;
     private TextureAtlas atlas;
 
     public MenuScreen(GameApp game) {
-        this.game = game;
-        this.assetManager = game.getAssetManager();
+        super(game);
     }
 
     @Override
     public void show() {
         viewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
-        stage = new Stage(viewport, game.getBatch());
-        skin = assetManager.get(AssetDescriptors.Skins.UI);
-        atlas = assetManager.get(AssetDescriptors.Atlas.GAMEPLAY);
+        stage = new Stage(viewport, getBatch());
+        skin = getAsset(AssetDescriptors.Skins.UI);
+        atlas = getAsset(AssetDescriptors.Atlas.GAMEPLAY);
 
         Gdx.input.setInputProcessor(stage);
         Actor ui = createUI();
@@ -87,7 +84,7 @@ public class MenuScreen extends ScreenAdapter {
     }
 
     private void play() {
-        game.setScreen(new GameScreen(game));
+        setScreen(new GameScreen(getGame()));
     }
 
     private void quit() {
@@ -105,11 +102,6 @@ public class MenuScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-    }
-
-    @Override
-    public void hide() {
-        dispose();
     }
 
     @Override

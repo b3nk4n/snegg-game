@@ -1,14 +1,11 @@
 package de.bsautermeister.snegg.screen.loading;
 
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -16,14 +13,12 @@ import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.util.GdxUtils;
 
-public class LoadingScreen extends ScreenAdapter {
+public class LoadingScreen extends ScreenBase {
     private final static String LOADING_ATLAS = "loading/loading.atlas";
-
-    private final GameApp game;
-    private final AssetManager assetManager;
 
     private Viewport viewport;
     private Stage stage;
@@ -40,8 +35,7 @@ public class LoadingScreen extends ScreenAdapter {
     private Actor loadingBar;
 
     public LoadingScreen(GameApp game) {
-        this.game = game;
-        this.assetManager = game.getAssetManager();
+        super(game);
     }
 
     @Override
@@ -50,15 +44,15 @@ public class LoadingScreen extends ScreenAdapter {
 
         // Tell the manager to load assets for the loading screen
 
-        assetManager.load(AssetDescriptors.Atlas.LOADING);
+        getAssetManager().load(AssetDescriptors.Atlas.LOADING);
         // Wait until they are finished loading
-        assetManager.finishLoading();
+        getAssetManager().finishLoading();
 
         // Initialize the stage where we will place everything
-        stage = new Stage(viewport, game.getBatch());
+        stage = new Stage(viewport, getBatch());
 
         // Get our texture atlas from the manager
-        TextureAtlas atlas = assetManager.get(AssetDescriptors.Atlas.LOADING);
+        TextureAtlas atlas = getAsset(AssetDescriptors.Atlas.LOADING);
 
         // Grab the regions from the atlas and create some images
         logo = new Image(atlas.findRegion(RegionNames.LOADING_LOGO));
@@ -85,13 +79,13 @@ public class LoadingScreen extends ScreenAdapter {
     }
 
     private void loadAssets() {
-        assetManager.load(AssetDescriptors.Fonts.UI);
-        assetManager.load(AssetDescriptors.Atlas.GAMEPLAY);
-        assetManager.load(AssetDescriptors.Skins.UI);
-        assetManager.load(AssetDescriptors.Sounds.COIN);
-        assetManager.load(AssetDescriptors.Sounds.LOSE);
-        assetManager.load(AssetDescriptors.Sounds.FRUIT);
-        assetManager.load(AssetDescriptors.Sounds.FRUIT_SPAWN);
+        getAssetManager().load(AssetDescriptors.Fonts.UI);
+        getAssetManager().load(AssetDescriptors.Atlas.GAMEPLAY);
+        getAssetManager().load(AssetDescriptors.Skins.UI);
+        getAssetManager().load(AssetDescriptors.Sounds.COIN);
+        getAssetManager().load(AssetDescriptors.Sounds.LOSE);
+        getAssetManager().load(AssetDescriptors.Sounds.FRUIT);
+        getAssetManager().load(AssetDescriptors.Sounds.FRUIT_SPAWN);
     }
 
     @Override
@@ -132,7 +126,7 @@ public class LoadingScreen extends ScreenAdapter {
         GdxUtils.clearScreen();
 
         // Interpolate the percentage to make it more smooth
-        percent = Interpolation.linear.apply(percent, assetManager.getProgress(), 0.05f);
+        percent = Interpolation.linear.apply(percent, getAssetManager().getProgress(), 0.05f);
 
         // Update positions (and size) to match the percentage
         loadingBarHidden.setX(startX + endX * percent);
@@ -144,20 +138,15 @@ public class LoadingScreen extends ScreenAdapter {
         stage.act();
         stage.draw();
 
-        if (assetManager.update() && percent > 0.99f) {
-            game.setScreen(new MenuScreen(game));
+        if (getAssetManager().update() && percent > 0.99f) {
+            setScreen(new MenuScreen(getGame()));
         }
-    }
-
-    @Override
-    public void hide() {
-        dispose();
     }
 
     @Override
     public void dispose() {
         // Dispose the loading assets as we no longer need them
-        assetManager.unload(LOADING_ATLAS);
+        getAssetManager().unload(LOADING_ATLAS);
 
         stage.dispose();
     }
