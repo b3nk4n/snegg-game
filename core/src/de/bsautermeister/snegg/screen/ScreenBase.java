@@ -5,7 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sun.istack.internal.NotNull;
+
 
 import de.bsautermeister.snegg.common.GameApp;
 
@@ -31,7 +31,7 @@ public abstract class ScreenBase extends ScreenAdapter {
         return game.getAssetManager();
     }
 
-    public <T> T getAsset(@NotNull AssetDescriptor<T> assetDescriptor) {
+    public <T> T getAsset(AssetDescriptor<T> assetDescriptor) {
         return getAssetManager().get(assetDescriptor);
     }
 
