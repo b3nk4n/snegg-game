@@ -7,19 +7,19 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
-import de.bsautermeister.snegg.common.GameApp;
+import de.bsautermeister.snegg.common.GameServiceApp;
 
 public abstract class ScreenBase extends ScreenAdapter {
-    private final GameApp game;
+    private final GameServiceApp game;
 
-    public ScreenBase(GameApp game) {
+    public ScreenBase(GameServiceApp game) {
         this.game = game;
     }
     public void setScreen(Screen screen) {
         this.game.setScreen(screen);
     }
 
-    public GameApp getGame() {
+    public GameServiceApp getGame() {
         return game;
     }
 

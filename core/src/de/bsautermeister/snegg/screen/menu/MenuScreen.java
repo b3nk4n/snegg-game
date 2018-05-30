@@ -1,8 +1,6 @@
 package de.bsautermeister.snegg.screen.menu;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -20,10 +18,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.assets.Styles;
-import de.bsautermeister.snegg.common.GameApp;
+import de.bsautermeister.snegg.common.GameServiceApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.game.GameScreen;
+import de.bsautermeister.snegg.services.PlayGameServices;
 import de.bsautermeister.snegg.util.GdxUtils;
 
 public class MenuScreen extends ScreenBase {
@@ -32,8 +31,11 @@ public class MenuScreen extends ScreenBase {
     private Skin skin;
     private TextureAtlas atlas;
 
-    public MenuScreen(GameApp game) {
+    private final PlayGameServices gameServices;
+
+    public MenuScreen(GameServiceApp game) {
         super(game);
+        this.gameServices = game.getGameServices();
     }
 
     @Override
@@ -46,6 +48,10 @@ public class MenuScreen extends ScreenBase {
         Gdx.input.setInputProcessor(stage);
         Actor ui = createUI();
         stage.addActor(ui);
+
+        if (!gameServices.isSignedIn()) {
+            gameServices.signIn();
+        }
     }
 
     private Actor createUI() {
@@ -88,6 +94,7 @@ public class MenuScreen extends ScreenBase {
     }
 
     private void quit() {
+        gameServices.signOut();
         Gdx.app.exit();
     }
 

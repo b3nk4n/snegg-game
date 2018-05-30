@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
-import de.bsautermeister.snegg.common.GameApp;
+import de.bsautermeister.snegg.common.GameServiceApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
@@ -34,7 +34,7 @@ public class LoadingScreen extends ScreenBase {
 
     private Actor loadingBar;
 
-    public LoadingScreen(GameApp game) {
+    public LoadingScreen(GameServiceApp game) {
         super(game);
     }
 
