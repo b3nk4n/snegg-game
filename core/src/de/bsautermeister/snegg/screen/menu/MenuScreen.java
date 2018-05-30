@@ -70,6 +70,32 @@ public class MenuScreen extends ScreenBase {
                 play();
             }
         });
+
+        Button leaderboardsButton = new Button(skin, Styles.Button.LEADERBOARDS);
+        leaderboardsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameServices.showScore();
+            }
+        });
+
+        Button achievementsButton = new Button(skin, Styles.Button.ACHIEVEMENTS);
+        achievementsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameServices.showAchievements();
+            }
+        });
+
+        Button reviewsButton = new Button(skin, Styles.Button.REVIEWS);
+        reviewsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // FIXME crashes the app?
+                //gameServices.rateGame();
+            }
+        });
+
         Button quitButton = new Button(skin, Styles.Button.QUIT);
         quitButton.addListener(new ClickListener() {
             @Override
@@ -80,6 +106,9 @@ public class MenuScreen extends ScreenBase {
 
         table.add(title).row();
         table.add(playButton).row();
+        table.add(leaderboardsButton).row();
+        table.add(achievementsButton).row();
+        table.add(reviewsButton).row();
         table.add(quitButton);
 
         table.center();

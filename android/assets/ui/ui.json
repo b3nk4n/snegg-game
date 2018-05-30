@@ -5,6 +5,15 @@
     },
     "quit": {
       "up": "quit-button"
+    },
+    "reviews": {
+      "up": "reviews-button"
+    },
+    "achievements": {
+      "up": "achievements-button"
+    },
+    "leaderboards": {
+      "up": "leaderboards-button"
     }
   }
 }

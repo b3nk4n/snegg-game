@@ -11,6 +11,6 @@ public class DesktopLauncher {
 		config.width = (int)GameConfig.WIDTH;
 		config.height = (int)GameConfig.HEIGHT;
 
-		new LwjglApplication(new SneggGame(), config);
+		new LwjglApplication(new SneggGame(null), config);
 	}
 }

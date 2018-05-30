@@ -1,26 +1,47 @@
 
 ui.png
-size: 1024,128
+size: 1024,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+achievements-button
+  rotate: false
+  xy: 2, 104
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+leaderboards-button
+  rotate: false
+  xy: 2, 2
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
 play-button
   rotate: false
-  xy: 569, 2
+  xy: 164, 104
   size: 160, 100
   orig: 160, 100
   offset: 0, 0
   index: -1
 quit-button
   rotate: false
-  xy: 731, 2
+  xy: 164, 2
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+reviews-button
+  rotate: false
+  xy: 326, 104
   size: 160, 100
   orig: 160, 100
   offset: 0, 0
   index: -1
 title
   rotate: false
-  xy: 2, 67
+  xy: 2, 206
   size: 565, 35
   orig: 565, 35
   offset: 0, 0
