@@ -5,7 +5,6 @@ import com.badlogic.gdx.audio.Sound;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.common.GameManager;
-import de.bsautermeister.snegg.common.GameServiceApp;
 import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
@@ -21,12 +20,8 @@ public class GameScreen extends ScreenBase {
     private Sound fruitSound;
     private Sound spawnFruitSound;
 
-    private final GameServiceApp gameServiceApp;
-
-    public GameScreen(GameServiceApp game) {
+    public GameScreen(GameApp game) {
         super(game);
-
-        this.gameServiceApp = game; // TODO fix getGame() vs. this.gameServiceApp (redundant vs. close coupling to PlayServices in GameApp base class)
 
         collisionListener = new GameListener() {
             @Override

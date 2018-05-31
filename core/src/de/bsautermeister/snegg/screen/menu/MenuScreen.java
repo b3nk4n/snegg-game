@@ -18,11 +18,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.assets.Styles;
-import de.bsautermeister.snegg.common.GameServiceApp;
+import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.game.GameScreen;
-import de.bsautermeister.snegg.services.PlayGameServices;
+import de.bsautermeister.snegg.services.Leaderboards;
 import de.bsautermeister.snegg.util.GdxUtils;
 
 public class MenuScreen extends ScreenBase {
@@ -31,11 +31,8 @@ public class MenuScreen extends ScreenBase {
     private Skin skin;
     private TextureAtlas atlas;
 
-    private final PlayGameServices gameServices;
-
-    public MenuScreen(GameServiceApp game) {
+    public MenuScreen(GameApp game) {
         super(game);
-        this.gameServices = game.getGameServices();
     }
 
     @Override
@@ -48,10 +45,6 @@ public class MenuScreen extends ScreenBase {
         Gdx.input.setInputProcessor(stage);
         Actor ui = createUI();
         stage.addActor(ui);
-
-        if (!gameServices.isSignedIn()) {
-            gameServices.signIn();
-        }
     }
 
     private Actor createUI() {
@@ -62,6 +55,7 @@ public class MenuScreen extends ScreenBase {
         table.setBackground(new TextureRegionDrawable(backgroundRegion));
 
         Image title = new Image(skin, RegionNames.TITLE);
+        table.add(title).row();
 
         Button playButton = new Button(skin, Styles.Button.PLAY);
         playButton.addListener(new ClickListener() {
@@ -70,31 +64,36 @@ public class MenuScreen extends ScreenBase {
                 play();
             }
         });
+        table.add(playButton).row();
 
-        Button leaderboardsButton = new Button(skin, Styles.Button.LEADERBOARDS);
-        leaderboardsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gameServices.showScore();
-            }
-        });
+        if (getGame().getGameServices().isSupported()) {
+            Button leaderboardsButton = new Button(skin, Styles.Button.LEADERBOARDS);
+            leaderboardsButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    getGameServices().showScore(Leaderboards.Keys.LEADERBOARD);
+                }
+            });
+            table.add(leaderboardsButton).row();
 
-        Button achievementsButton = new Button(skin, Styles.Button.ACHIEVEMENTS);
-        achievementsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                gameServices.showAchievements();
-            }
-        });
+            Button achievementsButton = new Button(skin, Styles.Button.ACHIEVEMENTS);
+            achievementsButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    getGameServices().showAchievements();
+                }
+            });
+            table.add(achievementsButton).row();
 
-        Button reviewsButton = new Button(skin, Styles.Button.REVIEWS);
-        reviewsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // FIXME crashes the app?
-                //gameServices.rateGame();
-            }
-        });
+            Button reviewsButton = new Button(skin, Styles.Button.REVIEWS);
+            reviewsButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    getGameServices().rateGame();
+                }
+            });
+            table.add(reviewsButton).row();
+        }
 
         Button quitButton = new Button(skin, Styles.Button.QUIT);
         quitButton.addListener(new ClickListener() {
@@ -103,12 +102,6 @@ public class MenuScreen extends ScreenBase {
                 quit();
             }
         });
-
-        table.add(title).row();
-        table.add(playButton).row();
-        table.add(leaderboardsButton).row();
-        table.add(achievementsButton).row();
-        table.add(reviewsButton).row();
         table.add(quitButton);
 
         table.center();
@@ -123,7 +116,10 @@ public class MenuScreen extends ScreenBase {
     }
 
     private void quit() {
-        gameServices.signOut();
+        if (getGameServices().isSupported()) {
+            getGameServices().signOut();
+        }
+
         Gdx.app.exit();
     }
 

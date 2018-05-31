@@ -4,13 +4,12 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 
 import de.bsautermeister.snegg.common.GameApp;
-import de.bsautermeister.snegg.common.GameServiceApp;
 import de.bsautermeister.snegg.screen.loading.LoadingScreen;
-import de.bsautermeister.snegg.services.PlayGameServices;
+import de.bsautermeister.snegg.services.GameServices;
 
-public class SneggGame extends GameServiceApp {
+public class SneggGame extends GameApp {
 
-	public SneggGame(PlayGameServices gameServices) {
+	public SneggGame(GameServices gameServices) {
 		super(gameServices);
 	}
 
