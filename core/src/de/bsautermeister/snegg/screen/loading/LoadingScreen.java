@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bsautermeister.snegg.assets.AssetDescriptors;
+import de.bsautermeister.snegg.assets.AssetPaths;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.common.GameServiceApp;
 import de.bsautermeister.snegg.config.GameConfig;
@@ -18,8 +19,6 @@ import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.util.GdxUtils;
 
 public class LoadingScreen extends ScreenBase {
-    private final static String LOADING_ATLAS = "loading/loading.atlas";
-
     private Viewport viewport;
     private Stage stage;
 
@@ -43,7 +42,6 @@ public class LoadingScreen extends ScreenBase {
         viewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
 
         // Tell the manager to load assets for the loading screen
-
         getAssetManager().load(AssetDescriptors.Atlas.LOADING);
         // Wait until they are finished loading
         getAssetManager().finishLoading();
@@ -62,7 +60,7 @@ public class LoadingScreen extends ScreenBase {
         loadingBg = new Image(atlas.findRegion(RegionNames.LOADING_FRAME_BACKGROUND));
 
         // Add the loading bar animation
-        Animation anim = new Animation(0.05f, atlas.findRegions("loading-bar-anim") );
+        Animation anim = new Animation(0.05f, atlas.findRegions(RegionNames.LOADING_ANIMATION) );
         anim.setPlayMode(Animation.PlayMode.LOOP_REVERSED);
         loadingBar = new LoadingBar(anim);
 
@@ -146,7 +144,7 @@ public class LoadingScreen extends ScreenBase {
     @Override
     public void dispose() {
         // Dispose the loading assets as we no longer need them
-        getAssetManager().unload(LOADING_ATLAS);
+        getAssetManager().unload(AssetPaths.Atlas.LOADING);
 
         stage.dispose();
     }

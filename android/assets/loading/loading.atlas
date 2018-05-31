@@ -1,89 +1,76 @@
 
 loading.png
+size: 1024,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-loading-frame
+frame
   rotate: false
-  xy: 1, 435
+  xy: 2, 192
   size: 540, 60
   orig: 540, 60
   offset: 0, 0
   index: -1
-loading-bar-anim
+frame-bg
   rotate: false
-  xy: 1, 384
+  xy: 505, 46
+  size: 5, 5
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+loading
+  rotate: false
+  xy: 2, 104
+  size: 501, 49
+  orig: 501, 49
+  offset: 0, 0
+  index: 0
+loading
+  rotate: false
+  xy: 2, 53
   size: 501, 49
   orig: 501, 49
   offset: 0, 0
   index: 1
-loading-bar-anim
+loading
   rotate: false
-  xy: 1, 333
+  xy: 2, 2
   size: 501, 49
   orig: 501, 49
   offset: 0, 0
   index: 2
-loading-bar-anim
+loading
   rotate: false
-  xy: 1, 282
+  xy: 505, 104
   size: 501, 49
   orig: 501, 49
   offset: 0, 0
   index: 3
-loading-bar-anim
+loading
   rotate: false
-  xy: 1, 231
+  xy: 505, 53
   size: 501, 49
   orig: 501, 49
   offset: 0, 0
   index: 4
-loading-bar-anim
+loading-hidden
   rotate: false
-  xy: 1, 180
-  size: 501, 49
-  orig: 501, 49
-  offset: 0, 0
-  index: 5
-loading-bar1
-  rotate: false
-  xy: 1, 129
-  size: 501, 49
-  orig: 501, 49
-  offset: 0, 0
-  index: -1
-loading-bar2
-  rotate: false
-  xy: 1, 78
-  size: 501, 49
-  orig: 501, 49
-  offset: 0, 0
-  index: -1
-libgdx-logo
-  rotate: false
-  xy: 1, 8
-  size: 408, 68
-  orig: 408, 68
-  offset: 0, 0
-  index: -1
-loading-bar-hidden
-  rotate: false
-  xy: 543, 441
+  xy: 544, 198
   size: 33, 54
   orig: 33, 54
   offset: 0, 0
   index: -1
-loading-frame-bg
+screen-bg
   rotate: false
-  xy: 504, 428
+  xy: 579, 247
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
   index: -1
-screen-bg
+title
   rotate: false
-  xy: 1, 1
-  size: 5, 5
-  orig: 5, 5
+  xy: 2, 155
+  size: 565, 35
+  orig: 565, 35
   offset: 0, 0
   index: -1
