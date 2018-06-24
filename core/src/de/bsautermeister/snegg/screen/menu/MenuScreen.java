@@ -1,6 +1,7 @@
 package de.bsautermeister.snegg.screen.menu;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,6 +23,7 @@ import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.game.GameScreen;
+import de.bsautermeister.snegg.screen.transition.Transitions;
 import de.bsautermeister.snegg.services.Leaderboards;
 import de.bsautermeister.snegg.util.GdxUtils;
 
@@ -112,7 +114,7 @@ public class MenuScreen extends ScreenBase {
     }
 
     private void play() {
-        setScreen(new GameScreen(getGame()));
+        setScreen(new GameScreen(getGame()), Transitions.FADE);
     }
 
     private void quit() {
@@ -139,5 +141,10 @@ public class MenuScreen extends ScreenBase {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    @Override
+    public InputProcessor getInputProcessor() {
+        return stage;
     }
 }

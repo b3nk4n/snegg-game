@@ -8,6 +8,7 @@ import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
+import de.bsautermeister.snegg.screen.transition.Transitions;
 
 public class GameScreen extends ScreenBase {
     private GameRenderer renderer;
@@ -63,7 +64,7 @@ public class GameScreen extends ScreenBase {
         renderer.render(delta);
 
         if (GameManager.INSTANCE.isGameOver()) {
-            setScreen(new MenuScreen(getGame()));
+            setScreen(new MenuScreen(getGame()), Transitions.FADE);
         }
     }
 
