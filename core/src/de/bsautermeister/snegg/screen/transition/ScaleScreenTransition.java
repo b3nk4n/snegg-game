@@ -9,32 +9,22 @@ import de.bsautermeister.snegg.util.GdxUtils;
 public class ScaleScreenTransition extends ScreenTransitionBase {
 
     private boolean scaleOut;
-    private Interpolation interpolation;
 
-    public ScaleScreenTransition(float duration) {
-        this(duration, false);
-    }
-
-    public ScaleScreenTransition(float duration, boolean scaleOut) {
-        this(duration, scaleOut, Interpolation.linear);
-    }
-
-    public ScaleScreenTransition(float duration, boolean scaleOut, Interpolation interpolation) {
-        super(duration);
+    public ScaleScreenTransition(float duration, Interpolation interpolation, boolean scaleOut) {
+        super(duration, interpolation);
 
         if (interpolation == null) {
             throw new IllegalArgumentException("Interpolation function is required");
         }
 
         this.scaleOut = scaleOut;
-        this.interpolation = interpolation;
     }
 
     @Override
     public void render(SpriteBatch batch, Texture currentScreenTexture, Texture nextScreenTexture, float progress) {
-        progress = interpolation.apply(progress);
+        float percentage = getInterpolatedPercentage(progress);
 
-        float scale = scaleOut ? progress : 1 - progress;
+        float scale = scaleOut ? percentage : 1 - percentage;
 
         // draw order depends on scale type (in / out)
         Texture topTexture = scaleOut ? nextScreenTexture : currentScreenTexture;
@@ -42,6 +32,7 @@ public class ScaleScreenTransition extends ScreenTransitionBase {
 
         int topTextureWidth = topTexture.getWidth();
         int topTextureHeight = topTexture.getHeight();
+
         int bottomTextureWidth = bottomTexture.getWidth();
         int bottomTextureHeight = bottomTexture.getHeight();
 

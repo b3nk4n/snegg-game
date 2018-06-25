@@ -23,7 +23,7 @@ import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.game.GameScreen;
-import de.bsautermeister.snegg.screen.transition.Transitions;
+import de.bsautermeister.snegg.screen.transition.ScreenTransitions;
 import de.bsautermeister.snegg.services.Leaderboards;
 import de.bsautermeister.snegg.util.GdxUtils;
 
@@ -114,7 +114,7 @@ public class MenuScreen extends ScreenBase {
     }
 
     private void play() {
-        setScreen(new GameScreen(getGame()), Transitions.FADE);
+        setScreen(new GameScreen(getGame()), ScreenTransitions.FADE);
     }
 
     private void quit() {

@@ -9,20 +9,19 @@ import de.bsautermeister.snegg.util.GdxUtils;
 
 public class FadeScreenTransition extends ScreenTransitionBase {
 
-    public FadeScreenTransition(float duration) {
-        super(duration);
+    public FadeScreenTransition(float duration, Interpolation interpolation) {
+        super(duration, interpolation);
     }
 
     @Override
     public void render(SpriteBatch batch, Texture currentScreenTexture, Texture nextScreenTexture, float progress) {
+        float percentage = getInterpolatedPercentage(progress);
+
         int currentScreenWidth = currentScreenTexture.getWidth();
         int currentScreenHeight = currentScreenTexture.getHeight();
 
         int nextScreenWidth = nextScreenTexture.getWidth();
         int nextScreenHeight = nextScreenTexture.getHeight();
-
-        // interpolate progress
-        progress = Interpolation.fade.apply(progress);
 
         GdxUtils.clearScreen();
 
@@ -31,7 +30,7 @@ public class FadeScreenTransition extends ScreenTransitionBase {
         batch.begin();
 
         // draw current screen
-        batch.setColor(1, 1, 1, 1f - progress);
+        batch.setColor(1, 1, 1, 1f - percentage);
         batch.draw(currentScreenTexture,
                 0, 0,
                 0, 0,
@@ -43,7 +42,7 @@ public class FadeScreenTransition extends ScreenTransitionBase {
                 false, true); // flip y-axis because buffer is y-axis is downward
 
         // draw next screen
-        batch.setColor(1, 1, 1, progress);
+        batch.setColor(1, 1, 1, percentage);
         batch.draw(nextScreenTexture,
                 0, 0,
                 0, 0,
