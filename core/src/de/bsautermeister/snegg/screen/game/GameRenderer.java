@@ -1,5 +1,6 @@
 package de.bsautermeister.snegg.screen.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,6 +12,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -18,12 +21,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.common.GameManager;
+import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
 import de.bsautermeister.snegg.model.Fruit;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
+import de.bsautermeister.snegg.screen.menu.PauseOverlay;
 import de.bsautermeister.snegg.util.GdxUtils;
 import de.bsautermeister.snegg.util.ViewportUtils;
 import de.bsautermeister.snegg.util.debug.DebugCameraController;
@@ -49,6 +54,10 @@ public class GameRenderer implements Disposable {
     private TextureRegion coinRegion;
     private TextureRegion orangeRegion;
 
+    private Skin skin;
+    private Stage hudStage;
+    private PauseOverlay pauseOverlay;
+
     private DebugCameraController debugCameraController;
 
     public GameRenderer(SpriteBatch batch, AssetManager assetManager, GameController controller) {
@@ -65,6 +74,7 @@ public class GameRenderer implements Disposable {
         renderer = new ShapeRenderer();
 
         font = assetManager.get(AssetDescriptors.Fonts.UI);
+        skin = assetManager.get(AssetDescriptors.Skins.UI);
         layout = new GlyphLayout();
 
         TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.Atlas.GAMEPLAY);
@@ -73,6 +83,14 @@ public class GameRenderer implements Disposable {
         bodyRegion = gamePlayAtlas.findRegion(RegionNames.BODY);
         coinRegion = gamePlayAtlas.findRegion(RegionNames.COIN);
         orangeRegion = gamePlayAtlas.findRegion(RegionNames.ORANGE);
+
+        pauseOverlay = new PauseOverlay(skin, controller.getCallback());
+
+        hudStage = new Stage(hudViewport, batch);
+        hudStage.addActor(pauseOverlay);
+        hudStage.setDebugAll(true);
+
+        Gdx.input.setInputProcessor(hudStage);
 
         debugCameraController = new DebugCameraController();
         debugCameraController.setStartPosition(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y);
@@ -171,12 +189,26 @@ public class GameRenderer implements Disposable {
 
     private void renderHud() {
         hudViewport.apply();
-        batch.setProjectionMatrix(hudViewport.getCamera().combined);
-        batch.begin();
 
-        drawHud();
+        pauseOverlay.setVisible(false);
 
-        batch.end();
+        GameState gameState = controller.getState();
+
+        if (gameState.isPlaying()) {
+            batch.setProjectionMatrix(hudViewport.getCamera().combined);
+            batch.begin();
+
+            drawHud();
+
+            batch.end();
+        } else {
+            if (gameState.isPaused()) {
+                pauseOverlay.setVisible(true);
+            }
+
+            hudStage.act();
+            hudStage.draw();
+        }
     }
 
     private void drawHud() {

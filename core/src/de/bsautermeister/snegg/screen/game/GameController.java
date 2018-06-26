@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.common.GameManager;
+import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.listeners.GameListener;
@@ -19,6 +20,8 @@ import de.bsautermeister.snegg.model.Direction;
 import de.bsautermeister.snegg.model.Fruit;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
+import de.bsautermeister.snegg.screen.menu.OverlayCallback;
+import de.bsautermeister.snegg.util.GdxUtils;
 
 
 public class GameController implements Updateable {
@@ -37,11 +40,31 @@ public class GameController implements Updateable {
 
     private GameListener gameListener;
 
+    private OverlayCallback callback;
+
     public GameController(GameListener gameListener) {
         this.gameListener = gameListener;
         snake = new Snake();
         coin = new Coin();
         fruit = new Fruit();
+
+        callback = new OverlayCallback() {
+            @Override
+            public void resume() {
+                GameManager.INSTANCE.setPlaying();
+            }
+
+            @Override
+            public void quit() {
+                // suicide instead of just quitting to also save the current score
+                GameManager.INSTANCE.saveHighscore(); // TODO save highscore in GameManager when setting state to game over?
+                GameManager.INSTANCE.setGameOver();
+            }
+        };
+
+        // enable phones BACK button
+        Gdx.input.setCatchBackKey(true);
+
         reset();
     }
 
@@ -195,6 +218,10 @@ public class GameController implements Updateable {
                     break;
             }
         }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+            GameManager.INSTANCE.setPaused();
+        }
     }
 
     private void checkKeyboardInput() {
@@ -202,6 +229,7 @@ public class GameController implements Updateable {
         boolean rightPressed = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
         boolean upPressed = Gdx.input.isKeyPressed(Input.Keys.UP);
         boolean downPressed = Gdx.input.isKeyPressed(Input.Keys.DOWN);
+        boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
         if (leftPressed) {
             snake.setDirection(Direction.LEFT);
@@ -211,6 +239,10 @@ public class GameController implements Updateable {
             snake.setDirection(Direction.UP);
         } else if (downPressed) {
             snake.setDirection(Direction.DOWN);
+        }
+
+        if (escapePressed) {
+            GameManager.INSTANCE.setPaused();
         }
     }
 
@@ -273,5 +305,13 @@ public class GameController implements Updateable {
 
     public Fruit getFruit() {
         return fruit;
+    }
+
+    public GameState getState() {
+        return GameManager.INSTANCE.getState();
+    }
+
+    public OverlayCallback getCallback() {
+        return callback;
     }
 }
