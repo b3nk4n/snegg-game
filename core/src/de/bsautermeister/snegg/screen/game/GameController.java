@@ -42,6 +42,9 @@ public class GameController implements Updateable {
 
     private OverlayCallback callback;
 
+    private float gameOverTimer;
+    private static final float GAME_OVER_WAIT_TIME = 3f;
+
     public GameController(GameListener gameListener) {
         this.gameListener = gameListener;
         snake = new Snake();
@@ -57,7 +60,6 @@ public class GameController implements Updateable {
             @Override
             public void quit() {
                 // suicide instead of just quitting to also save the current score
-                GameManager.INSTANCE.saveHighscore(); // TODO save highscore in GameManager when setting state to game over?
                 GameManager.INSTANCE.setGameOver();
             }
         };
@@ -77,6 +79,7 @@ public class GameController implements Updateable {
         currentMoveTime = GameConfig.MOVE_TIME;
         snakeMoveTimer = 0f;
         snake.reset();
+        gameOverTimer = 0f;
     }
 
     @Override
@@ -116,8 +119,8 @@ public class GameController implements Updateable {
                 spawnFruit();
             }
             fruit.update(delta);
-        } else if (GameManager.INSTANCE.isPaused()) {
-
+        } else if (GameManager.INSTANCE.isGameOver()) {
+            gameOverTimer += delta;
         } else {
             checkForRestart();
         }
@@ -152,7 +155,6 @@ public class GameController implements Updateable {
         Rectangle bodyBounds = bodyPart.getCollisionBounds();
 
         if (Intersector.overlaps(headBounds, bodyBounds)) {
-            GameManager.INSTANCE.saveHighscore();
             GameManager.INSTANCE.setGameOver();
             gameListener.lose();
         }
@@ -315,5 +317,9 @@ public class GameController implements Updateable {
 
     public OverlayCallback getCallback() {
         return callback;
+    }
+
+    public boolean gameOverWaitTimeReady() {
+        return gameOverTimer >= GAME_OVER_WAIT_TIME;
     }
 }

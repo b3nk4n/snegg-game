@@ -64,7 +64,7 @@ public class GameScreen extends ScreenBase {
         controller.update(delta);
         renderer.render(delta);
 
-        if (GameManager.INSTANCE.isGameOver()) {
+        if (controller.gameOverWaitTimeReady()) {
             setScreen(new MenuScreen(getGame()), ScreenTransitions.FADE);
         }
     }

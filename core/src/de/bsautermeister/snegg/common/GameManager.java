@@ -55,7 +55,10 @@ public class GameManager implements Resettable {
     }
 
     public void setGameOver() {
-        state = GameState.GAME_OVER;
+        if (!state.isGameOver()) {
+            state = GameState.GAME_OVER;
+            saveHighscore();
+        }
     }
 
     public int getDisplayScore() {
