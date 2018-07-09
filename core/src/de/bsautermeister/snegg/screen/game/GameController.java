@@ -21,7 +21,6 @@ import de.bsautermeister.snegg.model.Fruit;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
 import de.bsautermeister.snegg.screen.menu.OverlayCallback;
-import de.bsautermeister.snegg.util.GdxUtils;
 
 
 public class GameController implements Updateable {
@@ -61,6 +60,8 @@ public class GameController implements Updateable {
             public void quit() {
                 // suicide instead of just quitting to also save the current score
                 GameManager.INSTANCE.setGameOver();
+                // skip wait time
+                gameOverTimer = GAME_OVER_WAIT_TIME;
             }
         };
 

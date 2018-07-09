@@ -5,7 +5,6 @@ import com.badlogic.gdx.audio.Sound;
 
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.common.GameApp;
-import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
