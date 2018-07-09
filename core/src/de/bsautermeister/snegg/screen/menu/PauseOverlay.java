@@ -1,6 +1,9 @@
 package de.bsautermeister.snegg.screen.menu;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -18,6 +21,8 @@ public class PauseOverlay extends Table {
     public PauseOverlay(Skin skin, OverlayCallback callback) {
         super(skin);
         this.callback = callback;
+        //this.setTouchable(Touchable.enabled);
+        this.setVisible(false);
 
         init();
     }
@@ -56,5 +61,15 @@ public class PauseOverlay extends Table {
         center();
         setFillParent(true);
         pack();
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.BACK) ||
+            Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            callback.resume();
+        }
     }
 }

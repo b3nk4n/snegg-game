@@ -116,6 +116,8 @@ public class GameController implements Updateable {
                 spawnFruit();
             }
             fruit.update(delta);
+        } else if (GameManager.INSTANCE.isPaused()) {
+
         } else {
             checkForRestart();
         }
@@ -225,11 +227,11 @@ public class GameController implements Updateable {
     }
 
     private void checkKeyboardInput() {
-        boolean leftPressed = Gdx.input.isKeyPressed(Input.Keys.LEFT);
-        boolean rightPressed = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
-        boolean upPressed = Gdx.input.isKeyPressed(Input.Keys.UP);
-        boolean downPressed = Gdx.input.isKeyPressed(Input.Keys.DOWN);
-        boolean escapePressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
+        boolean leftPressed = Gdx.input.isKeyJustPressed(Input.Keys.LEFT);
+        boolean rightPressed = Gdx.input.isKeyJustPressed(Input.Keys.RIGHT);
+        boolean upPressed = Gdx.input.isKeyJustPressed(Input.Keys.UP);
+        boolean downPressed = Gdx.input.isKeyJustPressed(Input.Keys.DOWN);
+        boolean escapePressed = Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE);
 
         if (leftPressed) {
             snake.setDirection(Direction.LEFT);

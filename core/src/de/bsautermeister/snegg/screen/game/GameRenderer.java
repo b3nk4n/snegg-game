@@ -1,6 +1,7 @@
 package de.bsautermeister.snegg.screen.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -190,8 +191,6 @@ public class GameRenderer implements Disposable {
     private void renderHud() {
         hudViewport.apply();
 
-        pauseOverlay.setVisible(false);
-
         GameState gameState = controller.getState();
 
         if (gameState.isPlaying()) {
@@ -201,13 +200,19 @@ public class GameRenderer implements Disposable {
             drawHud();
 
             batch.end();
-        } else {
-            if (gameState.isPaused()) {
-                pauseOverlay.setVisible(true);
-            }
+        }
 
-            hudStage.act();
+        if (gameState.isPaused()) {
+            if (!pauseOverlay.isVisible()) {
+                pauseOverlay.setVisible(true);
+            } else {
+                // workaround: do not act during the first frame, otherwise button event which triggered
+                // this overlay to show are processed in the overlay, which could immediately close it again
+                hudStage.act();
+            }
             hudStage.draw();
+        } else {
+            pauseOverlay.setVisible(false);
         }
     }
 
@@ -278,5 +283,9 @@ public class GameRenderer implements Disposable {
 
     public static Vector3 projectToScreen(float x, float y) {
         return camera.project(new Vector3(x, y, 0));
+    }
+
+    public InputProcessor getInputProcessor() {
+        return hudStage;
     }
 }

@@ -1,5 +1,6 @@
 package de.bsautermeister.snegg.screen.game;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
 
 import de.bsautermeister.snegg.assets.AssetDescriptors;
@@ -76,5 +77,10 @@ public class GameScreen extends ScreenBase {
     @Override
     public void dispose() {
         renderer.dispose();
+    }
+
+    @Override
+    public InputProcessor getInputProcessor() {
+        return renderer.getInputProcessor();
     }
 }
