@@ -278,8 +278,8 @@ public class GameController implements Updateable {
         int x;
         int y;
         do {
-            x = MathUtils.random((int)(GameConfig.WORLD_WIDTH - GameConfig.COLLECTIBLE_SIZE));
-            y = MathUtils.random((int)(GameConfig.MAX_Y - GameConfig.COLLECTIBLE_SIZE));
+            x = MathUtils.random((int)GameConfig.MIN_X, (int)(GameConfig.MAX_X - GameConfig.COLLECTIBLE_SIZE));
+            y = MathUtils.random((int)GameConfig.MIN_Y, (int)(GameConfig.MAX_Y - GameConfig.COLLECTIBLE_SIZE));
         } while (isPositionBlocked(x, y));
 
         return new Vector2(x, y);

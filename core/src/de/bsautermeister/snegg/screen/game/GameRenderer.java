@@ -169,20 +169,20 @@ public class GameRenderer implements Disposable {
 
     private float getWorldWrapX(float headX) {
         float cloneX = headX;
-        if (headX < 0) {
-            cloneX = headX + GameConfig.WORLD_WIDTH;
-        } else if (headX > GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SIZE) {
-            cloneX = headX - GameConfig.WORLD_WIDTH;
+        if (headX < GameConfig.MIN_X) {
+            cloneX = headX + GameConfig.GAMEFIELD_WIDTH;
+        } else if (headX > GameConfig.MAX_X - GameConfig.SNAKE_SIZE) {
+            cloneX = headX - GameConfig.GAMEFIELD_WIDTH;
         }
         return cloneX;
     }
 
     private float getWorldWrapY(float headY) {
         float cloneY = headY;
-        if (headY < 0) {
-            cloneY = headY + GameConfig.MAX_Y;
+        if (headY < GameConfig.MIN_Y) {
+            cloneY = headY + GameConfig.GAMEFIELD_HEIGHT;
         } else if (headY > GameConfig.MAX_Y - GameConfig.SNAKE_SIZE) {
-            cloneY = headY - GameConfig.MAX_Y;
+            cloneY = headY - GameConfig.GAMEFIELD_HEIGHT;
         }
         return cloneY;
     }

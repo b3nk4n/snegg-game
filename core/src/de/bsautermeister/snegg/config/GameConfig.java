@@ -36,8 +36,15 @@ public final class GameConfig {
     public static final float FRUIT_MAX_SPAWN_DELAY = 5f;
     public static final float FRUIT_LIFETIME = 15f;
 
-    private static final float Y_OFFSET = 2f;
-    public static final float MAX_Y = WORLD_HEIGHT - Y_OFFSET;
+    private static final float MARGIN_TOP = 2f;
+    private static final float MARGIN_OTHER = 1f;
+
+    public static final float MIN_X = MARGIN_OTHER;
+    public static final float MAX_X = WORLD_WIDTH - MARGIN_OTHER;
+    public static final float MIN_Y = MARGIN_OTHER;
+    public static final float MAX_Y = WORLD_HEIGHT - MARGIN_TOP;
+    public static final float GAMEFIELD_WIDTH = MAX_X - MIN_X;
+    public static final float GAMEFIELD_HEIGHT = MAX_Y - MIN_Y;
 
     private GameConfig() { }
 }

@@ -1,6 +1,5 @@
 package de.bsautermeister.snegg.model;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 
@@ -90,15 +89,15 @@ public class Snake implements Resettable, Updateable {
     }
 
     private void checkGameObjectOutOfBounds(SmoothGameObject gameObject) {
-        if (gameObject.getX() >= GameConfig.WORLD_WIDTH - EPS) {
-            gameObject.gotoX(0);
-        } else if (gameObject.getX() < -GameConfig.SNAKE_SIZE + EPS) {
-            gameObject.gotoX(GameConfig.WORLD_WIDTH - GameConfig.SNAKE_SIZE);
+        if (gameObject.getX() >= GameConfig.MAX_X - EPS) {
+            gameObject.gotoX(GameConfig.MIN_X);
+        } else if (gameObject.getX() < GameConfig.MIN_X - GameConfig.SNAKE_SIZE + EPS) {
+            gameObject.gotoX(GameConfig.MAX_X - GameConfig.SNAKE_SIZE);
         }
 
         if (gameObject.getY() >= GameConfig.MAX_Y - EPS) {
-            gameObject.gotoY(0);
-        } else if (gameObject.getY() < -GameConfig.SNAKE_SIZE + EPS) {
+            gameObject.gotoY(GameConfig.MIN_Y);
+        } else if (gameObject.getY() < GameConfig.MIN_Y - GameConfig.SNAKE_SIZE + EPS) {
             gameObject.gotoY(GameConfig.MAX_Y - GameConfig.SNAKE_SIZE);
         }
     }
