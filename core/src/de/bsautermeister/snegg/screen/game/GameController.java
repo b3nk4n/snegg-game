@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Logger;
 
-import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.common.LocalHighscoreService;
 import de.bsautermeister.snegg.common.ScoreProvider;
@@ -27,6 +26,8 @@ import de.bsautermeister.snegg.screen.menu.OverlayCallback;
 
 public class GameController implements Updateable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
+
+    private GameState state = GameState.READY;
 
     private float gameTime;
     private static float currentMoveTime;
@@ -57,13 +58,13 @@ public class GameController implements Updateable {
         callback = new OverlayCallback() {
             @Override
             public void resume() {
-                GameManager.INSTANCE.setPlaying();
+                state = GameState.PLAYING; // TODO what happens when we paused in GAME_OVER state?
             }
 
             @Override
             public void quit() {
                 // suicide instead of just quitting to also save the current score
-                GameManager.INSTANCE.setGameOver();
+                state = GameState.GAME_OVER;
                 highscoreService.saveHighscore();
                 // skip wait time
                 gameOverTimer = GAME_OVER_WAIT_TIME;
@@ -77,7 +78,7 @@ public class GameController implements Updateable {
     }
 
     private void reset() {
-        GameManager.INSTANCE.reset();
+        state = GameState.PLAYING;
         highscoreService.reset();
         collectedCoins = 0;
         spawnCoin();
@@ -93,7 +94,7 @@ public class GameController implements Updateable {
     public void update(float delta) {
         highscoreService.updateDisplayScore(delta);
 
-        if (GameManager.INSTANCE.isPlaying()) {
+        if (state.isPlaying()) {
             gameTime += delta;
             currentMoveTime -= delta * GameConfig.DIFFICULTY_LOWERING_MOVE_TIME_FACTOR;
             currentMoveTime = Math.max(GameConfig.MIN_MOVE_TIME, currentMoveTime);
@@ -126,7 +127,7 @@ public class GameController implements Updateable {
                 spawnFruit();
             }
             fruit.update(delta);
-        } else if (GameManager.INSTANCE.isGameOver()) {
+        } else if (state.isGameOver()) {
             gameOverTimer += delta;
         } else {
             checkForRestart();
@@ -158,8 +159,8 @@ public class GameController implements Updateable {
         Rectangle bodyBounds = bodyPart.getCollisionBounds();
 
         if (Intersector.overlaps(headBounds, bodyBounds)) {
-            GameManager.INSTANCE.setGameOver();
-            highscoreService.saveHighscore();
+            state = GameState.GAME_OVER;
+            highscoreService.saveHighscore(); // TODO check this method is only called once!
             gameListener.lose();
         }
     }
@@ -228,7 +229,7 @@ public class GameController implements Updateable {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-            GameManager.INSTANCE.setPaused();
+            state = GameState.PAUSED;
         }
     }
 
@@ -250,7 +251,7 @@ public class GameController implements Updateable {
         }
 
         if (escapePressed) {
-            GameManager.INSTANCE.setPaused();
+            state = GameState.PAUSED;
         }
     }
 
@@ -316,7 +317,7 @@ public class GameController implements Updateable {
     }
 
     public GameState getState() {
-        return GameManager.INSTANCE.getState();
+        return state;
     }
 
     public OverlayCallback getCallback() {
