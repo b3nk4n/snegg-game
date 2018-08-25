@@ -105,4 +105,20 @@ public abstract class SmoothGameObject extends GameObject {
         this.targetY = y + diff;
         super.setY(y);
     }
+
+    public float getTransitionDuration() {
+        return transitionDuration;
+    }
+
+    public void setTransitionDuration(float transitionDuration) {
+        this.transitionDuration = transitionDuration;
+    }
+
+    public void setTransitionDelay(float delay) {
+        transitionDelay = delay;
+    }
+
+    public float getTransitionDelay() {
+        return transitionDelay;
+    }
 }

@@ -1,12 +1,17 @@
 package de.bsautermeister.snegg.model;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.common.Resettable;
 import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.screen.game.GameController;
 
 public class Snake implements Resettable, Updateable {
+    private static final Logger LOG = new Logger(Snake.class.getName(), GameConfig.LOG_LEVEL);
+
     // why the fuck to we still need this epsilon? why is there a glitch for world-wrap bottom/right without this?
     private static final float EPS = 0.0025f;
 
@@ -103,9 +108,7 @@ public class Snake implements Resettable, Updateable {
     }
 
     public void insertBodyPart() {
-        // TODO make sure total transition delay is never bigger than the MOVE_TIME
-        float transitionDelay = 0.01f + 0.01f * bodyParts.size;
-        BodyPart bodyPart = new BodyPart(transitionDelay);
+        BodyPart bodyPart = new BodyPart();
 
         float x, y;
         if (bodyParts.size == 0) {
@@ -119,6 +122,27 @@ public class Snake implements Resettable, Updateable {
 
         bodyPart.gotoXY(x, y);
         bodyParts.add(bodyPart);
+
+        final float STATIC_STAY_TIME = 0.05f;
+        float currentMoveTime = GameController.getCurrentMoveTime();
+
+        float duration = GameConfig.INITIAL_TRANS_DURATION - ((float)Math.sqrt(bodyParts.size) * 0.01f);
+        float delay = Math.min(GameConfig.INITIAL_TRANS_DELAY, (currentMoveTime - duration - STATIC_STAY_TIME) / bodyParts.size);
+
+        head.setTransitionDuration(duration);
+
+        int i = 1;
+        for (BodyPart body : bodyParts) {
+            body.setTransitionDuration(duration);
+            body.setTransitionDelay(i++ * delay);
+        }
+
+        /*
+        TODO game still got stuck here:
+            de.bsautermeister.snegg.screen.game.GameController: 0.3641296
+            de.bsautermeister.snegg.screen.game.GameController: 0.36412534
+            <hang>
+         */
     }
 
     public Array<BodyPart> getBodyParts() {

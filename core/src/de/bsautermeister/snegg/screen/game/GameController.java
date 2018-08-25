@@ -27,7 +27,7 @@ public class GameController implements Updateable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
 
     private float gameTime;
-    private float currentMoveTime;
+    private static float currentMoveTime;
 
     private float snakeMoveTimer;
     private Snake snake;
@@ -125,10 +125,6 @@ public class GameController implements Updateable {
         } else {
             checkForRestart();
         }
-    }
-
-    public float getCurrentMoveTime() {
-        return currentMoveTime;
     }
 
     private void checkForRestart() {
@@ -252,7 +248,7 @@ public class GameController implements Updateable {
     }
 
     private void checkDebugInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.PLUS)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             snake.insertBodyPart();
         }
     }
@@ -322,5 +318,9 @@ public class GameController implements Updateable {
 
     public boolean gameOverWaitTimeReady() {
         return gameOverTimer >= GAME_OVER_WAIT_TIME;
+    }
+
+    public static float getCurrentMoveTime() {
+        return currentMoveTime;
     }
 }
