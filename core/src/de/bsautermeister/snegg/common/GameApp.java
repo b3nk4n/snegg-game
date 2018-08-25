@@ -1,7 +1,6 @@
 package de.bsautermeister.snegg.common;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -74,7 +73,7 @@ public abstract class GameApp implements ApplicationListener {
         nextScreen.show();
         nextScreen.resize(width, height);
         nextScreen.pause();
-        transitionTime = 0;
+        transitionTime = getDuration();
 
         if (currentScreen != null) {
             currentScreen.pause();
@@ -94,8 +93,7 @@ public abstract class GameApp implements ApplicationListener {
             // transition
             transitionInProgress = true;
 
-            float duration = getDuration();
-            transitionTime = Math.min(transitionTime + delta, duration);
+            transitionTime = transitionTime - delta;
 
             // render to texture only once
             if (!renderedToTexture) {
@@ -103,7 +101,7 @@ public abstract class GameApp implements ApplicationListener {
                 renderScreensToTexture();
             }
 
-            updateTransition(delta);
+            updateTransition();
         }
     }
 
@@ -178,7 +176,7 @@ public abstract class GameApp implements ApplicationListener {
     }
 
     private boolean isTransitionFinished() {
-        return transitionTime >= getDuration(); // TODO use timer that counts down to 0 instead?
+        return transitionTime <= 0;
     }
 
     private void renderScreensToTexture() {
@@ -195,7 +193,7 @@ public abstract class GameApp implements ApplicationListener {
         nextFrameBuffer.end();
     }
 
-    private void updateTransition(float delta) {
+    private void updateTransition() {
         if (transtion == null || isTransitionFinished()) {
             if (currentScreen != null) {
                 currentScreen.hide();
@@ -218,7 +216,7 @@ public abstract class GameApp implements ApplicationListener {
         }
 
         // calculate progress
-        float progress = transitionTime / getDuration();
+        float progress = 1.0f - transitionTime / getDuration();
 
         // get textures from the buffers (these textures are auto-disposed when buffers are disposed)
         Texture currentScreenTexture = currentFrameBuffer.getColorBufferTexture();
