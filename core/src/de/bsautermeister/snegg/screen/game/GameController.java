@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.common.GameState;
+import de.bsautermeister.snegg.common.LocalHighscoreService;
+import de.bsautermeister.snegg.common.ScoreProvider;
 import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.listeners.GameListener;
@@ -44,6 +46,8 @@ public class GameController implements Updateable {
     private float gameOverTimer;
     private static final float GAME_OVER_WAIT_TIME = 3f;
 
+    private final LocalHighscoreService highscoreService = new LocalHighscoreService();
+
     public GameController(GameListener gameListener) {
         this.gameListener = gameListener;
         snake = new Snake();
@@ -60,6 +64,7 @@ public class GameController implements Updateable {
             public void quit() {
                 // suicide instead of just quitting to also save the current score
                 GameManager.INSTANCE.setGameOver();
+                highscoreService.saveHighscore();
                 // skip wait time
                 gameOverTimer = GAME_OVER_WAIT_TIME;
             }
@@ -73,6 +78,7 @@ public class GameController implements Updateable {
 
     private void reset() {
         GameManager.INSTANCE.reset();
+        highscoreService.reset();
         collectedCoins = 0;
         spawnCoin();
         fruitSpanDelayTimer = Float.MAX_VALUE;
@@ -85,7 +91,7 @@ public class GameController implements Updateable {
 
     @Override
     public void update(float delta) {
-        GameManager.INSTANCE.updateDisplayScore(delta);
+        highscoreService.updateDisplayScore(delta);
 
         if (GameManager.INSTANCE.isPlaying()) {
             gameTime += delta;
@@ -153,6 +159,7 @@ public class GameController implements Updateable {
 
         if (Intersector.overlaps(headBounds, bodyBounds)) {
             GameManager.INSTANCE.setGameOver();
+            highscoreService.saveHighscore();
             gameListener.lose();
         }
     }
@@ -165,7 +172,7 @@ public class GameController implements Updateable {
 
         if (!coin.isCollected() && overlap) {
             snake.insertBodyPart();
-            GameManager.INSTANCE.incrementScore(coin.getScore());
+            highscoreService.incrementScore(coin.getScore());
             spawnCoin();
             gameListener.hitCoin();
 
@@ -185,7 +192,7 @@ public class GameController implements Updateable {
         boolean overlap = Intersector.overlaps(headBounds, fruitBounds);
 
         if (!fruit.isCollected() && overlap) {
-            GameManager.INSTANCE.incrementScore(fruit.getScore());
+            highscoreService.incrementScore(fruit.getScore());
             fruit.collect();
             gameListener.hitFruit();
         }
@@ -322,5 +329,9 @@ public class GameController implements Updateable {
 
     public static float getCurrentMoveTime() {
         return currentMoveTime;
+    }
+
+    public ScoreProvider getScoreProvider() {
+        return highscoreService;
     }
 }

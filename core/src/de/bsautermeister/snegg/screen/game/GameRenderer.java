@@ -21,7 +21,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
-import de.bsautermeister.snegg.common.GameManager;
 import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.model.BodyPart;
@@ -217,14 +216,14 @@ public class GameRenderer implements Disposable {
     }
 
     private void drawHud() {
-        String highscoreString = "HIGHSCORE: " + GameManager.INSTANCE.getDisplayHighScore();
+        String highscoreString = "HIGHSCORE: " + controller.getScoreProvider().getDisplayHighscore();
         layout.setText(font, highscoreString);
         font.draw(batch, layout, PADDING, hudViewport.getWorldHeight() - PADDING);
 
         float scoreX = hudViewport.getWorldWidth() - layout.width;
         float scoreY = hudViewport.getWorldHeight() - PADDING;
 
-        String scoreString = "SCORE: " + GameManager.INSTANCE.getDisplayScore();
+        String scoreString = "SCORE: " + controller.getScoreProvider().getDisplayScore();
         font.draw(batch, scoreString, scoreX, scoreY);
     }
 
