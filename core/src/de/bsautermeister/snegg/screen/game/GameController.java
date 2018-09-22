@@ -79,7 +79,7 @@ public class GameController implements Updateable {
         // enable phones BACK button
         Gdx.input.setCatchBackKey(true);
 
-        this.inputProcessor = new DirectionGestureDetector(new DirectionGestureListener() {
+        this.inputProcessor = new DirectionGestureDetector(333.0f, new DirectionGestureListener() {
             @Override
             public void onUp() {
                 snake.setDirection(Direction.UP);

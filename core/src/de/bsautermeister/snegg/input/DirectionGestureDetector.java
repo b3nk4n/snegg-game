@@ -4,25 +4,34 @@ import com.badlogic.gdx.input.GestureDetector;
 
 public class DirectionGestureDetector extends GestureDetector {
     public DirectionGestureDetector(DirectionGestureListener listener) {
-        super(new DirectionGestureAdapter(listener));
+        super(new DirectionGestureAdapter(0f, listener));
+    }
+
+    public DirectionGestureDetector(float velocityThreshold, DirectionGestureListener listener) {
+        super(new DirectionGestureAdapter(velocityThreshold, listener));
     }
 
     private static class DirectionGestureAdapter extends GestureAdapter {
-        DirectionGestureListener directionGestureListener;
+        private final DirectionGestureListener directionGestureListener;
+        private final float velocityThreshold;
 
-        public DirectionGestureAdapter(DirectionGestureListener directionGestureListener) {
+        public DirectionGestureAdapter(float velocityThreshold, DirectionGestureListener directionGestureListener) {
+            this.velocityThreshold = velocityThreshold;
             this.directionGestureListener = directionGestureListener;
         }
 
         @Override
         public boolean fling(float velocityX, float velocityY, int button) {
-            if (Math.abs(velocityX) > Math.abs(velocityY)) {
+            float absVelocityX = Math.abs(velocityX);
+            float absVelocityY = Math.abs(velocityY);
+
+            if (absVelocityX > absVelocityY && absVelocityX >= velocityThreshold) {
                 if (velocityX > 0) {
                     directionGestureListener.onRight();
                 } else {
                     directionGestureListener.onLeft();
                 }
-            } else {
+            } else if (absVelocityY > absVelocityX && absVelocityY >= velocityThreshold) {
                 if (velocityY > 0) {
                     directionGestureListener.onDown();
                 } else {
