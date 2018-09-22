@@ -20,7 +20,6 @@ public class PauseOverlay extends Table {
     public PauseOverlay(Skin skin, OverlayCallback callback) {
         super(skin);
         this.callback = callback;
-        //this.setTouchable(Touchable.enabled);
         this.setVisible(false);
 
         init();

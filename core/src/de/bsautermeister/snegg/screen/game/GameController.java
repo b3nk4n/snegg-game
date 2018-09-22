@@ -258,6 +258,10 @@ public class GameController implements Updateable {
     }
 
     private void checkDebugInput() {
+        if (!GameConfig.DEBUG_MODE) {
+            return;
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             snake.insertBodyPart();
         }

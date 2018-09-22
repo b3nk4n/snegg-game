@@ -88,7 +88,7 @@ public class GameRenderer implements Disposable {
 
         hudStage = new Stage(hudViewport, batch);
         hudStage.addActor(pauseOverlay);
-        hudStage.setDebugAll(true);
+        hudStage.setDebugAll(GameConfig.DEBUG_MODE);
 
         Gdx.input.setInputProcessor(hudStage);
 
@@ -228,6 +228,10 @@ public class GameRenderer implements Disposable {
     }
 
     private void renderDebug() {
+        if (!GameConfig.DEBUG_MODE) {
+            return;
+        }
+
         ViewportUtils.drawGrid(viewport, renderer);
 
         viewport.apply();
