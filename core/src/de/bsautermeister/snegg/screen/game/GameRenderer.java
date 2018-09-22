@@ -164,7 +164,12 @@ public class GameRenderer implements Disposable {
         if (cloneX != headX || cloneY != headY) {
             batch.draw(headRegion, cloneX, cloneY, head.getWidth(), head.getHeight());
         }
-        batch.draw(headRegion, headX, headY, head.getWidth(), head.getHeight());
+        batch.draw(headRegion,
+                headX, headY,
+                head.getWidth() / 2, head.getHeight() / 2,
+                head.getWidth(), head.getHeight(),
+                1f, 1f,
+                snake.getDirection().angle() + 90f);
     }
 
     private float getWorldWrapX(float headX) {

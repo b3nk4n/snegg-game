@@ -45,4 +45,17 @@ public enum Direction {
     public boolean isOpposite(Direction direction) {
         return this.opposite() == direction;
     }
+
+    public float angle() {
+        if (this == RIGHT) {
+            return 0f;
+        }
+        if (this == UP) {
+            return 90f;
+        }
+        if (this == LEFT) {
+            return 180f;
+        }
+        return 270f;
+    }
 }
