@@ -2,6 +2,7 @@ package de.bsautermeister.snegg.screen.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -14,6 +15,8 @@ import de.bsautermeister.snegg.common.LocalHighscoreService;
 import de.bsautermeister.snegg.common.ScoreProvider;
 import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.input.DirectionGestureDetector;
+import de.bsautermeister.snegg.input.DirectionGestureListener;
 import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
@@ -49,6 +52,8 @@ public class GameController implements Updateable {
 
     private final LocalHighscoreService highscoreService = new LocalHighscoreService();
 
+    private InputProcessor inputProcessor;
+
     public GameController(GameListener gameListener) {
         this.gameListener = gameListener;
         snake = new Snake();
@@ -73,6 +78,31 @@ public class GameController implements Updateable {
 
         // enable phones BACK button
         Gdx.input.setCatchBackKey(true);
+
+        this.inputProcessor = new DirectionGestureDetector(new DirectionGestureListener() {
+            @Override
+            public void onUp() {
+                snake.setDirection(Direction.UP);
+            }
+
+            @Override
+            public void onRight() {
+                snake.setDirection(Direction.RIGHT);
+            }
+
+            @Override
+            public void onDown() {
+                snake.setDirection(Direction.DOWN);
+            }
+
+            @Override
+            public void onLeft() {
+                snake.setDirection(Direction.LEFT);
+            }
+        });
+
+
+        Gdx.input.setInputProcessor(this.inputProcessor);
 
         reset();
     }
@@ -101,7 +131,7 @@ public class GameController implements Updateable {
 
             LOG.info(String.valueOf(currentMoveTime));
 
-            checkTouchInput();
+            checkBackButtonInput();
             checkKeyboardInput();
             checkDebugInput();
 
@@ -199,35 +229,7 @@ public class GameController implements Updateable {
         }
     }
 
-    private void checkTouchInput() {
-        if (Gdx.input.isTouched() && Gdx.input.justTouched()) {
-            float x = Gdx.input.getX();
-            float y = Gdx.input.getY();
-
-            Vector3 touchPosition = GameRenderer.projectToWorld(x, y);
-            float headX = snake.getHead().getX();
-            float headY = snake.getHead().getY();
-
-            switch (snake.getDirection()) {
-                case UP:
-                case DOWN:
-                    if (touchPosition.x < headX) {
-                        snake.setDirection(Direction.LEFT);
-                    } else if (touchPosition.x > headX) {
-                        snake.setDirection(Direction.RIGHT);
-                    }
-                    break;
-                case RIGHT:
-                case LEFT:
-                    if (touchPosition.y < headY) {
-                        snake.setDirection(Direction.DOWN);
-                    } else if (touchPosition.y > headY) {
-                        snake.setDirection(Direction.UP);
-                    }
-                    break;
-            }
-        }
-
+    private void checkBackButtonInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
             state = GameState.PAUSED;
         }
@@ -334,5 +336,9 @@ public class GameController implements Updateable {
 
     public ScoreProvider getScoreProvider() {
         return highscoreService;
+    }
+
+    public InputProcessor getInputProcessor() {
+        return inputProcessor;
     }
 }

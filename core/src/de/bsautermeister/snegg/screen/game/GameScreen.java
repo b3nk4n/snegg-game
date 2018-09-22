@@ -1,5 +1,6 @@
 package de.bsautermeister.snegg.screen.game;
 
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
 
@@ -80,6 +81,9 @@ public class GameScreen extends ScreenBase {
 
     @Override
     public InputProcessor getInputProcessor() {
-        return renderer.getInputProcessor();
+        InputMultiplexer inputs = new InputMultiplexer();
+        inputs.addProcessor(renderer.getInputProcessor());
+        inputs.addProcessor(controller.getInputProcessor());
+        return inputs;
     }
 }
