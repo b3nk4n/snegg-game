@@ -48,13 +48,13 @@ public class GameController implements Updateable {
     private OverlayCallback callback;
 
     private float gameOverTimer;
-    private static final float GAME_OVER_WAIT_TIME = 3f;
+    private static final float GAME_OVER_WAIT_TIME = 1f;
 
     private final LocalHighscoreService highscoreService = new LocalHighscoreService();
 
     private InputProcessor inputProcessor;
 
-    public GameController(GameListener gameListener) {
+    public GameController(final GameListener gameListener) {
         this.gameListener = gameListener;
         snake = new Snake();
         coin = new Coin();
@@ -67,12 +67,19 @@ public class GameController implements Updateable {
             }
 
             @Override
+            public void restart() {
+                reset();
+            }
+
+            @Override
             public void quit() {
+                // TODO make sure the highscore is saved locally at the approprate state
                 // suicide instead of just quitting to also save the current score
-                state = GameState.GAME_OVER;
-                highscoreService.saveHighscore();
+                //state = GameState.GAME_OVER;
+                //highscoreService.saveHighscore();
                 // skip wait time
-                gameOverTimer = GAME_OVER_WAIT_TIME;
+                //gameOverTimer = GAME_OVER_WAIT_TIME;
+                gameListener.quit();
             }
         };
 
@@ -82,25 +89,32 @@ public class GameController implements Updateable {
         this.inputProcessor = new DirectionGestureDetector(333.0f, new DirectionGestureListener() {
             @Override
             public void onUp() {
-                snake.setDirection(Direction.UP);
+                if (state.isPlaying()) {
+                    snake.setDirection(Direction.UP);
+                }
             }
 
             @Override
             public void onRight() {
-                snake.setDirection(Direction.RIGHT);
+                if (state.isPlaying()) {
+                    snake.setDirection(Direction.RIGHT);
+                }
             }
 
             @Override
             public void onDown() {
-                snake.setDirection(Direction.DOWN);
+                if (state.isPlaying()) {
+                    snake.setDirection(Direction.DOWN);
+                }
             }
 
             @Override
             public void onLeft() {
-                snake.setDirection(Direction.LEFT);
+                if (state.isPlaying()) {
+                    snake.setDirection(Direction.LEFT);
+                }
             }
         });
-
 
         Gdx.input.setInputProcessor(this.inputProcessor);
 
@@ -157,16 +171,11 @@ public class GameController implements Updateable {
                 spawnFruit();
             }
             fruit.update(delta);
-        } else if (state.isGameOver()) {
+        } else if (state.isGameOverPending()) {
             gameOverTimer += delta;
-        } else {
-            checkForRestart();
-        }
-    }
-
-    private void checkForRestart() {
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            reset();
+            if (gameOverTimer >= GAME_OVER_WAIT_TIME) {
+                state = GameState.GAME_OVER;
+            }
         }
     }
 
@@ -189,8 +198,8 @@ public class GameController implements Updateable {
         Rectangle bodyBounds = bodyPart.getCollisionBounds();
 
         if (Intersector.overlaps(headBounds, bodyBounds)) {
-            state = GameState.GAME_OVER;
-            highscoreService.saveHighscore(); // TODO check this method is only called once!
+            state = GameState.GAME_OVER_PENDING;
+            //highscoreService.saveHighscore(); // TODO check this method is only called once!
             gameListener.lose();
         }
     }
@@ -328,10 +337,6 @@ public class GameController implements Updateable {
 
     public OverlayCallback getCallback() {
         return callback;
-    }
-
-    public boolean gameOverWaitTimeReady() {
-        return gameOverTimer >= GAME_OVER_WAIT_TIME;
     }
 
     public static float getCurrentMoveTime() {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -12,10 +13,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.assets.Styles;
 
-public class PauseOverlay extends Table {
-    private final OverlayCallback callback;
+public class GameOverOverlay extends Table {
+    private static final String SCORE_TEXT = "SCORE: ";
 
-    public PauseOverlay(Skin skin, OverlayCallback callback) {
+    private final OverlayCallback callback;
+    private Label scoreLabel;
+
+    public GameOverOverlay(Skin skin, OverlayCallback callback) {
         super(skin);
         this.callback = callback;
         this.setVisible(false);
@@ -28,16 +32,16 @@ public class PauseOverlay extends Table {
 
         Image titleImage = new Image(getSkin(), RegionNames.TITLE);
 
+        scoreLabel = new Label(SCORE_TEXT, getSkin());
         Table buttonTable = new Table(getSkin());
         buttonTable.defaults().pad(20);
         buttonTable.center();
-        //buttonTable.setBackground(RegionNames.PANEL);
 
         Button resumeButton = new Button(getSkin(), Styles.Button.PLAY);
         resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                callback.resume();
+                callback.restart();
             }
         });
         buttonTable.add(resumeButton);
@@ -52,11 +56,16 @@ public class PauseOverlay extends Table {
         buttonTable.add(quitButton);
 
         add(titleImage).row();
+        add(scoreLabel).row();
         add(buttonTable);
 
         center();
         setFillParent(true);
         pack();
+    }
+
+    public void update(int score) {
+        scoreLabel.setText(SCORE_TEXT + score); // TODO make sure this is only called once
     }
 
     @Override

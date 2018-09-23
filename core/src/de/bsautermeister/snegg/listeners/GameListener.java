@@ -5,4 +5,5 @@ public interface GameListener {
     void hitFruit();
     void spawnFruit();
     void lose();
+    void quit();
 }

@@ -31,6 +31,7 @@ import de.bsautermeister.snegg.model.Fruit;
 import de.bsautermeister.snegg.model.GameObject;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
+import de.bsautermeister.snegg.screen.menu.GameOverOverlay;
 import de.bsautermeister.snegg.screen.menu.PauseOverlay;
 import de.bsautermeister.snegg.util.GdxUtils;
 import de.bsautermeister.snegg.util.ViewportUtils;
@@ -60,6 +61,7 @@ public class GameRenderer implements Disposable {
     private Skin skin;
     private Stage hudStage;
     private PauseOverlay pauseOverlay;
+    private GameOverOverlay gameOverOverlay;
 
     private DebugCameraController debugCameraController;
 
@@ -88,9 +90,11 @@ public class GameRenderer implements Disposable {
         orangeRegion = gamePlayAtlas.findRegion(RegionNames.ORANGE);
 
         pauseOverlay = new PauseOverlay(skin, controller.getCallback());
+        gameOverOverlay = new GameOverOverlay(skin, controller.getCallback());
 
         hudStage = new Stage(hudViewport, batch);
         hudStage.addActor(pauseOverlay);
+        hudStage.addActor(gameOverOverlay);
         hudStage.setDebugAll(GameConfig.DEBUG_MODE);
 
         Gdx.input.setInputProcessor(hudStage);
@@ -243,6 +247,19 @@ public class GameRenderer implements Disposable {
             hudStage.draw();
         } else {
             pauseOverlay.setVisible(false);
+        }
+
+        if (gameState.isGameOver()) {
+            if (!gameOverOverlay.isVisible()) {
+                gameOverOverlay.setVisible(true);
+            } else {
+                // workaround: do not act during the first frame, otherwise button event which triggered
+                // this overlay to show are processed in the overlay, which could immediately close it again
+                hudStage.act();
+            }
+            hudStage.draw();
+        } else {
+            gameOverOverlay.setVisible(false);
         }
     }
 

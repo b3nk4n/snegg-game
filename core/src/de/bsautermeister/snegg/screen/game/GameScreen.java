@@ -22,6 +22,8 @@ public class GameScreen extends ScreenBase {
     private Sound fruitSound;
     private Sound spawnFruitSound;
 
+    private boolean navigateToMenuScreen;
+
     public GameScreen(GameApp game) {
         super(game);
 
@@ -45,6 +47,11 @@ public class GameScreen extends ScreenBase {
             public void lose() {
                 loseSound.play();
             }
+
+            @Override
+            public void quit() {
+                navigateToMenuScreen = true;
+            }
         };
     }
 
@@ -64,7 +71,7 @@ public class GameScreen extends ScreenBase {
         controller.update(delta);
         renderer.render(delta);
 
-        if (controller.gameOverWaitTimeReady()) {
+        if (navigateToMenuScreen) {
             setScreen(new MenuScreen(getGame()), ScreenTransitions.FADE);
         }
     }

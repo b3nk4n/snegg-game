@@ -4,6 +4,7 @@ public enum GameState {
     READY,
     PLAYING,
     PAUSED,
+    GAME_OVER_PENDING,
     GAME_OVER;
 
     public boolean isReady() {
@@ -16,6 +17,10 @@ public enum GameState {
 
     public boolean isPaused() {
         return this == PAUSED;
+    }
+
+    public boolean isGameOverPending() {
+        return this == GAME_OVER_PENDING;
     }
 
     public boolean isGameOver() {
