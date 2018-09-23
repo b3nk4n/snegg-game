@@ -64,6 +64,14 @@ public abstract class GameObject implements Resettable, Updateable {
         return x;
     }
 
+    public float getCenterX() {
+        return x + width / 2f;
+    }
+
+    public float getCenterY() {
+        return y + height / 2f;
+    }
+
     public float getY() {
         return y;
     }

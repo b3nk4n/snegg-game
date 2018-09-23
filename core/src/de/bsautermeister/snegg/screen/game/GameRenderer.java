@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -142,20 +143,39 @@ public class GameRenderer implements Disposable {
         }
     }
 
+    private Vector2 previous = new Vector2();
+    private Vector2 current = new Vector2();
     private void drawSnake() {
         Snake snake = controller.getSnake();
+        SnakeHead head = snake.getHead();
+        previous.set(head.getCenterX(), head.getCenterY());
         for (BodyPart bodyPart : snake.getBodyParts()) {
             float bodyX = bodyPart.getX();
             float cloneX = getWorldWrapX(bodyX);
             float bodyY = bodyPart.getY();
             float cloneY = getWorldWrapY(bodyY);
+
+            current.set(bodyPart.getCenterX(), bodyPart.getCenterY());
+            Vector2 direction = previous.sub(current);
+            float rotation = direction.angle() + 90f;
+            previous.set(current.x, current.y);
+
             if (cloneX != bodyX || cloneY != bodyY) {
-                batch.draw(bodyRegion, cloneX, cloneY, bodyPart.getWidth(), bodyPart.getHeight());
+                batch.draw(bodyRegion,
+                        cloneX, cloneY,
+                        bodyPart.getWidth() / 2, bodyPart.getHeight() / 2,
+                        bodyPart.getWidth(), bodyPart.getHeight(),
+                        1f, 1f,
+                        rotation);
             }
-            batch.draw(bodyRegion, bodyPart.getX(), bodyPart.getY(), bodyPart.getWidth(), bodyPart.getHeight());
+            batch.draw(bodyRegion,
+                    bodyPart.getX(), bodyPart.getY(),
+                    bodyPart.getWidth() / 2, bodyPart.getHeight() / 2,
+                    bodyPart.getWidth(), bodyPart.getHeight(),
+                    1f, 1f,
+                    rotation);
         }
 
-        SnakeHead head = snake.getHead();
 
         float headX = head.getX();
         float cloneX = getWorldWrapX(headX);
