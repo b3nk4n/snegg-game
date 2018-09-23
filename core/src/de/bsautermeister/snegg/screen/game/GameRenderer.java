@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -27,6 +28,7 @@ import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
 import de.bsautermeister.snegg.model.Fruit;
+import de.bsautermeister.snegg.model.GameObject;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
 import de.bsautermeister.snegg.screen.menu.PauseOverlay;
@@ -148,34 +150,38 @@ public class GameRenderer implements Disposable {
     private void drawSnake() {
         Snake snake = controller.getSnake();
         SnakeHead head = snake.getHead();
-        previous.set(head.getCenterX(), head.getCenterY());
-        for (BodyPart bodyPart : snake.getBodyParts()) {
-            float bodyX = bodyPart.getX();
-            float cloneX = getWorldWrapX(bodyX);
-            float bodyY = bodyPart.getY();
-            float cloneY = getWorldWrapY(bodyY);
 
-            current.set(bodyPart.getCenterX(), bodyPart.getCenterY());
+        Array<BodyPart> bodyParts= snake.getBodyParts();
+        for (int i = bodyParts.size - 1; i >= 0; --i) {
+            GameObject currentObject = bodyParts.get(i);
+            GameObject previousObject = (i > 0) ? bodyParts.get(i - 1) : head;
+
+            previous.set(previousObject.getCenterX(), previousObject.getCenterY());
+            current.set(currentObject.getCenterX(), currentObject.getCenterY());
             Vector2 direction = previous.sub(current);
             float rotation = direction.angle() + 90f;
             previous.set(current.x, current.y);
 
+            float bodyX = currentObject.getX();
+            float cloneX = getWorldWrapX(bodyX);
+            float bodyY = currentObject.getY();
+            float cloneY = getWorldWrapY(bodyY);
+
             if (cloneX != bodyX || cloneY != bodyY) {
                 batch.draw(bodyRegion,
                         cloneX, cloneY,
-                        bodyPart.getWidth() / 2, bodyPart.getHeight() / 2,
-                        bodyPart.getWidth(), bodyPart.getHeight(),
+                        currentObject.getWidth() / 2, currentObject.getHeight() / 2,
+                        currentObject.getWidth(), currentObject.getHeight(),
                         1f, 1f,
                         rotation);
             }
             batch.draw(bodyRegion,
-                    bodyPart.getX(), bodyPart.getY(),
-                    bodyPart.getWidth() / 2, bodyPart.getHeight() / 2,
-                    bodyPart.getWidth(), bodyPart.getHeight(),
+                    bodyX, bodyY,
+                    currentObject.getWidth() / 2, currentObject.getHeight() / 2,
+                    currentObject.getWidth(), currentObject.getHeight(),
                     1f, 1f,
                     rotation);
         }
-
 
         float headX = head.getX();
         float cloneX = getWorldWrapX(headX);
