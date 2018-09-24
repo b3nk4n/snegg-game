@@ -252,6 +252,7 @@ public class GameRenderer implements Disposable {
         if (gameState.isGameOver()) {
             if (!gameOverOverlay.isVisible()) {
                 gameOverOverlay.setVisible(true);
+                gameOverOverlay.update(controller.getScoreProvider().getScore());
             } else {
                 // workaround: do not act during the first frame, otherwise button event which triggered
                 // this overlay to show are processed in the overlay, which could immediately close it again
@@ -264,15 +265,11 @@ public class GameRenderer implements Disposable {
     }
 
     private void drawHud() {
-        String highscoreString = "HIGHSCORE: " + controller.getScoreProvider().getDisplayHighscore();
-        layout.setText(font, highscoreString);
-        font.draw(batch, layout, PADDING, hudViewport.getWorldHeight() - PADDING);
-
-        float scoreX = hudViewport.getWorldWidth() - layout.width;
-        float scoreY = hudViewport.getWorldHeight() - PADDING;
-
-        String scoreString = "SCORE: " + controller.getScoreProvider().getDisplayScore();
-        font.draw(batch, scoreString, scoreX, scoreY);
+        String scoreString = String.valueOf(controller.getScoreProvider().getDisplayScore());
+        layout.setText(font, scoreString);
+        font.draw(batch, layout,
+                hudViewport.getWorldWidth() - layout.width - PADDING,
+                hudViewport.getWorldHeight() - PADDING);
     }
 
     private void renderDebug() {

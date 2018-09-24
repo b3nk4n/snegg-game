@@ -73,12 +73,7 @@ public class GameController implements Updateable {
 
             @Override
             public void quit() {
-                // TODO make sure the highscore is saved locally at the approprate state
-                // suicide instead of just quitting to also save the current score
-                //state = GameState.GAME_OVER;
-                //highscoreService.saveHighscore();
-                // skip wait time
-                //gameOverTimer = GAME_OVER_WAIT_TIME;
+                highscoreService.saveHighscore();
                 gameListener.quit();
             }
         };
@@ -199,7 +194,7 @@ public class GameController implements Updateable {
 
         if (Intersector.overlaps(headBounds, bodyBounds)) {
             state = GameState.GAME_OVER_PENDING;
-            //highscoreService.saveHighscore(); // TODO check this method is only called once!
+            highscoreService.saveHighscore();
             gameListener.lose();
         }
     }

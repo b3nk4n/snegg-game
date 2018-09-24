@@ -30,18 +30,21 @@ public class LocalHighscoreService implements ScoreProvider, Resettable {
 
     public void incrementScore(int delta) {
         score += delta;
-
-        if (score > highscore) {
-            highscore = score;
-        }
     }
 
+    @Override
     public int getDisplayScore() {
         return displayScore;
     }
 
-    public int getDisplayHighscore() {
-        return displayHighscore;
+    @Override
+    public int getScore() {
+        return score;
+    }
+
+    @Override
+    public int getHighscore() {
+        return highscore;
     }
 
     public void updateDisplayScore(float delta) {
@@ -55,7 +58,7 @@ public class LocalHighscoreService implements ScoreProvider, Resettable {
     }
 
     public void saveHighscore() {
-        if (score < highscore) {
+        if (score <= highscore) {
             return;
         }
 
