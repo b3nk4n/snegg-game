@@ -29,10 +29,11 @@ public class Snake implements Resettable, Updateable {
     @Override
     public void reset() {
         bodyParts.clear();
-        insertBodyPart();
+
         direction = Direction.UP;
         lastDirection = Direction.UP;
         head.reset();
+        insertBodyPart();
     }
 
     @Override
