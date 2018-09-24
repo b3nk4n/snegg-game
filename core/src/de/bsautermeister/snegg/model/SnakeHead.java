@@ -13,6 +13,6 @@ public class SnakeHead extends SmoothGameObject {
     @Override
     public void reset() {
         super.reset();
-        gotoXY(1, 1);
+        gotoXY((int)(GameConfig.GAMEFIELD_WIDTH / 2), 3);
     }
 }

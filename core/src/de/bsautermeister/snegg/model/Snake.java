@@ -30,8 +30,8 @@ public class Snake implements Resettable, Updateable {
     public void reset() {
         bodyParts.clear();
         insertBodyPart();
-        direction = Direction.RIGHT;
-        lastDirection = Direction.RIGHT;
+        direction = Direction.UP;
+        lastDirection = Direction.UP;
         head.reset();
     }
 
