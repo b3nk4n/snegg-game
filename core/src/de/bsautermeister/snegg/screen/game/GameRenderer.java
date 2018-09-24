@@ -164,6 +164,13 @@ public class GameRenderer implements Disposable {
             current.set(currentObject.getCenterX(), currentObject.getCenterY());
             Vector2 direction = previous.sub(current);
             float rotation = direction.angle() + 90f;
+
+            if (direction.len2() >= 2f) {
+                // hack: if a bodypart is more than 1 unit away, it must be on the other side,
+                //       so we simply rotate it by 180° to point into the right direction
+                rotation += 180f;
+            }
+
             previous.set(current.x, current.y);
 
             float bodyX = currentObject.getX();
@@ -191,15 +198,21 @@ public class GameRenderer implements Disposable {
         float cloneX = getWorldWrapX(headX);
         float headY = head.getY();
         float cloneY = getWorldWrapY(headY);
+        float headRotation = snake.getDirection().angle() + 90f;
         if (cloneX != headX || cloneY != headY) {
-            batch.draw(headRegion, cloneX, cloneY, head.getWidth(), head.getHeight());
+            batch.draw(headRegion,
+                    cloneX, cloneY,
+                    head.getWidth() / 2f, head.getHeight() / 2f,
+                    head.getWidth(), head.getHeight(),
+                    1f, 1f,
+                    headRotation);
         }
         batch.draw(headRegion,
                 headX, headY,
                 head.getWidth() / 2, head.getHeight() / 2,
                 head.getWidth(), head.getHeight(),
                 1f, 1f,
-                snake.getDirection().angle() + 90f);
+                headRotation);
     }
 
     private float getWorldWrapX(float headX) {
