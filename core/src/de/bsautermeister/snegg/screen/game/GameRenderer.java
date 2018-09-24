@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -55,6 +56,9 @@ public class GameRenderer implements Disposable {
     private TextureRegion backgroundRegion;
     private TextureRegion bodyRegion;
     private TextureRegion headRegion;
+    private TextureRegion headKilledRegion;
+    private TextureRegion currentHappyRegion;
+    private TextureRegion[] headHappyRegions;
     private TextureRegion coinRegion;
     private TextureRegion orangeRegion;
 
@@ -85,6 +89,11 @@ public class GameRenderer implements Disposable {
         TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.Atlas.GAMEPLAY);
         backgroundRegion = gamePlayAtlas.findRegion(RegionNames.BACKGROUND);
         headRegion = gamePlayAtlas.findRegion(RegionNames.HEAD);
+        headKilledRegion = gamePlayAtlas.findRegion(RegionNames.HEAD_KILLED);
+        headHappyRegions = new TextureRegion[RegionNames.HEAD_HAPPY.length];
+        for (int i = 0; i < RegionNames.HEAD_HAPPY.length; ++i) {
+            headHappyRegions[i] = gamePlayAtlas.findRegion(RegionNames.HEAD_HAPPY[i]);
+        }
         bodyRegion = gamePlayAtlas.findRegion(RegionNames.BODY);
         coinRegion = gamePlayAtlas.findRegion(RegionNames.COIN);
         orangeRegion = gamePlayAtlas.findRegion(RegionNames.ORANGE);
@@ -199,20 +208,40 @@ public class GameRenderer implements Disposable {
         float headY = head.getY();
         float cloneY = getWorldWrapY(headY);
         float headRotation = snake.getDirection().angle() + 90f;
+        TextureRegion currentHeadRegion = getSnakeHeadRegion();
         if (cloneX != headX || cloneY != headY) {
-            batch.draw(headRegion,
+            batch.draw(currentHeadRegion,
                     cloneX, cloneY,
                     head.getWidth() / 2f, head.getHeight() / 2f,
                     head.getWidth(), head.getHeight(),
                     1f, 1f,
                     headRotation);
         }
-        batch.draw(headRegion,
+        batch.draw(currentHeadRegion,
                 headX, headY,
                 head.getWidth() / 2, head.getHeight() / 2,
                 head.getWidth(), head.getHeight(),
                 1f, 1f,
                 headRotation);
+    }
+
+    private TextureRegion getSnakeHeadRegion() {
+        if (controller.getState().isAnyGameOverState()) {
+            currentHappyRegion = null;
+            return headKilledRegion;
+        }
+
+        if (controller.getSnake().isHappy()) {
+            if (currentHappyRegion != null) {
+                return currentHappyRegion;
+            }
+            int randomIndex = MathUtils.random(headHappyRegions.length - 1);
+            currentHappyRegion = headHappyRegions[randomIndex];
+            return currentHappyRegion;
+        }
+
+        currentHappyRegion = null;
+        return headRegion;
     }
 
     private float getWorldWrapX(float headX) {

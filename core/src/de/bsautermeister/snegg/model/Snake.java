@@ -19,6 +19,8 @@ public class Snake implements Resettable, Updateable {
 
     private final SnakeHead head;
     private final Array<BodyPart> bodyParts;
+
+    private float happyTimer = 0f;
     
     public Snake() {
         head = new SnakeHead();
@@ -41,6 +43,10 @@ public class Snake implements Resettable, Updateable {
         head.update(delta);
         for (BodyPart body : bodyParts) {
             body.update(delta);
+        }
+
+        if (happyTimer >= 0) {
+            happyTimer -= delta;
         }
     }
 
@@ -157,5 +163,13 @@ public class Snake implements Resettable, Updateable {
 
     public Direction getDirection() {
         return direction;
+    }
+
+    public void makeHappy() {
+        happyTimer = GameConfig.SNAKE_HAPPY_TIME;
+    }
+
+    public boolean isHappy() {
+        return happyTimer > 0f;
     }
 }

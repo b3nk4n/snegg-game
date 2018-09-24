@@ -26,4 +26,8 @@ public enum GameState {
     public boolean isGameOver() {
         return this == GAME_OVER;
     }
+
+    public boolean isAnyGameOverState() {
+        return this == GAME_OVER_PENDING || this == GAME_OVER;
+    }
 }

@@ -11,6 +11,8 @@ public class RegionNames {
 
     public static final String BACKGROUND = "background";
     public static final String HEAD = "head";
+    public static final String HEAD_KILLED = "head-killed";
+    public static final String[] HEAD_HAPPY = {"head-happy1", "head-happy2", "head-happy3"};
     public static final String BODY = "body";
     public static final String COIN = "coin";
     public static final String ORANGE = "orange";

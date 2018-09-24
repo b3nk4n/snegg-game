@@ -32,9 +32,37 @@ head
   orig: 64, 64
   offset: 0, 0
   index: -1
-orange
+head-happy1
   rotate: false
   xy: 804, 286
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+head-happy2
+  rotate: false
+  xy: 870, 352
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+head-happy3
+  rotate: false
+  xy: 936, 418
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+head-killed
+  rotate: false
+  xy: 804, 220
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+orange
+  rotate: false
+  xy: 870, 286
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

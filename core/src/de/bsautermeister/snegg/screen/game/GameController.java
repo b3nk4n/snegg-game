@@ -207,6 +207,7 @@ public class GameController implements Updateable {
 
         if (!coin.isCollected() && overlap) {
             snake.insertBodyPart();
+            snake.makeHappy();
             highscoreService.incrementScore(coin.getScore());
             spawnCoin();
             gameListener.hitCoin();
@@ -227,6 +228,7 @@ public class GameController implements Updateable {
         boolean overlap = Intersector.overlaps(headBounds, fruitBounds);
 
         if (!fruit.isCollected() && overlap) {
+            snake.makeHappy();
             highscoreService.incrementScore(fruit.getScore());
             fruit.collect();
             gameListener.hitFruit();

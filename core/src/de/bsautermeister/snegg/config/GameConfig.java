@@ -22,6 +22,7 @@ public final class GameConfig {
     public static final float MOVE_TIME = 0.40f;
     public static final float MIN_MOVE_TIME = 0.1f;
     public static final float SNAKE_SPEED = 1f;
+    public static final float SNAKE_HAPPY_TIME = 0.66f;
 
     public static final float INITIAL_TRANS_DURATION = MOVE_TIME / 2;
     public static final float INITIAL_TRANS_DELAY = INITIAL_TRANS_DURATION / 5;
