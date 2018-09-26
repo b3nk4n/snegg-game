@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -32,6 +33,7 @@ import de.bsautermeister.snegg.model.Fruit;
 import de.bsautermeister.snegg.model.GameObject;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
+import de.bsautermeister.snegg.model.ZoomText;
 import de.bsautermeister.snegg.screen.menu.GameOverOverlay;
 import de.bsautermeister.snegg.screen.menu.PauseOverlay;
 import de.bsautermeister.snegg.util.GdxUtils;
@@ -138,6 +140,22 @@ public class GameRenderer implements Disposable {
         drawCoin();
         drawFruit();
         drawSnake();
+        drawZoomText();
+    }
+
+    // https://stackoverflow.com/questions/29907063/scale-a-bitmapfont-in-libgdx
+    private void drawZoomText() {
+        ZoomText zoomText = controller.getZoomText();
+        if (zoomText.isActive()) {
+            System.out.println(zoomText.getScale());
+            String text = zoomText.getText();
+            font.getData().setScale(zoomText.getScale());
+            layout.setText(font, text);
+            font.draw(batch, layout,
+                    zoomText.getCenter().x - layout.width / 2,
+                    zoomText.getCenter().y + layout.height / 2);
+            font.getData().setScale(1);
+        }
     }
 
     private void drawBackground() {

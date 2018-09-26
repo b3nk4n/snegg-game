@@ -30,4 +30,8 @@ public enum GameState {
     public boolean isAnyGameOverState() {
         return this == GAME_OVER_PENDING || this == GAME_OVER;
     }
+
+    public boolean isGameActive() {
+        return this == READY || this == PLAYING || this == GAME_OVER_PENDING;
+    }
 }

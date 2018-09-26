@@ -3,11 +3,11 @@ package de.bsautermeister.snegg.screen.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.common.GameState;
@@ -24,6 +24,7 @@ import de.bsautermeister.snegg.model.Direction;
 import de.bsautermeister.snegg.model.Fruit;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
+import de.bsautermeister.snegg.model.ZoomText;
 import de.bsautermeister.snegg.screen.menu.OverlayCallback;
 
 
@@ -54,11 +55,15 @@ public class GameController implements Updateable {
 
     private InputProcessor inputProcessor;
 
+    private ZoomText zoomText;
+
     public GameController(final GameListener gameListener) {
         this.gameListener = gameListener;
         snake = new Snake();
         coin = new Coin();
         fruit = new Fruit();
+
+        zoomText = new ZoomText(Interpolation.smoother);
 
         callback = new OverlayCallback() {
             @Override
@@ -127,6 +132,8 @@ public class GameController implements Updateable {
         snakeMoveTimer = 0f;
         snake.reset();
         gameOverTimer = 0f;
+        zoomText.reset();
+        zoomText.show("Test", new Vector2(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y), 0.1f, 0.2f, 1.33f);
     }
 
     @Override
@@ -137,8 +144,6 @@ public class GameController implements Updateable {
             gameTime += delta;
             currentMoveTime -= delta * GameConfig.DIFFICULTY_LOWERING_MOVE_TIME_FACTOR;
             currentMoveTime = Math.max(GameConfig.MIN_MOVE_TIME, currentMoveTime);
-
-            LOG.info(String.valueOf(currentMoveTime));
 
             checkBackButtonInput();
             checkKeyboardInput();
@@ -171,6 +176,10 @@ public class GameController implements Updateable {
             if (gameOverTimer >= GAME_OVER_WAIT_TIME) {
                 state = GameState.GAME_OVER;
             }
+        }
+
+        if (state.isGameActive()) {
+            zoomText.update(delta);
         }
     }
 
@@ -346,5 +355,9 @@ public class GameController implements Updateable {
 
     public InputProcessor getInputProcessor() {
         return inputProcessor;
+    }
+
+    public ZoomText getZoomText() {
+        return zoomText;
     }
 }
