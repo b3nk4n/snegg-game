@@ -293,7 +293,7 @@ public class GameRenderer implements Disposable {
 
             StatusTextQueue statusTextQueue = controller.getStatusTextQueue();
             if (statusTextQueue.hasMessage()) {
-                animatedText.appearText(statusTextQueue.consume());
+                animatedText.dropText(statusTextQueue.consume());
             }
 
             animatedText.act();

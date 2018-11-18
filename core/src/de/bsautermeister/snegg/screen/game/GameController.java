@@ -63,7 +63,7 @@ public class GameController implements Updateable {
         coin = new Coin();
         fruit = new Fruit();
 
-        statusTextQueue = new StatusTextQueue(GameConfig.STATUS_MESSAGE_QUEUE_GRACE_TIME);
+        statusTextQueue = new StatusTextQueue(GameConfig.TEXT_ANIMATION_DURATION);
 
         callback = new OverlayCallback() {
             @Override

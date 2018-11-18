@@ -51,7 +51,7 @@ public final class GameConfig {
     public static final float GAMEFIELD_WIDTH = MAX_X - MIN_X;
     public static final float GAMEFIELD_HEIGHT = MAX_Y - MIN_Y;
 
-    public static final float STATUS_MESSAGE_QUEUE_GRACE_TIME = 2f;
+    public static final float TEXT_ANIMATION_DURATION = 3f;
     public static final float CHAR_ANIMATION_TIME = 0.5f;
     public static final float TEXT_ANIMATION_TIME = 1.0f;
 

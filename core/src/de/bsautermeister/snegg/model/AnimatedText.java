@@ -66,9 +66,6 @@ public class AnimatedText extends Stage implements Resettable {
         reset();
         prepareText(statusText);
 
-        float leftX = statusText.getX() - glyphLayout.width / 2;
-        float bottomY = statusText.getY() + glyphLayout.height / 2;
-
         float delay = getCharacterDelay(text);
 
         for (int i = 0; i < text.length(); i++) {
@@ -76,10 +73,13 @@ public class AnimatedText extends Stage implements Resettable {
             character.setScale(0f);
             character.setColor(0, 0, 0, 0);
             character.addAction(
-                    Actions.delay(delay * i,Actions.parallel(
-                            Actions.alpha(1, GameConfig.CHAR_ANIMATION_TIME),
-                            Actions.scaleTo(1, 1, GameConfig.CHAR_ANIMATION_TIME, Interpolation.swingOut)
-                    )));
+                    Actions.parallel(
+                            Actions.delay(delay * i,Actions.parallel(
+                                    Actions.alpha(1, GameConfig.CHAR_ANIMATION_TIME),
+                                    Actions.scaleTo(1, 1, GameConfig.CHAR_ANIMATION_TIME, Interpolation.swingOut))),
+                            Actions.delay(GameConfig.TEXT_ANIMATION_DURATION - GameConfig.CHAR_ANIMATION_TIME ,Actions.parallel(
+                                    Actions.alpha(0, GameConfig.CHAR_ANIMATION_TIME)))
+                    ));
         }
     }
 
@@ -98,10 +98,14 @@ public class AnimatedText extends Stage implements Resettable {
             character.setY(startY + dropTextOffsetY);
             character.setColor(0, 0, 0, 0);
             character.addAction(
-                    Actions.delay(delay * i,Actions.parallel(
-                            Actions.alpha(1, GameConfig.CHAR_ANIMATION_TIME),
-                            Actions.moveTo(startX, startY, GameConfig.CHAR_ANIMATION_TIME, Interpolation.swingOut)
-                    )));
+                    Actions.parallel(
+                            Actions.delay(delay * i,Actions.parallel(
+                                    Actions.alpha(1, GameConfig.CHAR_ANIMATION_TIME),
+                                    Actions.moveTo(startX, startY, GameConfig.CHAR_ANIMATION_TIME, Interpolation.swingOut)
+                            )),
+                            Actions.delay(GameConfig.TEXT_ANIMATION_DURATION - GameConfig.CHAR_ANIMATION_TIME ,Actions.parallel(
+                                    Actions.alpha(0, GameConfig.CHAR_ANIMATION_TIME)))
+                    ));
         }
     }
 
