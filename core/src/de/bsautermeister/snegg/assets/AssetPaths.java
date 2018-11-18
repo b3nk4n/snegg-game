@@ -4,6 +4,7 @@ public final class AssetPaths {
 
     public interface Fonts {
         String UI = "ui/fonts/oswald-32.fnt";
+        String BIG = "ui/fonts/nanum-100.fnt";
     }
 
     public interface Atlas {

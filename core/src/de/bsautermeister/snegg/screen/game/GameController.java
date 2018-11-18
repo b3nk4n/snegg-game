@@ -3,7 +3,6 @@ package de.bsautermeister.snegg.screen.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -24,7 +23,8 @@ import de.bsautermeister.snegg.model.Direction;
 import de.bsautermeister.snegg.model.Fruit;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
-import de.bsautermeister.snegg.model.ZoomText;
+import de.bsautermeister.snegg.model.StatusText;
+import de.bsautermeister.snegg.model.StatusTextQueue;
 import de.bsautermeister.snegg.screen.menu.OverlayCallback;
 
 
@@ -55,7 +55,7 @@ public class GameController implements Updateable {
 
     private InputProcessor inputProcessor;
 
-    private ZoomText zoomText;
+    StatusTextQueue statusTextQueue;
 
     public GameController(final GameListener gameListener) {
         this.gameListener = gameListener;
@@ -63,7 +63,7 @@ public class GameController implements Updateable {
         coin = new Coin();
         fruit = new Fruit();
 
-        zoomText = new ZoomText(Interpolation.smoother);
+        statusTextQueue = new StatusTextQueue(GameConfig.STATUS_MESSAGE_QUEUE_GRACE_TIME);
 
         callback = new OverlayCallback() {
             @Override
@@ -132,8 +132,6 @@ public class GameController implements Updateable {
         snakeMoveTimer = 0f;
         snake.reset();
         gameOverTimer = 0f;
-        zoomText.reset();
-        zoomText.show("Test", new Vector2(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y), 0.1f, 0.2f, 1.33f);
     }
 
     @Override
@@ -179,7 +177,7 @@ public class GameController implements Updateable {
         }
 
         if (state.isGameActive()) {
-            zoomText.update(delta);
+            statusTextQueue.update(delta);
         }
     }
 
@@ -227,6 +225,9 @@ public class GameController implements Updateable {
                         GameConfig.FRUIT_MIN_SPAWN_DELAY,
                         GameConfig.FRUIT_MAX_SPAWN_DELAY);
             }
+
+            statusTextQueue.publish(
+                    new StatusText("mmmmsmmmmsssmmmssmm", GameConfig.HUD_CENTER_X, GameConfig.HUD_CENTER_Y));
         }
     }
 
@@ -357,7 +358,7 @@ public class GameController implements Updateable {
         return inputProcessor;
     }
 
-    public ZoomText getZoomText() {
-        return zoomText;
+    public StatusTextQueue getStatusTextQueue() {
+        return statusTextQueue;
     }
 }

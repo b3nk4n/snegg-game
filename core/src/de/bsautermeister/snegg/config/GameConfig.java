@@ -12,6 +12,9 @@ public final class GameConfig {
     public static final float HUD_WIDTH = 720; // still world units!
     public static final float HUD_HEIGHT = 1280; // still world units!
 
+    public static final float HUD_CENTER_X = HUD_WIDTH / 2f;
+    public static final float HUD_CENTER_Y = HUD_HEIGHT / 2f;
+
     public static final float WORLD_WIDTH = 9.0f;
     public static final float WORLD_HEIGHT = 16.0f;
 
@@ -47,6 +50,10 @@ public final class GameConfig {
     public static final float MAX_Y = WORLD_HEIGHT - MARGIN_TOP;
     public static final float GAMEFIELD_WIDTH = MAX_X - MIN_X;
     public static final float GAMEFIELD_HEIGHT = MAX_Y - MIN_Y;
+
+    public static final float STATUS_MESSAGE_QUEUE_GRACE_TIME = 2f;
+    public static final float CHAR_ANIMATION_TIME = 0.5f;
+    public static final float TEXT_ANIMATION_TIME = 1.0f;
 
     private GameConfig() { }
 }

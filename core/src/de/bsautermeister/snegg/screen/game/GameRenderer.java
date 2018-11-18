@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,9 +18,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -27,13 +28,14 @@ import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.model.AnimatedText;
 import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Coin;
 import de.bsautermeister.snegg.model.Fruit;
 import de.bsautermeister.snegg.model.GameObject;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
-import de.bsautermeister.snegg.model.ZoomText;
+import de.bsautermeister.snegg.model.StatusTextQueue;
 import de.bsautermeister.snegg.screen.menu.GameOverOverlay;
 import de.bsautermeister.snegg.screen.menu.PauseOverlay;
 import de.bsautermeister.snegg.util.GdxUtils;
@@ -41,6 +43,8 @@ import de.bsautermeister.snegg.util.ViewportUtils;
 import de.bsautermeister.snegg.util.debug.DebugCameraController;
 
 public class GameRenderer implements Disposable {
+    private static final Logger LOG = new Logger(GameRenderer.class.getName(), GameConfig.LOG_LEVEL);
+
     private static final float PADDING = 20.0f;
 
     private final SpriteBatch batch;
@@ -64,6 +68,8 @@ public class GameRenderer implements Disposable {
     private TextureRegion coinRegion;
     private TextureRegion orangeRegion;
 
+    private AnimatedText animatedText;
+
     private Skin skin;
     private Stage hudStage;
     private PauseOverlay pauseOverlay;
@@ -84,7 +90,11 @@ public class GameRenderer implements Disposable {
         hudViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
         renderer = new ShapeRenderer();
 
-        font = assetManager.get(AssetDescriptors.Fonts.UI);
+        /*font = assetManager.get(AssetDescriptors.Fonts.UI);*/ // TODO is there a way to set these texture properties for the font using AssetDescriptors?
+        Texture texture = new Texture(Gdx.files.internal("ui/fonts/oswald-32.png"), false);
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        font = new BitmapFont(Gdx.files.internal("ui/fonts/oswald-32.fnt"), new TextureRegion(texture), false);
+
         skin = assetManager.get(AssetDescriptors.Skins.UI);
         layout = new GlyphLayout();
 
@@ -102,6 +112,8 @@ public class GameRenderer implements Disposable {
 
         pauseOverlay = new PauseOverlay(skin, controller.getCallback());
         gameOverOverlay = new GameOverOverlay(skin, controller.getCallback());
+
+        animatedText = new AnimatedText(font, 32);
 
         hudStage = new Stage(hudViewport, batch);
         hudStage.addActor(pauseOverlay);
@@ -140,22 +152,6 @@ public class GameRenderer implements Disposable {
         drawCoin();
         drawFruit();
         drawSnake();
-        drawZoomText();
-    }
-
-    // https://stackoverflow.com/questions/29907063/scale-a-bitmapfont-in-libgdx
-    private void drawZoomText() {
-        ZoomText zoomText = controller.getZoomText();
-        if (zoomText.isActive()) {
-            System.out.println(zoomText.getScale());
-            String text = zoomText.getText();
-            font.getData().setScale(zoomText.getScale());
-            layout.setText(font, text);
-            font.draw(batch, layout,
-                    zoomText.getCenter().x - layout.width / 2,
-                    zoomText.getCenter().y + layout.height / 2);
-            font.getData().setScale(1);
-        }
     }
 
     private void drawBackground() {
@@ -294,6 +290,14 @@ public class GameRenderer implements Disposable {
             drawHud();
 
             batch.end();
+
+            StatusTextQueue statusTextQueue = controller.getStatusTextQueue();
+            if (statusTextQueue.hasMessage()) {
+                animatedText.dropText(statusTextQueue.consume());
+            }
+
+            animatedText.act();
+            animatedText.draw();
         }
 
         if (gameState.isPaused()) {
