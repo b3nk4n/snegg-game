@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 
 import de.bsautermeister.snegg.common.Resettable;
@@ -15,9 +18,9 @@ import de.bsautermeister.snegg.config.GameConfig;
 public class AnimatedText extends Stage implements Resettable {
     private final BitmapFont font;
     private final GlyphLayout glyphLayout;
-    private final TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+    private final Label.LabelStyle style = new Label.LabelStyle();
     private String text;
-    private TextButton[] characters; // we use TextButton instead of Label, because Label needs a wrapping container to set transform to TRUE for scaling.
+    private Array<Container<Label>> charContainers;
 
     public AnimatedText(BitmapFont font, int maxTextLength) {
         this.font = font;
@@ -26,13 +29,15 @@ public class AnimatedText extends Stage implements Resettable {
 
         font.getRegion().getTexture()
                 .setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        characters = new TextButton[maxTextLength];
+        charContainers = new Array<Container<Label>>(maxTextLength);
         glyphLayout = new GlyphLayout();
 
         for (int i = 0; i < maxTextLength; i++) {
-            characters[i] = new TextButton("", style);
-            characters[i].setTransform(true);
-            addActor(characters[i]);
+            Container<Label> container = new Container<Label>(new Label("", style));
+            container.align(Align.left);
+            container.setTransform(true);
+            addActor(container);
+            charContainers.add(container);
         }
 
         reset();
@@ -67,9 +72,10 @@ public class AnimatedText extends Stage implements Resettable {
         float delay = getCharacterDelay(text);
 
         for (int i = 0; i < text.length(); i++) {
-            characters[i].setScale(0f);
-            characters[i].setColor(0, 0, 0, 0);
-            characters[i].addAction(
+            Container<Label> character = charContainers.get(i);
+            character.setScale(0f);
+            character.setColor(0, 0, 0, 0);
+            character.addAction(
                     Actions.delay(delay * i,Actions.parallel(
                             Actions.alpha(1, GameConfig.CHAR_ANIMATION_TIME),
                             Actions.scaleTo(1, 1, GameConfig.CHAR_ANIMATION_TIME, Interpolation.swingOut)
@@ -85,12 +91,13 @@ public class AnimatedText extends Stage implements Resettable {
         float delay = getCharacterDelay(text);
 
         for (int i = 0; i < text.length(); i++) {
-            float startX = characters[i].getX();
-            float startY = characters[i].getY();
+            Container<Label> character = charContainers.get(i);
+            float startX = character.getX();
+            float startY = character.getY();
 
-            characters[i].setY(startY + dropTextOffsetY);
-            characters[i].setColor(0, 0, 0, 0);
-            characters[i].addAction(
+            character.setY(startY + dropTextOffsetY);
+            character.setColor(0, 0, 0, 0);
+            character.addAction(
                     Actions.delay(delay * i,Actions.parallel(
                             Actions.alpha(1, GameConfig.CHAR_ANIMATION_TIME),
                             Actions.moveTo(startX, startY, GameConfig.CHAR_ANIMATION_TIME, Interpolation.swingOut)
@@ -110,9 +117,10 @@ public class AnimatedText extends Stage implements Resettable {
         float bottomY = statusText.getY() - glyphLayout.height / 2;
 
         for (int i = 0; i < text.length(); i++) {
-            characters[i].setPosition(leftX + positions.get(i), bottomY);
-            characters[i].setOrigin(advances.get(i) / 2, characters[i].getHeight() / 4);
-            characters[i].setText(String.valueOf(text.charAt(i)));
+            Container<Label> character = charContainers.get(i);
+            character.getActor().setText(String.valueOf(text.charAt(i)));
+            character.setPosition(leftX + positions.get(i), bottomY);
+            character.setOrigin(advances.get(i) / 2, character.getHeight() / 8);
         }
     }
 

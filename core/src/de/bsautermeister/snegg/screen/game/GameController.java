@@ -227,7 +227,7 @@ public class GameController implements Updateable {
             }
 
             statusTextQueue.publish(
-                    new StatusText("mmmmsmmmmsssmmmssmm", GameConfig.HUD_CENTER_X, GameConfig.HUD_CENTER_Y));
+                    new StatusText("NEW HIGHSCORE", GameConfig.HUD_CENTER_X, GameConfig.HUD_CENTER_Y));
         }
     }
 
