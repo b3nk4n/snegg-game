@@ -10,5 +10,9 @@ public class Styles {
         String LEADERBOARDS = "leaderboards";
     }
 
+    public interface Fonts {
+        String DEFAULT = "default-font";
+    }
+
     private Styles() {}
 }

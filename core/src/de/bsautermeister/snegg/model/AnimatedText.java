@@ -1,5 +1,6 @@
 package de.bsautermeister.snegg.model;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -8,32 +9,33 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
 
+import de.bsautermeister.snegg.assets.Styles;
 import de.bsautermeister.snegg.common.Resettable;
 import de.bsautermeister.snegg.config.GameConfig;
 
 public class AnimatedText extends Stage implements Resettable {
     private final BitmapFont font;
     private final GlyphLayout glyphLayout;
-    private final Label.LabelStyle style = new Label.LabelStyle();
     private String text;
     private Array<Container<Label>> charContainers;
 
-    public AnimatedText(BitmapFont font, int maxTextLength) {
-        this.font = font;
+    public AnimatedText(Skin skin, int maxTextLength) {
+        this.font = skin.getFont(Styles.Fonts.DEFAULT);
 
-        style.font = font;
-
+        // enable smooth scaling for BitmapFont
         font.getRegion().getTexture()
                 .setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
         charContainers = new Array<Container<Label>>(maxTextLength);
         glyphLayout = new GlyphLayout();
 
         for (int i = 0; i < maxTextLength; i++) {
-            Container<Label> container = new Container<Label>(new Label("", style));
+            Container<Label> container = new Container<Label>(new Label("", skin));
             container.align(Align.left);
             container.setTransform(true);
             addActor(container);

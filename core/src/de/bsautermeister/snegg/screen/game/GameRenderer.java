@@ -90,10 +90,7 @@ public class GameRenderer implements Disposable {
         hudViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
         renderer = new ShapeRenderer();
 
-        /*font = assetManager.get(AssetDescriptors.Fonts.UI);*/ // TODO is there a way to set these texture properties for the font using AssetDescriptors?
-        Texture texture = new Texture(Gdx.files.internal("ui/fonts/oswald-32.png"), false);
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        font = new BitmapFont(Gdx.files.internal("ui/fonts/oswald-32.fnt"), new TextureRegion(texture), false);
+        font = assetManager.get(AssetDescriptors.Fonts.UI);
 
         skin = assetManager.get(AssetDescriptors.Skins.UI);
         layout = new GlyphLayout();
@@ -113,7 +110,7 @@ public class GameRenderer implements Disposable {
         pauseOverlay = new PauseOverlay(skin, controller.getCallback());
         gameOverOverlay = new GameOverOverlay(skin, controller.getCallback());
 
-        animatedText = new AnimatedText(font, 32);
+        animatedText = new AnimatedText(skin , 32);
 
         hudStage = new Stage(hudViewport, batch);
         hudStage.addActor(pauseOverlay);
