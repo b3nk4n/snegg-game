@@ -2,6 +2,7 @@ package de.bsautermeister.snegg.model;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Interpolation;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.FloatArray;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bsautermeister.snegg.assets.Styles;
 import de.bsautermeister.snegg.common.Resettable;
@@ -24,7 +26,8 @@ public class AnimatedText extends Stage implements Resettable {
     private String text;
     private Array<Container<Label>> charContainers;
 
-    public AnimatedText(Skin skin, int maxTextLength) {
+    public AnimatedText(Viewport viewport, Batch batch, Skin skin, int maxTextLength) {
+        super(viewport, batch);
         this.font = skin.getFont(Styles.Fonts.DEFAULT);
 
         // enable smooth scaling for BitmapFont

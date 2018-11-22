@@ -1,5 +1,6 @@
 package de.bsautermeister.snegg.screen.menu;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -97,14 +98,17 @@ public class MenuScreen extends ScreenBase {
             table.add(reviewsButton).row();
         }
 
-        Button quitButton = new Button(skin, Styles.Button.QUIT);
-        quitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                quit();
-            }
-        });
-        table.add(quitButton);
+        if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
+            // only show quit button on Desktop
+            Button quitButton = new Button(skin, Styles.Button.QUIT);
+            quitButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    quit();
+                }
+            });
+            table.add(quitButton);
+        }
 
         table.center();
         table.setFillParent(true);
@@ -119,6 +123,8 @@ public class MenuScreen extends ScreenBase {
 
     private void quit() {
         if (getGameServices().isSupported()) {
+            // TODO quit will never be executed on Android, which is the only supported platform
+            //      do we actually ever need to call sign-out? Maybe hidden in a settings page?
             getGameServices().signOut();
         }
 

@@ -38,6 +38,10 @@ public abstract class GameApp implements ApplicationListener {
         transitionContext.setScreen(screen, transtion);
     }
 
+    public ScreenBase getScreen() {
+        return transitionContext.getScreen();
+    }
+
     @Override
     public void render() {
         float delta = Gdx.graphics.getDeltaTime();

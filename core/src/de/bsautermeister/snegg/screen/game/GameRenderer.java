@@ -5,7 +5,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -110,7 +109,7 @@ public class GameRenderer implements Disposable {
         pauseOverlay = new PauseOverlay(skin, controller.getCallback());
         gameOverOverlay = new GameOverOverlay(skin, controller.getCallback());
 
-        animatedText = new AnimatedText(skin , 32);
+        animatedText = new AnimatedText(hudViewport, batch, skin , 32);
 
         hudStage = new Stage(hudViewport, batch);
         hudStage.addActor(pauseOverlay);

@@ -56,12 +56,16 @@ public class TransitionContext {
         nextScreen = screen;
         nextScreen.show();
         nextScreen.resize(width, height);
-        nextScreen.pause();
+        nextScreen.resume();
         transitionTime = getDuration();
 
         if (currentScreen != null) {
             currentScreen.pause();
         }
+    }
+
+    public ScreenBase getScreen() {
+        return currentScreen;
     }
 
     public void render(float delta) {

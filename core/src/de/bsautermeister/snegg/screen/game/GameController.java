@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.common.GameState;
@@ -324,6 +325,24 @@ public class GameController implements Updateable {
             return true;
 
         return false;
+    }
+
+    public void pause() {
+        this.state = GameState.PAUSED;
+
+        /*Json json = new Json();
+        String jsonString = json.toJson(this);
+        //String jsonString = json.prettyPrint(this);
+        LOG.debug(jsonString);*/
+    }
+
+    public void resume() {
+        /*String jsonString = "";
+        Json json = new Json();
+        GameController deserialized = json.fromJson(GameController.class, jsonString);
+        this.state = deserialized.state;
+        this.gameTime = deserialized.gameTime;
+        this.gameOverTimer = deserialized.gameOverTimer;*/
     }
 
     public Snake getSnake() {

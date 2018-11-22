@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -21,6 +22,8 @@ import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.util.GdxUtils;
 
 public class LoadingScreen extends ScreenBase {
+    private static final Logger LOGGER = new Logger(LoadingScreen.class.getName(), GameConfig.LOG_LEVEL);
+
     private Viewport viewport;
     private Stage stage;
 
@@ -149,5 +152,19 @@ public class LoadingScreen extends ScreenBase {
         getAssetManager().unload(AssetPaths.Atlas.LOADING);
 
         stage.dispose();
+    }
+
+    @Override
+    public void pause() {
+        super.pause();
+
+        LOGGER.debug("PAUSE");
+    }
+
+    @Override
+    public void resume() {
+        super.resume();
+
+        LOGGER.debug("RESUME");
     }
 }

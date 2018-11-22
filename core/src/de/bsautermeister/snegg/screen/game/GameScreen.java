@@ -3,15 +3,19 @@ package de.bsautermeister.snegg.screen.game;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.common.GameApp;
+import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.screen.transition.ScreenTransitions;
 
 public class GameScreen extends ScreenBase {
+    private static final Logger LOGGER = new Logger(GameScreen.class.getName(), GameConfig.LOG_LEVEL);
+
     private GameRenderer renderer;
     private GameController controller;
 
@@ -84,6 +88,22 @@ public class GameScreen extends ScreenBase {
     @Override
     public void dispose() {
         renderer.dispose();
+    }
+
+    @Override
+    public void pause() {
+        super.pause();
+
+        LOGGER.debug("PAUSE");
+        controller.pause();
+    }
+
+    @Override
+    public void resume() {
+        super.resume();
+
+        LOGGER.debug("RESUME");
+        controller.resume();
     }
 
     @Override
