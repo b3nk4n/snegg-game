@@ -42,7 +42,7 @@ public class SneggGame extends GameApp {
 	}
 
 	public static FileHandle getSavedDataHandle() {
-		return Gdx.files.local(SAVE_DAT_FILENAME);
+		return Gdx.files.local(SAVE_DAT_FILENAME); // TODO: use internal, as soon as we are ready?
 	}
 
 	public static void deleteSavedData() {

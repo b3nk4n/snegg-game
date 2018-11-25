@@ -6,49 +6,91 @@ filter: Nearest,Nearest
 repeat: none
 achievements-button
   rotate: false
-  xy: 2, 104
+  xy: 2, 141
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+achievements-down-button
+  rotate: false
+  xy: 164, 141
   size: 160, 100
   orig: 160, 100
   offset: 0, 0
   index: -1
 leaderboards-button
   rotate: false
-  xy: 2, 2
+  xy: 326, 104
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+leaderboards-down-button
+  rotate: false
+  xy: 2, 39
   size: 160, 100
   orig: 160, 100
   offset: 0, 0
   index: -1
 play-button
   rotate: false
-  xy: 164, 104
+  xy: 164, 39
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+play-down-button
+  rotate: false
+  xy: 488, 104
   size: 160, 100
   orig: 160, 100
   offset: 0, 0
   index: -1
 quit-button
   rotate: false
-  xy: 164, 2
+  xy: 650, 104
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+quit-down-button
+  rotate: false
+  xy: 812, 104
   size: 160, 100
   orig: 160, 100
   offset: 0, 0
   index: -1
 resume-button
   rotate: false
-  xy: 326, 104
+  xy: 326, 2
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+resume-down-button
+  rotate: false
+  xy: 488, 2
   size: 160, 100
   orig: 160, 100
   offset: 0, 0
   index: -1
 reviews-button
   rotate: false
-  xy: 326, 2
+  xy: 650, 2
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+reviews-down-button
+  rotate: false
+  xy: 812, 2
   size: 160, 100
   orig: 160, 100
   offset: 0, 0
   index: -1
 title
   rotate: false
-  xy: 2, 206
+  xy: 326, 206
   size: 565, 35
   orig: 565, 35
   offset: 0, 0

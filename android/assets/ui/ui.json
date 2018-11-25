@@ -32,22 +32,28 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle": {
     "play": {
-      "up": "play-button"
+      "up": "play-button",
+      "down": "play-down-button"
     },
     "resume": {
-      "up": "resume-button"
+      "up": "resume-button",
+      "down": "resume-down-button"
     },
     "quit": {
-      "up": "quit-button"
+      "up": "quit-button",
+      "down": "quit-down-button"
     },
     "reviews": {
-      "up": "reviews-button"
+      "up": "reviews-button",
+      "down": "reviews-down-button"
     },
     "achievements": {
-      "up": "achievements-button"
+      "up": "achievements-button",
+      "down": "achievements-down-button"
     },
     "leaderboards": {
-      "up": "leaderboards-button"
+      "up": "leaderboards-button",
+      "down": "leaderboards-down-button"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
