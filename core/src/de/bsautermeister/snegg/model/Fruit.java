@@ -2,6 +2,10 @@ package de.bsautermeister.snegg.model;
 
 import com.badlogic.gdx.math.Interpolation;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import de.bsautermeister.snegg.config.GameConfig;
 
 public class Fruit extends GameObject implements Collectible {
@@ -50,5 +54,19 @@ public class Fruit extends GameObject implements Collectible {
     public void release() {
         collected = false;
         lifetime = GameConfig.FRUIT_LIFETIME;
+    }
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        super.write(out);
+        out.writeBoolean(collected);
+        out.writeFloat(lifetime);
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        super.read(in);
+        collected = in.readBoolean();
+        lifetime = in.readFloat();
     }
 }

@@ -24,7 +24,6 @@ public class BinarySerializer {
         DataOutputStream out = new DataOutputStream(output);
         try {
             out.write(HEADER);
-            out.writeInt(VERSION);
             serializable.write(out);
             return true;
         } catch (IOException ex) {

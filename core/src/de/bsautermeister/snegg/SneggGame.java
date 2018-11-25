@@ -30,9 +30,6 @@ public class SneggGame extends GameApp {
 		super.pause();
 
 		LOGGER.debug("PAUSE");
-
-		ScreenBase screen = getScreen();
-		screen.pause();
 	}
 
 	@Override

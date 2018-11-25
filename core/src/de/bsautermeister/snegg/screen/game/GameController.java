@@ -7,8 +7,11 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Logger;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.common.LocalHighscoreService;
@@ -27,9 +30,10 @@ import de.bsautermeister.snegg.model.SnakeHead;
 import de.bsautermeister.snegg.model.StatusText;
 import de.bsautermeister.snegg.model.StatusTextQueue;
 import de.bsautermeister.snegg.screen.menu.OverlayCallback;
+import de.bsautermeister.snegg.serializer.BinarySerializable;
 
 
-public class GameController implements Updateable {
+public class GameController implements Updateable, BinarySerializable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
 
     private GameState state = GameState.READY;
@@ -228,7 +232,7 @@ public class GameController implements Updateable {
             }
 
             statusTextQueue.publish(
-                    new StatusText("NEW HIGHSCORE", GameConfig.HUD_CENTER_X, GameConfig.HUD_CENTER_Y));
+                    new StatusText("SOME NOTIFICATION", GameConfig.HUD_CENTER_X, GameConfig.HUD_CENTER_Y));
         }
     }
 
@@ -327,24 +331,6 @@ public class GameController implements Updateable {
         return false;
     }
 
-    public void pause() {
-        this.state = GameState.PAUSED;
-
-        /*Json json = new Json();
-        String jsonString = json.toJson(this);
-        //String jsonString = json.prettyPrint(this);
-        LOG.debug(jsonString);*/
-    }
-
-    public void resume() {
-        /*String jsonString = "";
-        Json json = new Json();
-        GameController deserialized = json.fromJson(GameController.class, jsonString);
-        this.state = deserialized.state;
-        this.gameTime = deserialized.gameTime;
-        this.gameOverTimer = deserialized.gameOverTimer;*/
-    }
-
     public Snake getSnake() {
         return snake;
     }
@@ -379,5 +365,33 @@ public class GameController implements Updateable {
 
     public StatusTextQueue getStatusTextQueue() {
         return statusTextQueue;
+    }
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        out.writeFloat(gameTime);
+        out.writeUTF(state.name());
+        out.writeFloat(currentMoveTime);
+        out.writeFloat(gameOverTimer);
+        out.writeInt(collectedCoins);
+        coin.write(out);
+        fruit.write(out);
+        snake.write(out);
+        highscoreService.write(out);
+        statusTextQueue.write(out);
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        gameTime = in.readFloat();
+        state = Enum.valueOf(GameState.class, in.readUTF());
+        currentMoveTime = in.readFloat();
+        gameOverTimer = in.readFloat();
+        collectedCoins = in.readInt();
+        coin.read(in);
+        fruit.read(in);
+        snake.read(in);
+        highscoreService.read(in);
+        statusTextQueue.read(in);
     }
 }

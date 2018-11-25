@@ -2,6 +2,10 @@ package de.bsautermeister.snegg.model;
 
 import com.badlogic.gdx.math.Interpolation;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public abstract class SmoothGameObject extends GameObject {
     private float sourceX;
     private float sourceY;
@@ -121,4 +125,33 @@ public abstract class SmoothGameObject extends GameObject {
     public float getTransitionDelay() {
         return transitionDelay;
     }
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        super.write(out);
+
+        out.writeFloat(sourceX);
+        out.writeFloat(sourceY);
+        out.writeFloat(targetX);
+        out.writeFloat(targetY);
+
+        out.writeFloat(transitionDuration);
+        out.writeFloat(transitionTimestep);
+        out.writeFloat(transitionDelay);
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        super.read(in);
+
+        sourceX = in.readFloat();
+        sourceY = in.readFloat();
+        targetX = in.readFloat();
+        targetY = in.readFloat();
+
+        transitionDuration = in.readFloat();
+        transitionTimestep = in.readFloat();
+        transitionDelay = in.readFloat();
+    }
+    
 }

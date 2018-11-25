@@ -2,7 +2,13 @@ package de.bsautermeister.snegg.model;
 
 import com.badlogic.gdx.utils.Queue;
 
-public class StatusTextQueue {
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import de.bsautermeister.snegg.serializer.BinarySerializable;
+
+public class StatusTextQueue implements BinarySerializable {
     private Queue<StatusText> messageQueue;
     private boolean readyToShow;
 
@@ -33,5 +39,28 @@ public class StatusTextQueue {
 
         delayTimer += minMessageDelay;
         return messageQueue.removeLast();
+    }
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        out.writeInt(messageQueue.size);
+        for (StatusText statusText : messageQueue) {
+            out.writeUTF(statusText.getText());
+            out.writeFloat(statusText.getX());
+            out.writeFloat(statusText.getY());
+        }
+        out.writeBoolean(readyToShow);
+        out.writeFloat(delayTimer);
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        int messageSize = in.readInt();
+        for (int i = 0; i < messageSize; i++) {
+            messageQueue.addFirst(
+                    new StatusText(in.readUTF(), in.readFloat(), in.readFloat()));
+        }
+        readyToShow = in.readBoolean();
+        delayTimer = in.readFloat();
     }
 }

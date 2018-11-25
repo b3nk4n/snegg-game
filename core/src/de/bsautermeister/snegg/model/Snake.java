@@ -3,12 +3,17 @@ package de.bsautermeister.snegg.model;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import de.bsautermeister.snegg.common.Resettable;
 import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.game.GameController;
+import de.bsautermeister.snegg.serializer.BinarySerializable;
 
-public class Snake implements Resettable, Updateable {
+public class Snake implements Resettable, Updateable, BinarySerializable {
     private static final Logger LOG = new Logger(Snake.class.getName(), GameConfig.LOG_LEVEL);
 
     // why the fuck to we still need this epsilon? why is there a glitch for world-wrap bottom/right without this?
@@ -171,5 +176,37 @@ public class Snake implements Resettable, Updateable {
 
     public boolean isHappy() {
         return happyTimer > 0f;
+    }
+
+    @Override
+    public void write(DataOutputStream out) throws IOException {
+        out.writeUTF(lastDirection.name());
+        out.writeUTF(direction.name());
+        out.writeFloat(happyTimer);
+        head.write(out);
+
+        out.writeInt(bodyParts.size);
+        for (BodyPart bodyPart : bodyParts) {
+            bodyPart.write(out);
+        }
+    }
+
+    @Override
+    public void read(DataInputStream in) throws IOException {
+        lastDirection = Enum.valueOf(Direction.class, in.readUTF());
+        direction = Enum.valueOf(Direction.class, in.readUTF());
+        happyTimer = in.readFloat();
+        head.read(in);
+
+        int bodyPartSize = in.readInt();
+        for (int i = 0; i < bodyPartSize; i++) {
+            if (i < bodyParts.size) {
+                bodyParts.get(i).read(in);
+            } else {
+                BodyPart bodyPart = new BodyPart();
+                bodyPart.read(in);
+                bodyParts.add(bodyPart);
+            }
+        }
     }
 }
