@@ -33,7 +33,7 @@ public class PauseOverlay extends Table {
         buttonTable.center();
         //buttonTable.setBackground(RegionNames.PANEL);
 
-        Button resumeButton = new Button(getSkin(), Styles.Button.PLAY);
+        Button resumeButton = new Button(getSkin(), Styles.Button.RESUME);
         resumeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

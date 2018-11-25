@@ -1,14 +1,12 @@
 package de.bsautermeister.snegg.screen.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Logger;
 
-import java.io.IOException;
-
+import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
@@ -20,8 +18,6 @@ import de.bsautermeister.snegg.serializer.BinarySerializer;
 
 public class GameScreen extends ScreenBase {
     private static final Logger LOGGER = new Logger(GameScreen.class.getName(), GameConfig.LOG_LEVEL);
-
-    private final static String SAVE_DAT_FILENAME = "snegg.dat";
 
     private GameRenderer renderer;
     private GameController controller;
@@ -76,13 +72,12 @@ public class GameScreen extends ScreenBase {
         controller = new GameController(collisionListener);
         renderer = new GameRenderer(getBatch(), getAssetManager(), controller);
 
-        if (true) { // TODO varaible: loadSaved ?
-            // The user might have a previous game. If this is the case, load it
+        if (SneggGame.hasSavedData()) {
             tryLoad();
-        } else {
-            // Ensure that there is no old save, we don't want to load it, thus delete it
-            deleteSave();
+            // ensure to not load this saved game later anymore
+            SneggGame.deleteSavedData();
         }
+
     }
 
     @Override
@@ -130,36 +125,29 @@ public class GameScreen extends ScreenBase {
     }
 
     private void save() {
-        //if (gameOverDone || gameMode != GAME_MODE_SCORE || scorer.getCurrentScore() == 0)
-        //    return;
+        if (controller.getState().isAnyGameOverState()) {
+            // don't save the game, when the player is game over, otherwise he would resume the game
+            // which would end immediately afterwards
+            return;
+        }
 
-        final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        final FileHandle handle = SneggGame.getSavedDataHandle();
         if (!BinarySerializer.write(controller, handle.write(false))) {
             // TODO exception handling?
         }
     }
 
     private boolean tryLoad() {
-        final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
+        final FileHandle handle = SneggGame.getSavedDataHandle();
 
         if (handle.exists()) {
             if (!BinarySerializer.read(controller, handle.read())) {
                 // TODO exception handling?
             }
 
-            deleteSave();
+            SneggGame.deleteSavedData();
             return true;
         }
         return false;
-    }
-
-    private void deleteSave() {
-        final FileHandle handle = Gdx.files.local(SAVE_DAT_FILENAME);
-        if (handle.exists())
-            handle.delete();
-    }
-
-    boolean hasSavedData() {
-        return Gdx.files.local(SAVE_DAT_FILENAME).exists();
     }
 }

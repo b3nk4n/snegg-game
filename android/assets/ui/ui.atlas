@@ -32,9 +32,16 @@ quit-button
   orig: 160, 100
   offset: 0, 0
   index: -1
-reviews-button
+resume-button
   rotate: false
   xy: 326, 104
+  size: 160, 100
+  orig: 160, 100
+  offset: 0, 0
+  index: -1
+reviews-button
+  rotate: false
+  xy: 326, 2
   size: 160, 100
   orig: 160, 100
   offset: 0, 0

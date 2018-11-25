@@ -34,6 +34,9 @@
     "play": {
       "up": "play-button"
     },
+    "resume": {
+      "up": "resume-button"
+    },
     "quit": {
       "up": "quit-button"
     },

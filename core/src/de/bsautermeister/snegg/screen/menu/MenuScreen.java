@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.assets.Styles;
@@ -46,11 +47,14 @@ public class MenuScreen extends ScreenBase {
         atlas = getAsset(AssetDescriptors.Atlas.GAMEPLAY);
 
         Gdx.input.setInputProcessor(stage);
-        Actor ui = createUI();
+
+        boolean canResumeGame = SneggGame.hasSavedData();
+
+        Actor ui = createUI(canResumeGame);
         stage.addActor(ui);
     }
 
-    private Actor createUI() {
+    private Actor createUI(boolean canResumeGame) {
         Table table = new Table(skin);
         table.defaults().pad(10);
 
@@ -60,14 +64,26 @@ public class MenuScreen extends ScreenBase {
         Image title = new Image(skin, RegionNames.TITLE);
         table.add(title).row();
 
-        Button playButton = new Button(skin, Styles.Button.PLAY);
-        playButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                play();
-            }
-        });
-        table.add(playButton).row();
+        if (canResumeGame) {
+            Button playButton = new Button(skin, Styles.Button.PLAY);
+            playButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    play();
+                }
+            });
+            table.add(playButton).row();
+        } else {
+            Button playButton = new Button(skin, Styles.Button.RESUME);
+            playButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    play();
+                }
+            });
+            table.add(playButton).row();
+        }
+
 
         if (getGame().getGameServices().isSupported()) {
             Button leaderboardsButton = new Button(skin, Styles.Button.LEADERBOARDS);

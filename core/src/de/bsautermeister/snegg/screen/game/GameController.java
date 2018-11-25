@@ -369,8 +369,8 @@ public class GameController implements Updateable, BinarySerializable {
 
     @Override
     public void write(DataOutputStream out) throws IOException {
-        out.writeFloat(gameTime);
         out.writeUTF(state.name());
+        out.writeFloat(gameTime);
         out.writeFloat(currentMoveTime);
         out.writeFloat(gameOverTimer);
         out.writeInt(collectedCoins);
@@ -383,8 +383,8 @@ public class GameController implements Updateable, BinarySerializable {
 
     @Override
     public void read(DataInputStream in) throws IOException {
-        gameTime = in.readFloat();
         state = Enum.valueOf(GameState.class, in.readUTF());
+        gameTime = in.readFloat();
         currentMoveTime = in.readFloat();
         gameOverTimer = in.readFloat();
         collectedCoins = in.readInt();
