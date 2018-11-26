@@ -5,9 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Logger;
 
+import de.bsautermeister.snegg.audio.MusicPlayer;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
-import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.loading.LoadingScreen;
 import de.bsautermeister.snegg.services.GameServices;
 
@@ -15,6 +15,8 @@ public class SneggGame extends GameApp {
 	private static final Logger LOGGER = new Logger(SneggGame.class.getName(), GameConfig.LOG_LEVEL);
 
 	private final static String SAVE_DAT_FILENAME = "snegg.dat";
+
+	private MusicPlayer musicPlayer = MusicPlayer.getInstance();
 
 	public SneggGame(GameServices gameServices) {
 		super(gameServices);
@@ -24,21 +26,34 @@ public class SneggGame extends GameApp {
 	public void create() {
 		super.create();
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		musicPlayer.setup("sounds/game_sound.mp3", 0.8f);
+		musicPlayer.play();
+
 		setScreen(new LoadingScreen(this));
+	}
+
+
+	@Override
+	public void resume() {
+		super.resume();
+		LOGGER.debug("RESUME");
+
+		musicPlayer.play();
 	}
 
 	@Override
 	public void pause() {
 		super.pause();
-
 		LOGGER.debug("PAUSE");
+
+		musicPlayer.pause();
 	}
 
 	@Override
-	public void resume() {
-		super.resume();
+	public void dispose() {
+		super.dispose();
 
-		LOGGER.debug("RESUME");
+		musicPlayer.dispose();
 	}
 
 	public static FileHandle getSavedDataHandle() {
