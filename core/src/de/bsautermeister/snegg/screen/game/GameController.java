@@ -3,6 +3,7 @@ package de.bsautermeister.snegg.screen.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -13,6 +14,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.common.LocalHighscoreService;
 import de.bsautermeister.snegg.common.ScoreProvider;
@@ -31,6 +33,7 @@ import de.bsautermeister.snegg.model.StatusText;
 import de.bsautermeister.snegg.model.StatusTextQueue;
 import de.bsautermeister.snegg.screen.menu.OverlayCallback;
 import de.bsautermeister.snegg.serializer.BinarySerializable;
+import de.bsautermeister.snegg.serializer.BinarySerializer;
 
 
 public class GameController implements Updateable, BinarySerializable {
@@ -84,6 +87,8 @@ public class GameController implements Updateable, BinarySerializable {
             @Override
             public void quit() {
                 highscoreService.saveHighscore();
+                state = GameState.GAME_OVER;
+                SneggGame.deleteSavedData();
                 gameListener.quit();
             }
         };
@@ -177,6 +182,7 @@ public class GameController implements Updateable, BinarySerializable {
         } else if (state.isGameOverPending()) {
             gameOverTimer += delta;
             if (gameOverTimer >= GAME_OVER_WAIT_TIME) {
+                SneggGame.deleteSavedData();
                 state = GameState.GAME_OVER;
             }
         }
@@ -365,6 +371,33 @@ public class GameController implements Updateable, BinarySerializable {
 
     public StatusTextQueue getStatusTextQueue() {
         return statusTextQueue;
+    }
+
+    public void save() {
+        if (getState().isAnyGameOverState()) {
+            // don't save the game, when the player is game over, otherwise he would resume the game
+            // which would end immediately afterwards
+            return;
+        }
+
+        final FileHandle handle = SneggGame.getSavedDataHandle();
+        if (!BinarySerializer.write(this, handle.write(false))) {
+            // TODO exception handling?
+        }
+    }
+
+    public boolean load() {
+        final FileHandle handle = SneggGame.getSavedDataHandle();
+
+        if (handle.exists()) {
+            if (!BinarySerializer.read(this, handle.read())) {
+                // TODO exception handling?
+            }
+
+            SneggGame.deleteSavedData();
+            return true;
+        }
+        return false;
     }
 
     @Override

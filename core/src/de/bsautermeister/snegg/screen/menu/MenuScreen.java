@@ -65,7 +65,7 @@ public class MenuScreen extends ScreenBase {
         table.add(title).row();
 
         if (canResumeGame) {
-            Button playButton = new Button(skin, Styles.Button.PLAY);
+            Button playButton = new Button(skin, Styles.Button.RESUME);
             playButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -74,7 +74,7 @@ public class MenuScreen extends ScreenBase {
             });
             table.add(playButton).row();
         } else {
-            Button playButton = new Button(skin, Styles.Button.RESUME);
+            Button playButton = new Button(skin, Styles.Button.PLAY);
             playButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {

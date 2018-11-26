@@ -3,7 +3,6 @@ package de.bsautermeister.snegg.screen.game;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.SneggGame;
@@ -14,7 +13,6 @@ import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.screen.transition.ScreenTransitions;
-import de.bsautermeister.snegg.serializer.BinarySerializer;
 
 public class GameScreen extends ScreenBase {
     private static final Logger LOGGER = new Logger(GameScreen.class.getName(), GameConfig.LOG_LEVEL);
@@ -73,7 +71,7 @@ public class GameScreen extends ScreenBase {
         renderer = new GameRenderer(getBatch(), getAssetManager(), controller);
 
         if (SneggGame.hasSavedData()) {
-            tryLoad();
+            controller.load();
             // ensure to not load this saved game later anymore
             SneggGame.deleteSavedData();
         }
@@ -106,7 +104,7 @@ public class GameScreen extends ScreenBase {
 
         LOGGER.debug("PAUSE");
 
-        save();
+        controller.save();
     }
 
     @Override
@@ -122,32 +120,5 @@ public class GameScreen extends ScreenBase {
         inputs.addProcessor(renderer.getInputProcessor());
         inputs.addProcessor(controller.getInputProcessor());
         return inputs;
-    }
-
-    private void save() {
-        if (controller.getState().isAnyGameOverState()) {
-            // don't save the game, when the player is game over, otherwise he would resume the game
-            // which would end immediately afterwards
-            return;
-        }
-
-        final FileHandle handle = SneggGame.getSavedDataHandle();
-        if (!BinarySerializer.write(controller, handle.write(false))) {
-            // TODO exception handling?
-        }
-    }
-
-    private boolean tryLoad() {
-        final FileHandle handle = SneggGame.getSavedDataHandle();
-
-        if (handle.exists()) {
-            if (!BinarySerializer.read(controller, handle.read())) {
-                // TODO exception handling?
-            }
-
-            SneggGame.deleteSavedData();
-            return true;
-        }
-        return false;
     }
 }
