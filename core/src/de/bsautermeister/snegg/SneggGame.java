@@ -26,12 +26,20 @@ public class SneggGame extends GameApp {
 	public void create() {
 		super.create();
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		musicPlayer.setup("sounds/game_sound.mp3", 0.8f);
+		musicPlayer.setup("sounds/game_sound.mp3", GameConfig.MUSIC_VOLUME);
 		musicPlayer.play();
 
 		setScreen(new LoadingScreen(this));
 	}
 
+
+	@Override
+	public void render() {
+		super.render();
+
+		float delta = Gdx.graphics.getDeltaTime();
+		musicPlayer.update(delta);
+	}
 
 	@Override
 	public void resume() {

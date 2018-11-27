@@ -55,5 +55,8 @@ public final class GameConfig {
     public static final float CHAR_ANIMATION_TIME = 0.5f;
     public static final float TEXT_ANIMATION_TIME = 1.0f;
 
+    public static final float MUSIC_VOLUME = 0.33f;
+    public static final float MUSIC_IN_GAME_VOLUME = 0.1f;
+
     private GameConfig() { }
 }

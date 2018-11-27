@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
+import de.bsautermeister.snegg.audio.MusicPlayer;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.listeners.GameListener;
@@ -99,19 +100,20 @@ public class GameScreen extends ScreenBase {
     }
 
     @Override
-    public void pause() {
-        super.pause();
+    public void resume() {
+        super.resume();
+        LOGGER.debug("RESUME");
 
-        LOGGER.debug("PAUSE");
-
-        controller.save();
+        MusicPlayer.getInstance().setVolume(GameConfig.MUSIC_IN_GAME_VOLUME, false);
     }
 
     @Override
-    public void resume() {
-        super.resume();
+    public void pause() {
+        super.pause();
+        LOGGER.debug("PAUSE");
 
-        LOGGER.debug("RESUME");
+        MusicPlayer.getInstance().setVolume(GameConfig.MUSIC_VOLUME, false);
+        controller.save();
     }
 
     @Override

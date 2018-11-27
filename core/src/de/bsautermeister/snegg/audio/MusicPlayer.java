@@ -17,9 +17,8 @@ public class MusicPlayer implements Updateable, BinarySerializable, Disposable {
 
     private static MusicPlayer instance;
 
-    private float glabalVolume;
-    private float currentVolumeFactor;
-    private float volumeFactorTarget;
+    private float currentVolume = 1.0f;
+    private float targetVolume = 1.0f;
     private Music music;
 
     private MusicPlayer() {
@@ -36,23 +35,24 @@ public class MusicPlayer implements Updateable, BinarySerializable, Disposable {
         FileHandle fileHandle = Gdx.files.internal(filePath);
         music = Gdx.audio.newMusic(fileHandle);
         music.setLooping(true);
-        setVolume(volume);
+        setVolume(volume, true);
     }
 
     @Override
     public void update(float delta) {
-        if (currentVolumeFactor != volumeFactorTarget) {
-            float diff = volumeFactorTarget - currentVolumeFactor;
+        if (targetVolume != currentVolume) {
+            float diff = targetVolume - currentVolume;
 
             if (diff > 0) {
-                currentVolumeFactor += delta * VOLUME_CHANGE_SPEED;
-                currentVolumeFactor = Math.min(volumeFactorTarget, currentVolumeFactor);
+                currentVolume += delta * VOLUME_CHANGE_SPEED;
+                currentVolume = Math.min(targetVolume, currentVolume);
             } else {
-                currentVolumeFactor -= delta * VOLUME_CHANGE_SPEED;
-                currentVolumeFactor = Math.max(volumeFactorTarget, currentVolumeFactor);
+                currentVolume -= delta * VOLUME_CHANGE_SPEED;
+                currentVolume = Math.max(targetVolume, currentVolume);
             }
         }
-        music.setVolume(glabalVolume * currentVolumeFactor);
+
+        music.setVolume(currentVolume);
     }
 
     public void play() {
@@ -67,12 +67,16 @@ public class MusicPlayer implements Updateable, BinarySerializable, Disposable {
         music.stop();
     }
 
-    public void setVolume(float volume) {
-        glabalVolume = volume;
+    public void setVolume(float volume, boolean immediate) {
+        targetVolume = volume;
+
+        if (immediate) {
+            currentVolume = volume;
+        }
     }
 
     public float getVolume() {
-        return glabalVolume;
+        return currentVolume;
     }
 
     @Override
