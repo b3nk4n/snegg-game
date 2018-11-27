@@ -324,7 +324,7 @@ public class GameController implements Updateable, BinarySerializable {
             return true;
 
         for (BodyPart body : snake.getBodyParts()) {
-            if (body.getX() == x || head.getY() == y)
+            if (body.getX() == x && body.getY() == y)
                 return true;
         }
 

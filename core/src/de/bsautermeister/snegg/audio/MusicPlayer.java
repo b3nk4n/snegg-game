@@ -28,7 +28,7 @@ public class MusicPlayer implements Updateable, BinarySerializable, Disposable {
         if (instance == null) {
             instance = new MusicPlayer();
         }
-        return  instance;
+        return instance;
     }
 
     public void setup(String filePath, float volume) {

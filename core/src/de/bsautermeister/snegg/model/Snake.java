@@ -148,12 +148,6 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
             body.setTransitionDelay(i++ * delay);
         }
 
-        /*
-        TODO game still got stuck here:
-            de.bsautermeister.snegg.screen.game.GameController: 0.3641296
-            de.bsautermeister.snegg.screen.game.GameController: 0.36412534
-            <hang>
-         */
     }
 
     public Array<BodyPart> getBodyParts() {
