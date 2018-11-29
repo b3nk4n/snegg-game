@@ -14,6 +14,7 @@ import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.screen.transition.ScreenTransitions;
+import de.bsautermeister.snegg.services.Leaderboards;
 
 public class GameScreen extends ScreenBase {
     private static final Logger LOGGER = new Logger(GameScreen.class.getName(), GameConfig.LOG_LEVEL);
@@ -35,12 +36,12 @@ public class GameScreen extends ScreenBase {
 
         collisionListener = new GameListener() {
             @Override
-            public void hitCoin() {
+            public void hitCoin(int score) {
                 coinSound.play();
             }
 
             @Override
-            public void hitFruit() {
+            public void hitFruit(int score) {
                 fruitSound.play();
             }
 
@@ -57,6 +58,11 @@ public class GameScreen extends ScreenBase {
             @Override
             public void quit() {
                 navigateToMenuScreen = true;
+            }
+
+            @Override
+            public void finishGame(int score) {
+                getGameServices().submitScore(Leaderboards.Keys.LEADERBOARD, score);
             }
         };
     }

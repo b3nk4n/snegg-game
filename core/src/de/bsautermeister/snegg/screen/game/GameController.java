@@ -90,6 +90,7 @@ public class GameController implements Updateable, BinarySerializable {
                 state = GameState.GAME_OVER;
                 SneggGame.deleteSavedData();
                 gameListener.quit();
+                gameListener.finishGame(highscoreService.getScore());
             }
         };
 
@@ -214,6 +215,7 @@ public class GameController implements Updateable, BinarySerializable {
             state = GameState.GAME_OVER_PENDING;
             highscoreService.saveHighscore();
             gameListener.lose();
+            gameListener.finishGame(highscoreService.getScore());
         }
     }
 
@@ -228,7 +230,7 @@ public class GameController implements Updateable, BinarySerializable {
             snake.makeHappy();
             highscoreService.incrementScore(coin.getScore());
             spawnCoin();
-            gameListener.hitCoin();
+            gameListener.hitCoin(highscoreService.getScore());
 
             collectedCoins++;
             if (collectedCoins % GameConfig.FRUIT_SPAWN_INTERVAL == 0) {
@@ -252,7 +254,7 @@ public class GameController implements Updateable, BinarySerializable {
             snake.makeHappy();
             highscoreService.incrementScore(fruit.getScore());
             fruit.collect();
-            gameListener.hitFruit();
+            gameListener.hitFruit(highscoreService.getScore());
         }
     }
 

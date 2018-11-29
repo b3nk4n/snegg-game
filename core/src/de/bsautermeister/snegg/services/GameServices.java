@@ -1,6 +1,10 @@
 package de.bsautermeister.snegg.services;
 
+import java.util.Map;
+
 public interface GameServices extends PlatformDependentService {
+    public static final long UNDEFINED_SCORE = -1;
+
     void start();
     void stop();
 
@@ -9,7 +13,9 @@ public interface GameServices extends PlatformDependentService {
     void rateGame();
     void unlockAchievement(String key);
     void showAchievements();
+    Map<String, Boolean> loadAchievements(boolean forceReload);
     void submitScore(String leaderboardKey, int highScore);
+    long loadCurrentHighscore(String leaderboardKey);
     void showScore(String leaderboardKey);
     boolean isSignedIn();
 }

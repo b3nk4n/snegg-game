@@ -14,8 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.Map;
 
 import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
@@ -30,6 +33,8 @@ import de.bsautermeister.snegg.services.Leaderboards;
 import de.bsautermeister.snegg.util.GdxUtils;
 
 public class MenuScreen extends ScreenBase {
+    private static final Logger LOG = new Logger(MenuScreen.class.getSimpleName(), GameConfig.LOG_LEVEL);
+
     private Viewport viewport;
     private Stage stage;
     private Skin skin;
@@ -108,7 +113,15 @@ public class MenuScreen extends ScreenBase {
             reviewsButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    getGameServices().rateGame();
+                    //getGameServices().rateGame();
+
+                    // TODO: move loading of score/achievements to Loading-Screen
+                    long score = getGameServices().loadCurrentHighscore(Leaderboards.Keys.LEADERBOARD);
+                    LOG.debug("GameServiceScore: " + score);
+
+                    Map<String, Boolean> map = getGameServices().loadAchievements(false);
+                    LOG.debug("AchievementsMap: " + map.size());
+
                 }
             });
             table.add(reviewsButton).row();

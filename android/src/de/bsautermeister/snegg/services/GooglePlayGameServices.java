@@ -5,8 +5,20 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.badlogic.gdx.Gdx;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.achievement.Achievement;
+import com.google.android.gms.games.achievement.AchievementBuffer;
+import com.google.android.gms.games.achievement.Achievements;
+import com.google.android.gms.games.leaderboard.LeaderboardVariant;
+import com.google.android.gms.games.leaderboard.Leaderboards;
 import com.google.example.games.basegameutils.GameHelper;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class GooglePlayGameServices implements GameServices {
     private GameHelper gameHelper;
@@ -116,6 +128,25 @@ public class GooglePlayGameServices implements GameServices {
     }
 
     @Override
+    public long loadCurrentHighscore(String leaderboardKey)
+    {
+        if (isSignedIn()) {
+            Leaderboards.LoadPlayerScoreResult result = Games.Leaderboards.loadCurrentPlayerLeaderboardScore(
+                    gameHelper.getApiClient(),
+                    leaderboardKey,
+                    LeaderboardVariant.TIME_SPAN_ALL_TIME,
+                    LeaderboardVariant.COLLECTION_PUBLIC)
+                    .await(5, TimeUnit.SECONDS);
+
+            if (result != null && result.getStatus().isSuccess() && result.getScore() != null) {
+                return result.getScore().getRawScore();
+            }
+        }
+
+        return UNDEFINED_SCORE;
+    }
+
+    @Override
     public void showAchievements()
     {
         if (isSignedIn()) {
@@ -139,6 +170,30 @@ public class GooglePlayGameServices implements GameServices {
         } else {
             signIn();
         }
+    }
+
+    @Override
+    public Map<String, Boolean> loadAchievements(boolean forceReload)
+    {
+        final Map<String,Boolean> achievementMap = new HashMap<>();
+
+        if (isSignedIn()) {
+            Achievements.LoadAchievementsResult result = Games.Achievements.load(
+                    gameHelper.getApiClient(),
+                    forceReload)
+                    .await(5, TimeUnit.SECONDS);
+
+            if (result != null && result.getStatus().isSuccess() && result.getAchievements() != null) {
+                AchievementBuffer achievementBuffer = result.getAchievements();
+
+                for(Achievement achievement : achievementBuffer) {
+                    achievementMap.put(achievement.getAchievementId(), achievement.getState() == Achievement.STATE_UNLOCKED);
+                }
+                achievementBuffer.release();
+            }
+        }
+
+        return achievementMap;
     }
 
     @Override
