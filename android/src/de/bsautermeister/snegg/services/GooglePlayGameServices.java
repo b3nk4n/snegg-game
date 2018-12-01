@@ -119,7 +119,7 @@ public class GooglePlayGameServices implements GameServices {
     }
 
     @Override
-    public void submitScore(String leaderboardKey, int highScore)
+    public void submitScore(String leaderboardKey, long highScore)
     {
         if (isSignedIn()) {
             Games.Leaderboards.submitScore(

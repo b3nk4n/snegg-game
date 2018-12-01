@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.common.GameState;
-import de.bsautermeister.snegg.common.LocalHighscoreService;
+import de.bsautermeister.snegg.common.GameScore;
 import de.bsautermeister.snegg.common.ScoreProvider;
 import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
@@ -59,10 +59,11 @@ public class GameController implements Updateable, BinarySerializable {
     private float gameOverTimer;
     private static final float GAME_OVER_WAIT_TIME = 1f;
 
-    private final LocalHighscoreService highscoreService = new LocalHighscoreService();
+    private final GameScore gameScore = new GameScore();
 
     private InputProcessor inputProcessor;
 
+    private boolean hasPublishedHighscoreMessage;
     StatusTextQueue statusTextQueue;
 
     public GameController(final GameListener gameListener) {
@@ -86,11 +87,11 @@ public class GameController implements Updateable, BinarySerializable {
 
             @Override
             public void quit() {
-                highscoreService.saveHighscore();
+                //gameScore.saveHighscore();
                 state = GameState.GAME_OVER;
                 SneggGame.deleteSavedData();
                 gameListener.quit();
-                gameListener.finishGame(highscoreService.getScore());
+                gameListener.finishGame(gameScore.getScore());
             }
         };
 
@@ -134,7 +135,7 @@ public class GameController implements Updateable, BinarySerializable {
 
     private void reset() {
         state = GameState.PLAYING;
-        highscoreService.reset();
+        gameScore.reset();
         collectedCoins = 0;
         spawnCoin();
         fruitSpanDelayTimer = Float.MAX_VALUE;
@@ -143,11 +144,12 @@ public class GameController implements Updateable, BinarySerializable {
         snakeMoveTimer = 0f;
         snake.reset();
         gameOverTimer = 0f;
+        hasPublishedHighscoreMessage = false;
     }
 
     @Override
     public void update(float delta) {
-        highscoreService.updateDisplayScore(delta);
+        gameScore.updateDisplayScore(delta);
 
         if (state.isPlaying()) {
             gameTime += delta;
@@ -213,9 +215,9 @@ public class GameController implements Updateable, BinarySerializable {
 
         if (Intersector.overlaps(headBounds, bodyBounds)) {
             state = GameState.GAME_OVER_PENDING;
-            highscoreService.saveHighscore();
+            //gameScore.saveHighscore();
             gameListener.lose();
-            gameListener.finishGame(highscoreService.getScore());
+            gameListener.finishGame(gameScore.getScore());
         }
     }
 
@@ -228,9 +230,10 @@ public class GameController implements Updateable, BinarySerializable {
         if (!coin.isCollected() && overlap) {
             snake.insertBodyPart();
             snake.makeHappy();
-            highscoreService.incrementScore(coin.getScore());
+            long newScore = gameScore.incrementScore(coin.getScore());
             spawnCoin();
-            gameListener.hitCoin(highscoreService.getScore());
+            gameListener.hitCoin(newScore);
+            snakeChanged(newScore);
 
             collectedCoins++;
             if (collectedCoins % GameConfig.FRUIT_SPAWN_INTERVAL == 0) {
@@ -238,9 +241,6 @@ public class GameController implements Updateable, BinarySerializable {
                         GameConfig.FRUIT_MIN_SPAWN_DELAY,
                         GameConfig.FRUIT_MAX_SPAWN_DELAY);
             }
-
-            statusTextQueue.publish(
-                    new StatusText("SOME NOTIFICATION", GameConfig.HUD_CENTER_X, GameConfig.HUD_CENTER_Y));
         }
     }
 
@@ -252,10 +252,28 @@ public class GameController implements Updateable, BinarySerializable {
 
         if (!fruit.isCollected() && overlap) {
             snake.makeHappy();
-            highscoreService.incrementScore(fruit.getScore());
+            long newScore = gameScore.incrementScore(fruit.getScore());
             fruit.collect();
-            gameListener.hitFruit(highscoreService.getScore());
+            gameListener.hitFruit(gameScore.getScore());
+            snakeChanged(newScore);
         }
+    }
+
+    private void snakeChanged(long newScore) {
+        gameListener.snakeChanged(snake.length(), newScore);
+
+        if (!hasPublishedHighscoreMessage) {
+            long onlineHighscore = SneggGame.getGameServiceManager().getOnlineHighscore();
+            if (onlineHighscore > 0 && newScore > onlineHighscore) {
+                hasPublishedHighscoreMessage = true;
+                publishMessage("NEW HIGHSCORE");
+            }
+        }
+    }
+
+    public void publishMessage(String message) {
+        statusTextQueue.publish(
+                new StatusText(message, GameConfig.HUD_CENTER_X, GameConfig.HUD_CENTER_Y));
     }
 
     private void checkBackButtonInput() {
@@ -364,7 +382,7 @@ public class GameController implements Updateable, BinarySerializable {
     }
 
     public ScoreProvider getScoreProvider() {
-        return highscoreService;
+        return gameScore;
     }
 
     public InputProcessor getInputProcessor() {
@@ -412,8 +430,9 @@ public class GameController implements Updateable, BinarySerializable {
         coin.write(out);
         fruit.write(out);
         snake.write(out);
-        highscoreService.write(out);
+        gameScore.write(out);
         statusTextQueue.write(out);
+        out.writeBoolean(hasPublishedHighscoreMessage);
     }
 
     @Override
@@ -426,7 +445,8 @@ public class GameController implements Updateable, BinarySerializable {
         coin.read(in);
         fruit.read(in);
         snake.read(in);
-        highscoreService.read(in);
+        gameScore.read(in);
         statusTextQueue.read(in);
+        hasPublishedHighscoreMessage = in.readBoolean();
     }
 }

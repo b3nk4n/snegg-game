@@ -12,6 +12,9 @@ import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Map;
+
+import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.AssetPaths;
 import de.bsautermeister.snegg.assets.RegionNames;
@@ -19,6 +22,7 @@ import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
+import de.bsautermeister.snegg.services.Leaderboards;
 import de.bsautermeister.snegg.util.GdxUtils;
 
 public class LoadingScreen extends ScreenBase {
@@ -142,6 +146,9 @@ public class LoadingScreen extends ScreenBase {
         stage.draw();
 
         if (getAssetManager().update() && percent > 0.99f) {
+            // TODO do this async
+            SneggGame.getGameServiceManager().refresh();
+
             setScreen(new MenuScreen(getGame()));
         }
     }

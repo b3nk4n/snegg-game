@@ -172,6 +172,10 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
         return happyTimer > 0f;
     }
 
+    public int length() {
+        return 1 + bodyParts.size;
+    }
+
     @Override
     public void write(DataOutputStream out) throws IOException {
         out.writeUTF(lastDirection.name());

@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.audio.MusicPlayer;
 import de.bsautermeister.snegg.common.GameApp;
+import de.bsautermeister.snegg.common.GameServiceManager;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.loading.LoadingScreen;
 import de.bsautermeister.snegg.services.GameServices;
@@ -18,8 +19,12 @@ public class SneggGame extends GameApp {
 
 	private MusicPlayer musicPlayer = MusicPlayer.getInstance();
 
+	private static GameServiceManager gameServiceManager;
+
 	public SneggGame(GameServices gameServices) {
 		super(gameServices);
+
+		gameServiceManager = new GameServiceManager(gameServices);
 	}
 
 	@Override
@@ -75,5 +80,9 @@ public class SneggGame extends GameApp {
 
 	public static boolean hasSavedData() {
 		return getSavedDataHandle().exists();
+	}
+
+	public static GameServiceManager getGameServiceManager() {
+		return gameServiceManager;
 	}
 }

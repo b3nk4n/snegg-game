@@ -14,7 +14,7 @@ public interface GameServices extends PlatformDependentService {
     void unlockAchievement(String key);
     void showAchievements();
     Map<String, Boolean> loadAchievements(boolean forceReload);
-    void submitScore(String leaderboardKey, int highScore);
+    void submitScore(String leaderboardKey, long highScore);
     long loadCurrentHighscore(String leaderboardKey);
     void showScore(String leaderboardKey);
     boolean isSignedIn();

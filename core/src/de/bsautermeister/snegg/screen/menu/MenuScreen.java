@@ -18,8 +18,6 @@ import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.Map;
-
 import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
@@ -55,7 +53,6 @@ public class MenuScreen extends ScreenBase {
         Gdx.input.setInputProcessor(stage);
 
         boolean canResumeGame = SneggGame.hasSavedData();
-
         Actor ui = createUI(canResumeGame);
         stage.addActor(ui);
     }
@@ -114,15 +111,7 @@ public class MenuScreen extends ScreenBase {
             reviewsButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    //getGameServices().rateGame();
-
-                    // TODO: move loading of score/achievements to Loading-Screen
-                    long score = getGameServices().loadCurrentHighscore(Leaderboards.Keys.LEADERBOARD);
-                    LOG.debug("GameServiceScore: " + score);
-
-                    Map<String, Boolean> map = getGameServices().loadAchievements(false);
-                    LOG.debug("AchievementsMap: " + map.size());
-
+                    getGameServices().rateGame();
                 }
             });
             table.add(reviewsButton).row();

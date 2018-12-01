@@ -9,6 +9,7 @@ import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.audio.MusicPlayer;
 import de.bsautermeister.snegg.common.GameApp;
+import de.bsautermeister.snegg.common.GameServiceManager;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.ScreenBase;
@@ -22,6 +23,7 @@ public class GameScreen extends ScreenBase {
     private GameRenderer renderer;
     private GameController controller;
 
+    private final GameServiceManager gameServiceManager;
     private final GameListener collisionListener;
 
     private Sound coinSound;
@@ -34,15 +36,31 @@ public class GameScreen extends ScreenBase {
     public GameScreen(GameApp game) {
         super(game);
 
+        gameServiceManager = new GameServiceManager(game.getGameServices());
+
         collisionListener = new GameListener() {
             @Override
-            public void hitCoin(int score) {
+            public void hitCoin(long score) {
                 coinSound.play();
             }
 
             @Override
-            public void hitFruit(int score) {
+            public void hitFruit(long score) {
                 fruitSound.play();
+            }
+
+            @Override
+            public void snakeChanged(int snakeSize, long score) {
+                String unlockedAchievement = gameServiceManager.checkAndUnlockAchievement(0, snakeSize);
+                publishAchievementMessage(unlockedAchievement);
+            }
+
+            private void publishAchievementMessage(String unlockedAchievement) {
+                if (unlockedAchievement.equals("")) {
+                    return;
+                }
+
+                controller.publishMessage(unlockedAchievement);
             }
 
             @Override
@@ -61,8 +79,8 @@ public class GameScreen extends ScreenBase {
             }
 
             @Override
-            public void finishGame(int score) {
-                getGameServices().submitScore(Leaderboards.Keys.LEADERBOARD, score);
+            public void finishGame(long score) {
+                gameServiceManager.submitScore(score);
             }
         };
     }
