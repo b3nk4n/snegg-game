@@ -27,7 +27,6 @@ public class SneggGame extends GameApp {
 		super.create();
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		musicPlayer.setup("sounds/game_sound.mp3", GameConfig.MUSIC_VOLUME);
-		musicPlayer.play();
 
 		setScreen(new LoadingScreen(this));
 	}

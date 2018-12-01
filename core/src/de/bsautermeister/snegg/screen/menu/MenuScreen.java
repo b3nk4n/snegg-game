@@ -24,6 +24,7 @@ import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.assets.Styles;
+import de.bsautermeister.snegg.audio.MusicPlayer;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
@@ -158,6 +159,12 @@ public class MenuScreen extends ScreenBase {
         }
 
         Gdx.app.exit();
+    }
+
+    @Override
+    public void resume() {
+        super.resume();
+        MusicPlayer.getInstance().play();
     }
 
     @Override
