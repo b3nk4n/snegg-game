@@ -57,6 +57,7 @@ public final class GameConfig {
 
     public static final float MUSIC_VOLUME = 0.33f;
     public static final float MUSIC_IN_GAME_VOLUME = 0.1f;
+    public static final int MAX_SNAKE_LENGTH = (int)(WORLD_WIDTH - 2 * MARGIN_OTHER) * (int)(WORLD_HEIGHT - MARGIN_TOP - MARGIN_OTHER) - 5;
 
     private GameConfig() { }
 }

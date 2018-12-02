@@ -15,7 +15,6 @@ import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.screen.transition.ScreenTransitions;
-import de.bsautermeister.snegg.services.Leaderboards;
 
 public class GameScreen extends ScreenBase {
     private static final Logger LOGGER = new Logger(GameScreen.class.getName(), GameConfig.LOG_LEVEL);
@@ -24,7 +23,7 @@ public class GameScreen extends ScreenBase {
     private GameController controller;
 
     private final GameServiceManager gameServiceManager;
-    private final GameListener collisionListener;
+    private final GameListener gameListener;
 
     private Sound coinSound;
     private Sound loseSound;
@@ -38,7 +37,7 @@ public class GameScreen extends ScreenBase {
 
         gameServiceManager = new GameServiceManager(game.getGameServices());
 
-        collisionListener = new GameListener() {
+        gameListener = new GameListener() {
             @Override
             public void hitCoin(long score) {
                 coinSound.play();
@@ -92,7 +91,7 @@ public class GameScreen extends ScreenBase {
         fruitSound = getAsset(AssetDescriptors.Sounds.FRUIT);
         spawnFruitSound = getAsset(AssetDescriptors.Sounds.FRUIT_SPAWN);
 
-        controller = new GameController(collisionListener);
+        controller = new GameController(gameListener);
         renderer = new GameRenderer(getBatch(), getAssetManager(), controller);
 
         if (SneggGame.hasSavedData()) {

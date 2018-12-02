@@ -110,6 +110,14 @@ public abstract class SmoothGameObject extends GameObject {
         super.setY(y);
     }
 
+    public float getTargetX() {
+        return targetX;
+    }
+
+    public float getTargetY() {
+        return targetY;
+    }
+
     public float getTransitionDuration() {
         return transitionDuration;
     }

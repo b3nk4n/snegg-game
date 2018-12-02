@@ -119,6 +119,11 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
     }
 
     public void insertBodyPart() {
+        if (length() >= GameConfig.MAX_SNAKE_LENGTH) {
+            // ensure the snake is never getting to large for the whole game field
+            return;
+        }
+
         BodyPart bodyPart = new BodyPart();
 
         float x, y;

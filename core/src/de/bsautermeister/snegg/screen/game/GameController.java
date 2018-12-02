@@ -338,21 +338,33 @@ public class GameController implements Updateable, BinarySerializable {
         return new Vector2(x, y);
     }
 
+    /**
+     * Checks whether the requested positions are blocked by another game object.
+     * We use target-positions for SmoothGameObjects, to ensure that a check is not failing due to
+     * animation is still in progress.
+     * @param x The x position
+     * @param y The y position
+     * @return Returns True in case the position is blocked, else False.
+     */
     private boolean isPositionBlocked(int x, int y) {
         SnakeHead head = snake.getHead();
-        if (head.getX() == x && head.getY() == y)
+        if (head.getTargetX() == x && head.getTargetY() == y) {
             return true;
-
-        for (BodyPart body : snake.getBodyParts()) {
-            if (body.getX() == x && body.getY() == y)
-                return true;
         }
 
-        if (coin.getX() == x && coin.getY() == y)
-            return true;
+        for (BodyPart body : snake.getBodyParts()) {
+            if (body.getTargetX() == x && body.getTargetY() == y) {
+                return true;
+            }
+        }
 
-        if (fruit.getX() == x && fruit.getY() == y)
+        if (coin.getX() == x && coin.getY() == y) {
             return true;
+        }
+
+        if (fruit.getX() == x && fruit.getY() == y) {
+            return true;
+        }
 
         return false;
     }
