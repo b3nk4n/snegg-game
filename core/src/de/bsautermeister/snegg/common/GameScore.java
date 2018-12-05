@@ -16,13 +16,7 @@ public class GameScore implements ScoreProvider, Resettable, BinarySerializable 
     private long score;
     private long displayScore;
 
-    //private int highscore;
-
-    private Preferences prefs;
-
     public GameScore() {
-        prefs = Gdx.app.getPreferences("SneggGame");
-        //highscore = prefs.getInteger(HIGHSCORE_KEY, 0);
         reset();
     }
 
@@ -47,26 +41,11 @@ public class GameScore implements ScoreProvider, Resettable, BinarySerializable 
         return score;
     }
 
-    /*@Override
-    public int getHighscore() {
-        return highscore;
-    }*/
-
     public void updateDisplayScore(float delta) {
         if (displayScore < score) {
             displayScore = Math.min(score, displayScore + (long)(100 * delta));
         }
     }
-
-    /*public void saveHighscore() {
-        if (score <= highscore) {
-            return;
-        }
-
-        highscore = score;
-        prefs.putInteger(HIGHSCORE_KEY, highscore);
-        prefs.flush();
-    }*/
 
     @Override
     public void write(DataOutputStream out) throws IOException {

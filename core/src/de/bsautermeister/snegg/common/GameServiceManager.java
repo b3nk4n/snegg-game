@@ -41,21 +41,29 @@ public class GameServiceManager {
         }
     }
 
-    public String checkAndUnlockAchievement(int currentCollectedFruits, int currentSnakeSize) {
-        if (currentSnakeSize >= 25 && onlineAchievements.containsKey(Achievements.Keys.POLOGNAISE_25) &&
-                !onlineAchievements.get(Achievements.Keys.POLOGNAISE_25)) {
-            onlineAchievements.put(Achievements.Keys.POLOGNAISE_25, true);
-            gameServices.unlockAchievement(Achievements.Keys.POLOGNAISE_25);
-            return Achievements.Keys.POLOGNAISE_25;
+    public void checkAndUnlockAchievement(int currentCollectedFruits, int currentSnakeSize) {
+        if (checkAchievementCanBeUnlocked(Achievements.Keys.POLOGNAISE_25, currentSnakeSize, 25)) {
+            unlockAchievement(Achievements.Keys.POLOGNAISE_25);
+        } else if (checkAchievementCanBeUnlocked(Achievements.Keys.POLOGNAISE_50, currentSnakeSize, 50)) {
+            unlockAchievement(Achievements.Keys.POLOGNAISE_50);
+        } else if (checkAchievementCanBeUnlocked(Achievements.Keys.FRUITS_10, currentCollectedFruits, 10)) {
+            unlockAchievement(Achievements.Keys.FRUITS_10);
+        } else if (checkAchievementCanBeUnlocked(Achievements.Keys.FRUITS_25, currentCollectedFruits, 25)) {
+            unlockAchievement(Achievements.Keys.FRUITS_25);
+        } else if (checkAchievementCanBeUnlocked(Achievements.Keys.FRUITS_100, currentCollectedFruits, 100)) {
+            unlockAchievement(Achievements.Keys.FRUITS_100);
         }
-        else if (currentSnakeSize >= 50 && onlineAchievements.containsKey(Achievements.Keys.POLOGNAISE_50) &&
-                !onlineAchievements.get(Achievements.Keys.POLOGNAISE_50)) {
-            onlineAchievements.put(Achievements.Keys.POLOGNAISE_25, true);
-            gameServices.unlockAchievement(Achievements.Keys.POLOGNAISE_25);
-            return Achievements.Keys.POLOGNAISE_50;
-        }
+    }
 
-        return "";
+    private boolean checkAchievementCanBeUnlocked(String achievementKey, int currentValue, int targetValue) {
+        return currentValue >= targetValue &&
+                onlineAchievements.containsKey(achievementKey) &&
+                !onlineAchievements.get(achievementKey);
+    }
+
+    private void unlockAchievement(String achievementKey) {
+        onlineAchievements.put(achievementKey, true);
+        gameServices.unlockAchievement(achievementKey);
     }
 
     public void submitScore(long score) {

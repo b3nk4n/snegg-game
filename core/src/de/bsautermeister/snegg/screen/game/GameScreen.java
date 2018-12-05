@@ -15,6 +15,7 @@ import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.screen.transition.ScreenTransitions;
+import de.bsautermeister.snegg.services.GameStats;
 
 public class GameScreen extends ScreenBase {
     private static final Logger LOGGER = new Logger(GameScreen.class.getName(), GameConfig.LOG_LEVEL);
@@ -24,6 +25,7 @@ public class GameScreen extends ScreenBase {
 
     private final GameServiceManager gameServiceManager;
     private final GameListener gameListener;
+    private final GameStats gameStats;
 
     private Sound coinSound;
     private Sound loseSound;
@@ -36,6 +38,7 @@ public class GameScreen extends ScreenBase {
         super(game);
 
         gameServiceManager = SneggGame.getGameServiceManager();
+        gameStats = new GameStats();
 
         gameListener = new GameListener() {
             @Override
@@ -45,21 +48,13 @@ public class GameScreen extends ScreenBase {
 
             @Override
             public void hitFruit(long score) {
+                gameStats.incrementFruitCounter();
                 fruitSound.play();
             }
 
             @Override
             public void snakeChanged(int snakeSize, long score) {
-                String unlockedAchievement = gameServiceManager.checkAndUnlockAchievement(0, snakeSize);
-                publishAchievementMessage(unlockedAchievement);
-            }
-
-            private void publishAchievementMessage(String unlockedAchievement) {
-                if (unlockedAchievement.equals("")) {
-                    return;
-                }
-
-                controller.publishMessage(unlockedAchievement);
+                gameServiceManager.checkAndUnlockAchievement(gameStats.getFruitCounter(), snakeSize);
             }
 
             @Override
