@@ -15,8 +15,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import de.bsautermeister.snegg.SneggGame;
-import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.common.GameScore;
+import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.common.ScoreProvider;
 import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
@@ -42,7 +42,7 @@ public class GameController implements Updateable, BinarySerializable {
     private GameState state = GameState.READY;
 
     private float gameTime;
-    private static float currentMoveTime;
+    private float currentMoveTime;
 
     private float snakeMoveTimer;
     private Snake snake;
@@ -164,6 +164,7 @@ public class GameController implements Updateable, BinarySerializable {
             if (snakeMoveTimer >= currentMoveTime) {
                 snakeMoveTimer = 0;
 
+                snake.setMaxTotalMoveTime(currentMoveTime);
                 snake.movementStep();
 
                 snake.checkSnakeHeadOutOfBounds();
@@ -387,10 +388,6 @@ public class GameController implements Updateable, BinarySerializable {
 
     public OverlayCallback getCallback() {
         return callback;
-    }
-
-    public static float getCurrentMoveTime() {
-        return currentMoveTime;
     }
 
     public ScoreProvider getScoreProvider() {

@@ -10,7 +10,6 @@ import java.io.IOException;
 import de.bsautermeister.snegg.common.Resettable;
 import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.config.GameConfig;
-import de.bsautermeister.snegg.screen.game.GameController;
 import de.bsautermeister.snegg.serializer.BinarySerializable;
 
 public class Snake implements Resettable, Updateable, BinarySerializable {
@@ -21,6 +20,12 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
 
     private Direction lastDirection;
     private Direction direction;
+
+    /**
+     * Defines the maximum time the whole snake should require to move. This is due to the game is
+     * slowly increasing the speed. Conequently, the whole snake movement has to get faster, too.
+     */
+    private float maxTotalMoveTime;
 
     private final SnakeHead head;
     private final Array<BodyPart> bodyParts;
@@ -41,6 +46,7 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
         lastDirection = Direction.UP;
         head.reset();
         insertBodyPart();
+        maxTotalMoveTime = GameConfig.MOVE_TIME;
     }
 
     @Override
@@ -140,10 +146,9 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
         bodyParts.add(bodyPart);
 
         final float STATIC_STAY_TIME = 0.05f;
-        float currentMoveTime = GameController.getCurrentMoveTime();
 
         float duration = GameConfig.INITIAL_TRANS_DURATION - ((float)Math.sqrt(bodyParts.size) * 0.01f);
-        float delay = Math.min(GameConfig.INITIAL_TRANS_DELAY, (currentMoveTime - duration - STATIC_STAY_TIME) / bodyParts.size);
+        float delay = Math.min(GameConfig.INITIAL_TRANS_DELAY, (maxTotalMoveTime - duration - STATIC_STAY_TIME) / bodyParts.size);
 
         head.setTransitionDuration(duration);
 
@@ -177,6 +182,10 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
         return happyTimer > 0f;
     }
 
+    public void setMaxTotalMoveTime(float maxTotalMoveTime) {
+        this.maxTotalMoveTime = maxTotalMoveTime;
+    }
+
     public int length() {
         return 1 + bodyParts.size;
     }
@@ -186,6 +195,7 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
         out.writeUTF(lastDirection.name());
         out.writeUTF(direction.name());
         out.writeFloat(happyTimer);
+        out.writeFloat(maxTotalMoveTime);
         head.write(out);
 
         out.writeInt(bodyParts.size);
@@ -199,6 +209,7 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
         lastDirection = Enum.valueOf(Direction.class, in.readUTF());
         direction = Enum.valueOf(Direction.class, in.readUTF());
         happyTimer = in.readFloat();
+        maxTotalMoveTime = in.readFloat();
         head.read(in);
 
         int bodyPartSize = in.readInt();
