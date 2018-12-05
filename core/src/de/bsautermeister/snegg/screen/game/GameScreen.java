@@ -35,7 +35,7 @@ public class GameScreen extends ScreenBase {
     public GameScreen(GameApp game) {
         super(game);
 
-        gameServiceManager = new GameServiceManager(game.getGameServices());
+        gameServiceManager = SneggGame.getGameServiceManager();
 
         gameListener = new GameListener() {
             @Override
@@ -125,18 +125,19 @@ public class GameScreen extends ScreenBase {
     @Override
     public void resume() {
         super.resume();
-        LOGGER.debug("RESUME");
 
+        // decrease audio when we enter the game screen
         MusicPlayer.getInstance().setVolume(GameConfig.MUSIC_IN_GAME_VOLUME, false);
     }
 
     @Override
     public void pause() {
         super.pause();
-        LOGGER.debug("PAUSE");
 
-        MusicPlayer.getInstance().setVolume(GameConfig.MUSIC_VOLUME, false);
         controller.save();
+
+        // increase audio when we leave the game screen
+        MusicPlayer.getInstance().setVolume(GameConfig.MUSIC_VOLUME, false);
     }
 
     @Override

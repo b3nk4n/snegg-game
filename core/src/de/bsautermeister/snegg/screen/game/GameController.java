@@ -411,7 +411,7 @@ public class GameController implements Updateable, BinarySerializable {
 
         final FileHandle handle = SneggGame.getSavedDataHandle();
         if (!BinarySerializer.write(this, handle.write(false))) {
-            // TODO exception handling?
+            LOG.error("Could not save game state");
         }
     }
 
@@ -420,7 +420,7 @@ public class GameController implements Updateable, BinarySerializable {
 
         if (handle.exists()) {
             if (!BinarySerializer.read(this, handle.read())) {
-                // TODO exception handling?
+                LOG.error("Could not load game state");
             }
 
             SneggGame.deleteSavedData();

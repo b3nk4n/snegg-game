@@ -13,7 +13,7 @@ import de.bsautermeister.snegg.common.Updateable;
 import de.bsautermeister.snegg.serializer.BinarySerializable;
 
 public class MusicPlayer implements Updateable, BinarySerializable, Disposable {
-    private final static float VOLUME_CHANGE_SPEED = 1.0f;
+    private final static float VOLUME_CHANGE_IN_SECONDS = 3.0f;
 
     private static MusicPlayer instance;
 
@@ -44,10 +44,10 @@ public class MusicPlayer implements Updateable, BinarySerializable, Disposable {
             float diff = targetVolume - currentVolume;
 
             if (diff > 0) {
-                currentVolume += delta * VOLUME_CHANGE_SPEED;
+                currentVolume += delta / VOLUME_CHANGE_IN_SECONDS;
                 currentVolume = Math.min(targetVolume, currentVolume);
             } else {
-                currentVolume -= delta * VOLUME_CHANGE_SPEED;
+                currentVolume -= delta / VOLUME_CHANGE_IN_SECONDS;
                 currentVolume = Math.max(targetVolume, currentVolume);
             }
         }
