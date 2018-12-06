@@ -108,15 +108,15 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
 
     private void checkGameObjectOutOfBounds(SmoothGameObject gameObject) {
         if (gameObject.getX() >= GameConfig.MAX_X - EPS) {
-            gameObject.gotoX(GameConfig.MIN_X);
+            gameObject.gotoWorldWrapX(GameConfig.MIN_X);
         } else if (gameObject.getX() < GameConfig.MIN_X - GameConfig.SNAKE_SIZE + EPS) {
-            gameObject.gotoX(GameConfig.MAX_X - GameConfig.SNAKE_SIZE);
+            gameObject.gotoWorldWrapX(GameConfig.MAX_X - GameConfig.SNAKE_SIZE);
         }
 
         if (gameObject.getY() >= GameConfig.MAX_Y - EPS) {
-            gameObject.gotoY(GameConfig.MIN_Y);
+            gameObject.gotoWorldWrapY(GameConfig.MIN_Y);
         } else if (gameObject.getY() < GameConfig.MIN_Y - GameConfig.SNAKE_SIZE + EPS) {
-            gameObject.gotoY(GameConfig.MAX_Y - GameConfig.SNAKE_SIZE);
+            gameObject.gotoWorldWrapY(GameConfig.MAX_Y - GameConfig.SNAKE_SIZE);
         }
     }
 
@@ -142,7 +142,7 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
             y = lastBodyPart.getY();
         }
 
-        bodyPart.gotoXY(x, y);
+        bodyPart.gotoWorldWrapXY(x, y);
         bodyParts.add(bodyPart);
 
         final float STATIC_STAY_TIME = 0.05f;

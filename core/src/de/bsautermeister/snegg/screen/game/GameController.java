@@ -39,7 +39,7 @@ import de.bsautermeister.snegg.serializer.BinarySerializer;
 public class GameController implements Updateable, BinarySerializable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
 
-    private GameState stateBeforePause = GameState.UNDEFINED;
+    private GameState stateBeforePause;
     private GameState state = GameState.READY;
 
     private float gameTime;
@@ -136,9 +136,9 @@ public class GameController implements Updateable, BinarySerializable {
 
     private void reset() {
         state = GameState.PLAYING;
+        stateBeforePause = GameState.UNDEFINED;
         gameScore.reset();
         collectedCoins = 0;
-        spawnCoin();
         fruitSpanDelayTimer = Float.MAX_VALUE;
         gameTime = 0f;
         currentMoveTime = GameConfig.MOVE_TIME;
@@ -146,6 +146,10 @@ public class GameController implements Updateable, BinarySerializable {
         snake.reset();
         gameOverTimer = 0f;
         hasPublishedHighscoreMessage = false;
+        fruit.reset();
+        coin.reset();
+        spawnCoin();
+        LOG.debug("SNAKE: y: " + snake.getHead().getY());
     }
 
     @Override
