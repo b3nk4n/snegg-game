@@ -64,8 +64,8 @@ public class GameOverOverlay extends Table {
         pack();
     }
 
-    public void update(long score) {
-        scoreLabel.setText(SCORE_TEXT + score); // TODO make sure this is only called once
+    public void setScore(long score) {
+        scoreLabel.setText(SCORE_TEXT + score);
     }
 
     @Override

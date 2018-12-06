@@ -109,7 +109,9 @@ public class GooglePlayGameServices implements GameServices {
     @Override
     public void rateGame()
     {
-        activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(storeLink)));
+        if (storeLink != null) {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(storeLink)));
+        }
     }
 
     @Override

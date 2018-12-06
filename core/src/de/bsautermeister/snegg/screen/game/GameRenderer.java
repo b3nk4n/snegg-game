@@ -312,7 +312,7 @@ public class GameRenderer implements Disposable {
         if (gameState.isGameOver()) {
             if (!gameOverOverlay.isVisible()) {
                 gameOverOverlay.setVisible(true);
-                gameOverOverlay.update(controller.getScoreProvider().getScore());
+                gameOverOverlay.setScore(controller.getScoreProvider().getScore());
             } else {
                 // workaround: do not act during the first frame, otherwise button event which triggered
                 // this overlay to show are processed in the overlay, which could immediately close it again

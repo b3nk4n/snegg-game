@@ -39,6 +39,7 @@ import de.bsautermeister.snegg.serializer.BinarySerializer;
 public class GameController implements Updateable, BinarySerializable {
     private static final Logger LOG = new Logger(GameController.class.getName(), GameConfig.LOG_LEVEL);
 
+    private GameState stateBeforePause = GameState.UNDEFINED;
     private GameState state = GameState.READY;
 
     private float gameTime;
@@ -77,7 +78,7 @@ public class GameController implements Updateable, BinarySerializable {
         callback = new OverlayCallback() {
             @Override
             public void resume() {
-                state = GameState.PLAYING; // TODO what happens when we paused in GAME_OVER state?
+                state = GameState.PLAYING;
             }
 
             @Override
@@ -279,7 +280,7 @@ public class GameController implements Updateable, BinarySerializable {
 
     private void checkBackButtonInput() {
         if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-            state = GameState.PAUSED;
+            pauseGame();
         }
     }
 
@@ -301,8 +302,13 @@ public class GameController implements Updateable, BinarySerializable {
         }
 
         if (escapePressed) {
-            state = GameState.PAUSED;
+            pauseGame();
         }
+    }
+
+    private void pauseGame() {
+        stateBeforePause = state;
+        state = GameState.PAUSED;
     }
 
     private void checkDebugInput() {
@@ -431,7 +437,12 @@ public class GameController implements Updateable, BinarySerializable {
 
     @Override
     public void write(DataOutputStream out) throws IOException {
-        out.writeUTF(state.name());
+        if (state.isPaused()) {
+            // don't store the paused state, because otherwise the game resumes in the pause menu
+            out.writeUTF(stateBeforePause.name());
+        } else {
+            out.writeUTF(state.name());
+        }
         out.writeFloat(gameTime);
         out.writeFloat(currentMoveTime);
         out.writeFloat(gameOverTimer);

@@ -67,7 +67,7 @@ public class DebugCameraController {
     }
 
     /**
-     * Handles debug input. Call this in you update cycle.
+     * Handles debug input. Call this in you setScore cycle.
      *
      * @param delta the delta time.
      */
@@ -79,7 +79,7 @@ public class DebugCameraController {
         float moveSpeed = info.getMoveSpeed() * delta;
         float zoomSpeed = info.getZoomSpeed() * delta;
 
-        // update control
+        // setScore control
         if (info.isLeftPressed()) {
             moveLeft(moveSpeed);
         }

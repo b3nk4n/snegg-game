@@ -94,7 +94,6 @@ public class GameScreen extends ScreenBase {
             // ensure to not load this saved game later anymore
             SneggGame.deleteSavedData();
         }
-
     }
 
     @Override

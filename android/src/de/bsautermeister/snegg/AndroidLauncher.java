@@ -17,7 +17,7 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useImmersiveMode = true;
-		this.gameServices = new GooglePlayGameServices(this, "storeLinkHere"); // TODO use store link
+		this.gameServices = new GooglePlayGameServices(this, null); // TODO use store link
 		initialize(new SneggGame(gameServices), config);
 	}
 

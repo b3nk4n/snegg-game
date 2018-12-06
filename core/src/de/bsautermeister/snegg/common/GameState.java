@@ -1,6 +1,7 @@
 package de.bsautermeister.snegg.common;
 
 public enum GameState {
+    UNDEFINED,
     READY,
     PLAYING,
     PAUSED,
