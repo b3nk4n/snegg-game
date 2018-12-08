@@ -88,8 +88,6 @@ public class GameController implements Updateable, BinarySerializable {
 
             @Override
             public void quit() {
-                //gameScore.saveHighscore();
-                state = GameState.GAME_OVER;
                 SneggGame.deleteSavedData();
                 gameListener.quit();
                 gameListener.finishGame(gameScore.getScore());
