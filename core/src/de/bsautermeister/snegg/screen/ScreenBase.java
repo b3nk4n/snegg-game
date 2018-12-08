@@ -36,10 +36,6 @@ public abstract class ScreenBase extends ScreenAdapter {
         return game;
     }
 
-    public GameServices getGameServices() {
-        return game.getGameServices();
-    }
-
     public SpriteBatch getBatch() {
         return game.getBatch();
     }

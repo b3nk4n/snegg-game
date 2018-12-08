@@ -15,21 +15,9 @@ import de.bsautermeister.snegg.serializer.BinarySerializable;
 public class MusicPlayer implements Updateable, BinarySerializable, Disposable {
     private final static float VOLUME_CHANGE_IN_SECONDS = 3.0f;
 
-    private static MusicPlayer instance;
-
     private float currentVolume = 1.0f;
     private float targetVolume = 1.0f;
     private Music music;
-
-    private MusicPlayer() {
-    }
-
-    public static MusicPlayer getInstance() {
-        if (instance == null) {
-            instance = new MusicPlayer();
-        }
-        return instance;
-    }
 
     public void setup(String filePath, float volume) {
         FileHandle fileHandle = Gdx.files.internal(filePath);

@@ -3,11 +3,9 @@ package de.bsautermeister.snegg.screen.game;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.utils.Logger;
 
 import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
-import de.bsautermeister.snegg.audio.MusicPlayer;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.common.GameServiceManager;
 import de.bsautermeister.snegg.config.GameConfig;
@@ -18,7 +16,6 @@ import de.bsautermeister.snegg.screen.transition.ScreenTransitions;
 import de.bsautermeister.snegg.services.GameStats;
 
 public class GameScreen extends ScreenBase {
-    private static final Logger LOGGER = new Logger(GameScreen.class.getName(), GameConfig.LOG_LEVEL);
 
     private GameRenderer renderer;
     private GameController controller;
@@ -121,7 +118,7 @@ public class GameScreen extends ScreenBase {
         super.resume();
 
         // decrease audio when we enter the game screen
-        MusicPlayer.getInstance().setVolume(GameConfig.MUSIC_IN_GAME_VOLUME, false);
+        SneggGame.getMusicPlayer().setVolume(GameConfig.MUSIC_IN_GAME_VOLUME, false);
     }
 
     @Override
@@ -131,7 +128,7 @@ public class GameScreen extends ScreenBase {
         controller.save();
 
         // increase audio when we leave the game screen
-        MusicPlayer.getInstance().setVolume(GameConfig.MUSIC_VOLUME, false);
+        SneggGame.getMusicPlayer().setVolume(GameConfig.MUSIC_VOLUME, false);
     }
 
     @Override

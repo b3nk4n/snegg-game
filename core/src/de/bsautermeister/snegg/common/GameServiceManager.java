@@ -9,11 +9,11 @@ import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.services.Achievements;
 import de.bsautermeister.snegg.services.GameServices;
 import de.bsautermeister.snegg.services.Leaderboards;
+import de.bsautermeister.snegg.services.OnlineServices;
+import de.bsautermeister.snegg.services.PlatformDependentService;
 
-public class GameServiceManager {
+public class GameServiceManager implements OnlineServices, PlatformDependentService {
     private static final Logger LOG = new Logger(GameServiceManager.class.getSimpleName(), GameConfig.LOG_LEVEL);
-
-    private static final String HIGHSCORE_KEY = "highscore";
 
     private final GameServices gameServices;
 
@@ -76,5 +76,41 @@ public class GameServiceManager {
 
     public long getOnlineHighscore() {
         return onlineHighscore;
+    }
+
+    @Override
+    public boolean isSupported() {
+        return gameServices.isSupported();
+    }
+
+
+    @Override
+    public void signIn() {
+        gameServices.signIn();
+    }
+
+    @Override
+    public boolean isSignedIn() {
+        return gameServices.isSignedIn();
+    }
+
+    @Override
+    public void signOut() {
+        gameServices.signOut();
+    }
+
+    @Override
+    public void rateGame() {
+        gameServices.rateGame();
+    }
+
+    @Override
+    public void showAchievements() {
+        gameServices.showAchievements();
+    }
+
+    @Override
+    public void showScore(String leaderboardKey) {
+        gameServices.showScore(leaderboardKey);
     }
 }

@@ -14,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -22,7 +21,6 @@ import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.assets.Styles;
-import de.bsautermeister.snegg.audio.MusicPlayer;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
@@ -32,7 +30,6 @@ import de.bsautermeister.snegg.services.Leaderboards;
 import de.bsautermeister.snegg.util.GdxUtils;
 
 public class MenuScreen extends ScreenBase {
-    private static final Logger LOG = new Logger(MenuScreen.class.getSimpleName(), GameConfig.LOG_LEVEL);
 
     private Viewport viewport;
     private Stage stage;
@@ -88,12 +85,12 @@ public class MenuScreen extends ScreenBase {
         }
 
 
-        if (getGame().getGameServices().isSupported()) {
+        if (SneggGame.getGameServiceManager().isSupported()) {
             Button leaderboardsButton = new Button(skin, Styles.Button.LEADERBOARDS);
             leaderboardsButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    getGameServices().showScore(Leaderboards.Keys.LEADERBOARD);
+                    SneggGame.getGameServiceManager().showScore(Leaderboards.Keys.LEADERBOARD);
                 }
             });
             table.add(leaderboardsButton).row();
@@ -102,7 +99,7 @@ public class MenuScreen extends ScreenBase {
             achievementsButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    getGameServices().showAchievements();
+                    SneggGame.getGameServiceManager().showAchievements();
                 }
             });
             table.add(achievementsButton).row();
@@ -111,7 +108,7 @@ public class MenuScreen extends ScreenBase {
             reviewsButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    getGameServices().rateGame();
+                    SneggGame.getGameServiceManager().rateGame();
                 }
             });
             table.add(reviewsButton).row();
@@ -141,10 +138,10 @@ public class MenuScreen extends ScreenBase {
     }
 
     private void quit() {
-        if (getGameServices().isSupported()) {
+        if (SneggGame.getGameServiceManager().isSupported()) {
             // TODO quit will never be executed on Android, which is the only supported platform
             //      do we actually ever need to call sign-out? Maybe hidden in a settings page?
-            getGameServices().signOut();
+            SneggGame.getGameServiceManager().signOut();
         }
 
         Gdx.app.exit();
@@ -153,7 +150,7 @@ public class MenuScreen extends ScreenBase {
     @Override
     public void resume() {
         super.resume();
-        MusicPlayer.getInstance().play();
+        SneggGame.getMusicPlayer().play();
     }
 
     @Override

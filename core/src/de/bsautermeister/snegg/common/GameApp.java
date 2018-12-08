@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.transition.ScreenTransition;
-import de.bsautermeister.snegg.services.GameServices;
 
 
 public abstract class GameApp implements ApplicationListener {
@@ -15,12 +14,6 @@ public abstract class GameApp implements ApplicationListener {
     private SpriteBatch batch;
 
     private TransitionContext transitionContext;
-
-    private final GameServices gameServices;
-
-    public GameApp(GameServices gameServices) {
-        this.gameServices = gameServices;
-    }
 
     @Override
     public void create() {
@@ -77,9 +70,5 @@ public abstract class GameApp implements ApplicationListener {
 
     public SpriteBatch getBatch() {
         return batch;
-    }
-
-    public GameServices getGameServices() {
-        return gameServices;
     }
 }
