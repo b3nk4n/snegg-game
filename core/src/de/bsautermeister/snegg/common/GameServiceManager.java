@@ -30,15 +30,31 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
     }
 
     private void refreshOnline() {
-        try {
-            onlineHighscore = gameServices.loadCurrentHighscore(Leaderboards.Keys.LEADERBOARD);
-            LOG.debug("GameServiceScore: " + onlineHighscore);
+        gameServices.loadCurrentHighscore(Leaderboards.Keys.LEADERBOARD, new GameServices.LoadHighscoreCallback() {
+            @Override
+            public void success(long scoreResult) {
+                onlineHighscore = scoreResult;
 
-            onlineAchievements = gameServices.loadAchievements(false);
-            LOG.debug("AchievementsMap: " + onlineAchievements.size());
-        } catch (Exception ex) {
-            // TODO: use local values as fallback? Is there actually an exception possible?
-        }
+                LOG.debug("Loaded users online highscore: " + onlineHighscore);
+            }
+
+            @Override
+            public void error() {
+                LOG.error("Failed to load user's online highscore");
+            }
+        });
+
+        gameServices.loadAchievements(false, new GameServices.LoadAchievementsCallback() {
+            @Override
+            public void success(Map<String, Boolean> achievementsResult) {
+                onlineAchievements = achievementsResult;;
+            }
+
+            @Override
+            public void error() {
+                LOG.error("Failed to load online achievements");
+            }
+        });
     }
 
     public void checkAndUnlockAchievement(int currentCollectedFruits, int currentSnakeSize) {

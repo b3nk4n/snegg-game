@@ -50,6 +50,11 @@ public class DummyGameServices implements GameServices {
     }
 
     @Override
+    public void loadAchievements(boolean forceReload, LoadAchievementsCallback callback) {
+        callback.error();
+    }
+
+    @Override
     public void submitScore(String leaderboardKey, long highScore) {
         // NOP
     }
@@ -57,6 +62,11 @@ public class DummyGameServices implements GameServices {
     @Override
     public long loadCurrentHighscore(String leaderboardKey) {
         return UNDEFINED_SCORE;
+    }
+
+    @Override
+    public void loadCurrentHighscore(String leaderboardKey, LoadHighscoreCallback callback) {
+        callback.error();
     }
 
     @Override

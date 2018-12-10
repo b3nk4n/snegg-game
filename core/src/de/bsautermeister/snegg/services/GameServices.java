@@ -10,6 +10,18 @@ public interface GameServices extends OnlineServices, PlatformDependentService {
 
     void unlockAchievement(String key);
     Map<String, Boolean> loadAchievements(boolean forceReload);
+    void loadAchievements(boolean forceReload, LoadAchievementsCallback callback);
     void submitScore(String leaderboardKey, long highScore);
     long loadCurrentHighscore(String leaderboardKey);
+    void loadCurrentHighscore(String leaderboardKey, LoadHighscoreCallback callback);
+
+    public interface LoadAchievementsCallback {
+        void success(Map<String, Boolean> achievementsResult);
+        void error();
+    }
+
+    public interface LoadHighscoreCallback {
+        void success(long scoreResult);
+        void error();
+    }
 }

@@ -1,7 +1,5 @@
 package de.bsautermeister.snegg.screen.loading;
 
-import com.badlogic.gdx.assets.loaders.TextureLoader;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
@@ -12,8 +10,6 @@ import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import java.util.Map;
-
 import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.AssetPaths;
@@ -22,7 +18,6 @@ import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
-import de.bsautermeister.snegg.services.Leaderboards;
 import de.bsautermeister.snegg.util.GdxUtils;
 
 public class LoadingScreen extends ScreenBase {
@@ -69,7 +64,7 @@ public class LoadingScreen extends ScreenBase {
         loadingBg = new Image(atlas.findRegion(RegionNames.LOADING_FRAME_BACKGROUND));
 
         // Add the loading bar animation
-        Animation anim = new Animation(0.05f, atlas.findRegions(RegionNames.LOADING_ANIMATION) );
+        Animation anim = new Animation<TextureAtlas.AtlasRegion>(0.05f, atlas.findRegions(RegionNames.LOADING_ANIMATION));
         anim.setPlayMode(Animation.PlayMode.LOOP_REVERSED);
         loadingBar = new LoadingBar(anim);
 
@@ -80,6 +75,9 @@ public class LoadingScreen extends ScreenBase {
         stage.addActor(loadingBarHidden);
         stage.addActor(loadingFrame);
         stage.addActor(logo);
+
+        // start loading game service content
+        SneggGame.getGameServiceManager().refresh();
 
         // Add everything to be loaded, for instance:
         loadAssets();
@@ -146,9 +144,6 @@ public class LoadingScreen extends ScreenBase {
         stage.draw();
 
         if (getAssetManager().update() && percent > 0.99f) {
-            // TODO do this async
-            SneggGame.getGameServiceManager().refresh();
-
             setScreen(new MenuScreen(getGame()));
         }
     }
