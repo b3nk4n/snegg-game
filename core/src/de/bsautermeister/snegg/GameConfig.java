@@ -1,4 +1,4 @@
-package de.bsautermeister.snegg.config;
+package de.bsautermeister.snegg;
 
 import com.badlogic.gdx.utils.Logger;
 

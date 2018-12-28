@@ -1,10 +1,4 @@
-package de.bsautermeister.snegg.model;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import de.bsautermeister.snegg.serializer.BinarySerializable;
+package de.bsautermeister.snegg.text;
 
 public class StatusText {
     private final String text;

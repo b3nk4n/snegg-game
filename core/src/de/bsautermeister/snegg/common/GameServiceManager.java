@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.services.Achievements;
 import de.bsautermeister.snegg.services.GameServices;
 import de.bsautermeister.snegg.services.Leaderboards;

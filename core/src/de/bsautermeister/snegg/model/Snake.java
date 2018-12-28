@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import de.bsautermeister.snegg.common.Resettable;
 import de.bsautermeister.snegg.common.Updateable;
-import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.serializer.BinarySerializable;
 
 public class Snake implements Resettable, Updateable, BinarySerializable {

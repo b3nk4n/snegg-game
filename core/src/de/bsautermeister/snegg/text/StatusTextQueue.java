@@ -1,4 +1,4 @@
-package de.bsautermeister.snegg.model;
+package de.bsautermeister.snegg.text;
 
 import com.badlogic.gdx.utils.Queue;
 

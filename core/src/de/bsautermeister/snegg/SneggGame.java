@@ -7,7 +7,6 @@ import com.badlogic.gdx.files.FileHandle;
 import de.bsautermeister.snegg.audio.MusicPlayer;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.common.GameServiceManager;
-import de.bsautermeister.snegg.config.GameConfig;
 import de.bsautermeister.snegg.screen.loading.LoadingScreen;
 import de.bsautermeister.snegg.services.GameServices;
 

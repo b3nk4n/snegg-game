@@ -1,6 +1,6 @@
 package de.bsautermeister.snegg.model;
 
-import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.GameConfig;
 
 public class BodyPart extends SmoothGameObject {
     private boolean justAdded;

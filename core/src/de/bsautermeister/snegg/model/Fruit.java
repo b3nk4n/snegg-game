@@ -6,7 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.GameConfig;
 
 public class Fruit extends GameObject implements Collectible {
     private boolean collected;

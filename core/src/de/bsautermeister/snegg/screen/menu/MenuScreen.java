@@ -22,7 +22,7 @@ import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.assets.Styles;
 import de.bsautermeister.snegg.common.GameApp;
-import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.game.GameScreen;
 import de.bsautermeister.snegg.screen.transition.ScreenTransitions;

@@ -1,6 +1,5 @@
-package de.bsautermeister.snegg.model;
+package de.bsautermeister.snegg.text;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bsautermeister.snegg.assets.Styles;
 import de.bsautermeister.snegg.common.Resettable;
-import de.bsautermeister.snegg.config.GameConfig;
+import de.bsautermeister.snegg.GameConfig;
 
 public class AnimatedText extends Stage implements Resettable {
     private final BitmapFont font;
