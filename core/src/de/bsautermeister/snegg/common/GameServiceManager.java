@@ -58,7 +58,7 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
         gameServices.loadAchievements(false, new GameServices.LoadAchievementsCallback() {
             @Override
             public void success(Map<String, Boolean> achievementsResult) {
-                onlineAchievements = achievementsResult;;
+                onlineAchievements = achievementsResult;
             }
 
             @Override

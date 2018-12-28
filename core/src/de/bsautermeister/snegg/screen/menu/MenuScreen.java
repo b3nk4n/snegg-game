@@ -138,12 +138,6 @@ public class MenuScreen extends ScreenBase {
     }
 
     private void quit() {
-        if (SneggGame.getGameServiceManager().isSupported()) {
-            // TODO quit will never be executed on Android, which is the only supported platform
-            //      do we actually ever need to call sign-out? Maybe hidden in a settings page?
-            SneggGame.getGameServiceManager().signOut();
-        }
-
         Gdx.app.exit();
     }
 
