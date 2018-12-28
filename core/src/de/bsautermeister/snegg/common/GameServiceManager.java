@@ -1,5 +1,7 @@
 package de.bsautermeister.snegg.common;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Logger;
 
 import java.util.HashMap;
@@ -15,25 +17,32 @@ import de.bsautermeister.snegg.services.PlatformDependentService;
 public class GameServiceManager implements OnlineServices, PlatformDependentService {
     private static final Logger LOG = new Logger(GameServiceManager.class.getSimpleName(), GameConfig.LOG_LEVEL);
 
+    private static final String HIGHSCORE_FALLBACK_KEY = "highscore";
+
     private final GameServices gameServices;
 
-    // TODO do we really need to store both?
-    private long onlineHighscore = GameServices.UNDEFINED_SCORE; //TODO save state for tombstoning?
+    private final Preferences prefs;
+    private long onlineHighscore = GameServices.UNDEFINED_SCORE;
     private Map<String, Boolean> onlineAchievements = new HashMap<String, Boolean>();
 
     public GameServiceManager(GameServices gameServices) {
         this.gameServices = gameServices;
+        this.prefs = Gdx.app.getPreferences(GameServiceManager.class.getName());
     }
 
     public void refresh() {
-        refreshOnline();
+        refreshUserHighscore();
+        refreshAchievements();
     }
 
-    private void refreshOnline() {
+    private void refreshUserHighscore() {
+        final long highscoreFallback = prefs.getLong(HIGHSCORE_FALLBACK_KEY, GameServices.UNDEFINED_SCORE);
+        onlineHighscore = highscoreFallback;
+
         gameServices.loadCurrentHighscore(Leaderboards.Keys.LEADERBOARD, new GameServices.LoadHighscoreCallback() {
             @Override
             public void success(long scoreResult) {
-                onlineHighscore = scoreResult;
+                onlineHighscore = Math.max(scoreResult, highscoreFallback);
 
                 LOG.debug("Loaded users online highscore: " + onlineHighscore);
             }
@@ -43,7 +52,9 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
                 LOG.error("Failed to load user's online highscore");
             }
         });
+    }
 
+    private void refreshAchievements() {
         gameServices.loadAchievements(false, new GameServices.LoadAchievementsCallback() {
             @Override
             public void success(Map<String, Boolean> achievementsResult) {
@@ -87,6 +98,7 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
 
         if (score > onlineHighscore) {
             onlineHighscore = score;
+            prefs.putLong(HIGHSCORE_FALLBACK_KEY, score);
         }
     }
 

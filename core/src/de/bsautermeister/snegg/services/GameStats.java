@@ -9,7 +9,7 @@ public class GameStats {
     private static final String KEY_FRUIT_COUNTER = "fruitCounter";
 
     public GameStats() {
-        prefs = Gdx.app.getPreferences("SneggGame.GameStats");
+        prefs = Gdx.app.getPreferences(GameStats.class.getName());
     }
 
     public void incrementFruitCounter() {
