@@ -15,6 +15,7 @@ public class GameStats {
     public void incrementFruitCounter() {
         int count = getFruitCounter();
         prefs.putInteger(KEY_FRUIT_COUNTER, count + 1);
+        prefs.flush();
     }
 
     public int getFruitCounter() {
