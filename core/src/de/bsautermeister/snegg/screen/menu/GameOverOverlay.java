@@ -30,7 +30,7 @@ public class GameOverOverlay extends Table {
     private void init() {
         defaults().pad(20);
 
-        Image titleImage = new Image(getSkin(), RegionNames.TITLE);
+        Image titleImage = new Image(getSkin(), RegionNames.GAME_OVER);
 
         scoreLabel = new Label(SCORE_TEXT, getSkin());
         Table buttonTable = new Table(getSkin());

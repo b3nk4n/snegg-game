@@ -1,5 +1,6 @@
 package de.bsautermeister.snegg.screen.loading;
 
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
@@ -84,13 +85,9 @@ public class LoadingScreen extends ScreenBase {
     }
 
     private void loadAssets() {
-        getAssetManager().load(AssetDescriptors.Fonts.UI);
-        getAssetManager().load(AssetDescriptors.Atlas.GAMEPLAY);
-        getAssetManager().load(AssetDescriptors.Skins.UI);
-        getAssetManager().load(AssetDescriptors.Sounds.COIN);
-        getAssetManager().load(AssetDescriptors.Sounds.LOSE);
-        getAssetManager().load(AssetDescriptors.Sounds.FRUIT);
-        getAssetManager().load(AssetDescriptors.Sounds.FRUIT_SPAWN);
+        for (AssetDescriptor assetDescriptor : AssetDescriptors.ALL) {
+            getAssetManager().load(assetDescriptor);
+        }
     }
 
     @Override

@@ -18,6 +18,8 @@ public class RegionNames {
     public static final String ORANGE = "orange";
 
     public static final String TITLE = "title";
+    public static final String PAUSE = "pause";
+    public static final String GAME_OVER = "gameover";
 
     private RegionNames() {}
 }

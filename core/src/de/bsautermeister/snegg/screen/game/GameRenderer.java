@@ -44,7 +44,7 @@ import de.bsautermeister.snegg.util.debug.DebugCameraController;
 public class GameRenderer implements Disposable {
     private static final Logger LOG = new Logger(GameRenderer.class.getName(), GameConfig.LOG_LEVEL);
 
-    private static final float PADDING = 20.0f;
+    private static final float PADDING = 24.0f;
 
     private final SpriteBatch batch;
     private final AssetManager assetManager;
@@ -89,7 +89,7 @@ public class GameRenderer implements Disposable {
         hudViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
         renderer = new ShapeRenderer();
 
-        font = assetManager.get(AssetDescriptors.Fonts.UI);
+        font = assetManager.get(AssetDescriptors.Fonts.BIG);
 
         skin = assetManager.get(AssetDescriptors.Skins.UI);
         layout = new GlyphLayout();

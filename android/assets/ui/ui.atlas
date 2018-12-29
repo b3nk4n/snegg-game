@@ -1,97 +1,139 @@
 
 ui.png
-size: 1024,256
+size: 1024,512
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 achievements-button
   rotate: false
-  xy: 2, 141
-  size: 160, 100
-  orig: 160, 100
-  offset: 0, 0
-  index: -1
-achievements-down-button
-  rotate: false
-  xy: 164, 141
-  size: 160, 100
-  orig: 160, 100
+  xy: 816, 344
+  size: 160, 160
+  orig: 160, 160
   offset: 0, 0
   index: -1
 leaderboards-button
   rotate: false
-  xy: 326, 104
-  size: 160, 100
-  orig: 160, 100
-  offset: 0, 0
-  index: -1
-leaderboards-down-button
-  rotate: false
-  xy: 2, 39
-  size: 160, 100
-  orig: 160, 100
+  xy: 816, 344
+  size: 160, 160
+  orig: 160, 160
   offset: 0, 0
   index: -1
 play-button
   rotate: false
-  xy: 164, 39
-  size: 160, 100
-  orig: 160, 100
-  offset: 0, 0
-  index: -1
-play-down-button
-  rotate: false
-  xy: 488, 104
-  size: 160, 100
-  orig: 160, 100
+  xy: 816, 344
+  size: 160, 160
+  orig: 160, 160
   offset: 0, 0
   index: -1
 quit-button
   rotate: false
-  xy: 650, 104
-  size: 160, 100
-  orig: 160, 100
-  offset: 0, 0
-  index: -1
-quit-down-button
-  rotate: false
-  xy: 812, 104
-  size: 160, 100
-  orig: 160, 100
+  xy: 816, 344
+  size: 160, 160
+  orig: 160, 160
   offset: 0, 0
   index: -1
 resume-button
   rotate: false
-  xy: 326, 2
-  size: 160, 100
-  orig: 160, 100
-  offset: 0, 0
-  index: -1
-resume-down-button
-  rotate: false
-  xy: 488, 2
-  size: 160, 100
-  orig: 160, 100
+  xy: 816, 344
+  size: 160, 160
+  orig: 160, 160
   offset: 0, 0
   index: -1
 reviews-button
   rotate: false
-  xy: 650, 2
-  size: 160, 100
-  orig: 160, 100
+  xy: 816, 344
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+achievements-down-button
+  rotate: false
+  xy: 816, 182
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+leaderboards-down-button
+  rotate: false
+  xy: 816, 182
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+play-down-button
+  rotate: false
+  xy: 816, 182
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+quit-down-button
+  rotate: false
+  xy: 816, 182
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+resume-down-button
+  rotate: false
+  xy: 816, 182
+  size: 160, 160
+  orig: 160, 160
   offset: 0, 0
   index: -1
 reviews-down-button
   rotate: false
-  xy: 812, 2
-  size: 160, 100
-  orig: 160, 100
+  xy: 816, 182
+  size: 160, 160
+  orig: 160, 160
+  offset: 0, 0
+  index: -1
+big-play-button
+  rotate: false
+  xy: 564, 254
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+big-resume-button
+  rotate: false
+  xy: 564, 254
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+big-play-down-button
+  rotate: false
+  xy: 564, 2
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+big-resume-down-button
+  rotate: false
+  xy: 564, 2
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+gameover
+  rotate: false
+  xy: 2, 222
+  size: 560, 100
+  orig: 560, 100
+  offset: 0, 0
+  index: -1
+pause
+  rotate: false
+  xy: 2, 120
+  size: 560, 100
+  orig: 560, 100
   offset: 0, 0
   index: -1
 title
   rotate: false
-  xy: 326, 206
-  size: 565, 35
-  orig: 565, 35
+  xy: 2, 324
+  size: 560, 180
+  orig: 560, 180
   offset: 0, 0
   index: -1

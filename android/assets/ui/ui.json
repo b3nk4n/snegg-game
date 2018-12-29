@@ -1,7 +1,10 @@
 {
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
-    "default-font": {
-      "file": "ui/fonts/oswald-32.fnt"
+    "small-font": {
+      "file": "ui/fonts/cartoon-24.fnt"
+    },
+    "big-font": {
+      "file": "ui/fonts/cartoon-48.fnt"
     }
   },
   "com.badlogic.gdx.graphics.Color": {
@@ -39,6 +42,14 @@
       "up": "resume-button",
       "down": "resume-down-button"
     },
+    "play-big": {
+      "up": "big-play-button",
+      "down": "big-play-down-button"
+    },
+    "resume-big": {
+      "up": "big-resume-button",
+      "down": "big-resume-down-button"
+    },
     "quit": {
       "up": "quit-button",
       "down": "quit-down-button"
@@ -58,7 +69,11 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
     "default": {
-      "font": "default-font",
+      "font": "big-font",
+      "fontColor": "white"
+    },
+    "footer": {
+      "font": "small-font",
       "fontColor": "white"
     }
   }

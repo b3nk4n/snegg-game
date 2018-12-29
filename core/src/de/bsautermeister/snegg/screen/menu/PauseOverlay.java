@@ -26,7 +26,7 @@ public class PauseOverlay extends Table {
     private void init() {
         defaults().pad(20);
 
-        Image titleImage = new Image(getSkin(), RegionNames.TITLE);
+        Image titleImage = new Image(getSkin(), RegionNames.PAUSE);
 
         Table buttonTable = new Table(getSkin());
         buttonTable.defaults().pad(20);

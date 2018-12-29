@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -52,6 +53,7 @@ public class MenuScreen extends ScreenBase {
         boolean canResumeGame = SneggGame.hasSavedData();
         Actor ui = createUI(canResumeGame);
         stage.addActor(ui);
+        stage.setDebugAll(GameConfig.DEBUG_MODE);
     }
 
     private Actor createUI(boolean canResumeGame) {
@@ -62,10 +64,10 @@ public class MenuScreen extends ScreenBase {
         table.setBackground(new TextureRegionDrawable(backgroundRegion));
 
         Image title = new Image(skin, RegionNames.TITLE);
-        table.add(title).row();
+        table.add(title).pad(50).expand().bottom().row();
 
         if (canResumeGame) {
-            Button playButton = new Button(skin, Styles.Button.RESUME);
+            Button playButton = new Button(skin, Styles.Button.RESUME_BIG);
             playButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -74,7 +76,7 @@ public class MenuScreen extends ScreenBase {
             });
             table.add(playButton).row();
         } else {
-            Button playButton = new Button(skin, Styles.Button.PLAY);
+            Button playButton = new Button(skin, Styles.Button.PLAY_BIG);
             playButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -84,8 +86,9 @@ public class MenuScreen extends ScreenBase {
             table.add(playButton).row();
         }
 
-
         if (SneggGame.getGameServiceManager().isSupported()) {
+            Table nestedTable = new Table(skin);
+            nestedTable.defaults().pad(10);
             Button leaderboardsButton = new Button(skin, Styles.Button.LEADERBOARDS);
             leaderboardsButton.addListener(new ClickListener() {
                 @Override
@@ -93,16 +96,7 @@ public class MenuScreen extends ScreenBase {
                     SneggGame.getGameServiceManager().showScore(Leaderboards.Keys.LEADERBOARD);
                 }
             });
-            table.add(leaderboardsButton).row();
-
-            Button achievementsButton = new Button(skin, Styles.Button.ACHIEVEMENTS);
-            achievementsButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    SneggGame.getGameServiceManager().showAchievements();
-                }
-            });
-            table.add(achievementsButton).row();
+            nestedTable.add(leaderboardsButton);
 
             Button reviewsButton = new Button(skin, Styles.Button.REVIEWS);
             reviewsButton.addListener(new ClickListener() {
@@ -111,7 +105,18 @@ public class MenuScreen extends ScreenBase {
                     SneggGame.getGameServiceManager().rateGame();
                 }
             });
-            table.add(reviewsButton).row();
+            nestedTable.add(reviewsButton).padTop(80);
+
+            Button achievementsButton = new Button(skin, Styles.Button.ACHIEVEMENTS);
+            achievementsButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    SneggGame.getGameServiceManager().showAchievements();
+                }
+            });
+            nestedTable.add(achievementsButton).row();
+
+            table.add(nestedTable).row();
         }
 
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
@@ -123,8 +128,24 @@ public class MenuScreen extends ScreenBase {
                     quit();
                 }
             });
-            table.add(quitButton);
+            table.add(quitButton).row();
         }
+
+        Table footerTable = new Table(skin);
+        footerTable.bottom();
+        Label createdByLabel = new Label("Created with love by",
+                skin, Styles.Label.FOOTER);
+        Label createrNameLabel = new Label("Vanessa Kan & Benjamin Sautermeister",
+                skin, Styles.Label.FOOTER);
+        Label musicByLabel = new Label("Music by",
+                skin, Styles.Label.FOOTER);
+        Label artistNameLabel = new Label("Scott Holmes",
+                skin, Styles.Label.FOOTER);
+        footerTable.add(createdByLabel).row();
+        footerTable.add(createrNameLabel).padBottom(16).row();
+        footerTable.add(musicByLabel).row();
+        footerTable.add(artistNameLabel).row();
+        table.add(footerTable).height(400).row();
 
         table.center();
         table.setFillParent(true);

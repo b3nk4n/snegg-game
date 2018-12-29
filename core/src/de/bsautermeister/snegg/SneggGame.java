@@ -4,6 +4,7 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
+import de.bsautermeister.snegg.assets.AssetPaths;
 import de.bsautermeister.snegg.audio.MusicPlayer;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.common.GameServiceManager;
@@ -29,7 +30,7 @@ public class SneggGame extends GameApp {
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
 		musicPlayer = new MusicPlayer();
-		musicPlayer.setup("sounds/game_sound.mp3", GameConfig.MUSIC_VOLUME);
+		musicPlayer.setup(AssetPaths.Music.BACKGROUND_AUDIO, GameConfig.MUSIC_VOLUME);
 
 		gameServiceManager = new GameServiceManager(gameServices);
 

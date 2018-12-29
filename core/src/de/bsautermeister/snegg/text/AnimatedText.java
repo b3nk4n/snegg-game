@@ -27,7 +27,7 @@ public class AnimatedText extends Stage implements Resettable {
 
     public AnimatedText(Viewport viewport, Batch batch, Skin skin, int maxTextLength) {
         super(viewport, batch);
-        this.font = skin.getFont(Styles.Fonts.DEFAULT);
+        this.font = skin.getFont(Styles.Fonts.BIG);
 
         // enable smooth scaling for BitmapFont
         font.getRegion().getTexture()

@@ -3,8 +3,8 @@ package de.bsautermeister.snegg.assets;
 public final class AssetPaths {
 
     public interface Fonts {
-        String UI = "ui/fonts/oswald-32.fnt";
-        String BIG = "ui/fonts/nanum-100.fnt";
+        String SMALL = "ui/fonts/cartoon-24.fnt";
+        String BIG = "ui/fonts/cartoon-48.fnt";
     }
 
     public interface Atlas {
@@ -21,6 +21,10 @@ public final class AssetPaths {
         String LOSE = "sounds/lose.wav";
         String FRUIT = "sounds/fruit.wav";
         String FRUIT_SPAWN = "sounds/spawn.wav";
+    }
+
+    public interface Music {
+        String BACKGROUND_AUDIO = "music/ScottHolmesHappyUkulele.mp3";
     }
 
     private AssetPaths() {}
