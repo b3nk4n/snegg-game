@@ -76,7 +76,7 @@ public class GameScreen extends ScreenBase {
 
             private void playRandomSound(Sound[] sounds) {
                 int rndIdx = MathUtils.random(sounds.length - 1);
-                collectSounds[rndIdx].play();
+                sounds[rndIdx].play();
             }
         };
     }

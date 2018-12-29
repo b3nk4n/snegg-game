@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -51,12 +52,10 @@ public class MenuScreen extends ScreenBase {
         Gdx.input.setInputProcessor(stage);
 
         boolean canResumeGame = SneggGame.hasSavedData();
-        Actor ui = createUI(canResumeGame);
-        stage.addActor(ui);
-        stage.setDebugAll(GameConfig.DEBUG_MODE);
+        createUI(canResumeGame);
     }
 
-    private Actor createUI(boolean canResumeGame) {
+    private void createUI(boolean canResumeGame) {
         Table table = new Table(skin);
         table.defaults().pad(10);
 
@@ -64,7 +63,12 @@ public class MenuScreen extends ScreenBase {
         table.setBackground(new TextureRegionDrawable(backgroundRegion));
 
         Image title = new Image(skin, RegionNames.TITLE);
-        table.add(title).pad(50).expand().bottom().row();
+        Container<Image> titleContainer = new Container<Image>(title);
+        titleContainer.center();
+        titleContainer.top();
+        titleContainer.padTop(100f);
+        titleContainer.setFillParent(true);
+        titleContainer.pack();
 
         if (canResumeGame) {
             Button playButton = new Button(skin, Styles.Button.RESUME_BIG);
@@ -131,6 +135,10 @@ public class MenuScreen extends ScreenBase {
             table.add(quitButton).row();
         }
 
+        table.center();
+        table.setFillParent(true);
+        table.pack();
+
         Table footerTable = new Table(skin);
         footerTable.bottom();
         Label createdByLabel = new Label("Created with love by",
@@ -145,13 +153,15 @@ public class MenuScreen extends ScreenBase {
         footerTable.add(createrNameLabel).padBottom(16).row();
         footerTable.add(musicByLabel).row();
         footerTable.add(artistNameLabel).row();
-        table.add(footerTable).height(400).row();
+        footerTable.center();
+        footerTable.bottom();
+        footerTable.setFillParent(true);
+        footerTable.pack();
 
-        table.center();
-        table.setFillParent(true);
-        table.pack();
-
-        return table;
+        stage.addActor(table);
+        stage.addActor(titleContainer);
+        stage.addActor(footerTable);
+        stage.setDebugAll(GameConfig.DEBUG_MODE);
     }
 
     private void play() {
