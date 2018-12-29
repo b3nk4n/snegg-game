@@ -25,6 +25,9 @@ public final class AssetPaths {
         String WORM_SPAWN1 = "sounds/spawn0.wav";
         String WORM_SPAWN2 = "sounds/spawn1.wav";
         String WORM_SPAWN3 = "sounds/spawn2.wav";
+        String DIGGING1 = "sounds/digging0.wav";
+        String DIGGING2 = "sounds/digging1.wav";
+        String DIGGING3 = "sounds/digging2.wav";
     }
 
     public interface Music {

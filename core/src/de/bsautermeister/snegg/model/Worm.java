@@ -26,10 +26,6 @@ public class Worm extends GameObject implements Collectible {
     @Override
     public void update(float delta) {
         lifetime -= delta;
-
-        if (lifetime <= 0) {
-            collect();
-        }
     }
 
     @Override
@@ -43,6 +39,11 @@ public class Worm extends GameObject implements Collectible {
     @Override
     public boolean isCollected() {
         return collected;
+    }
+
+    @Override
+    public boolean isExpired() {
+        return lifetime <= 0 && !collected;
     }
 
     @Override

@@ -35,6 +35,11 @@ public class Egg extends GameObject implements Collectible {
     }
 
     @Override
+    public boolean isExpired() {
+        return false;
+    }
+
+    @Override
     public void collect() {
         collected = true;
     }

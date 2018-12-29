@@ -5,6 +5,7 @@ public interface GameListener {
     void hitWorm(long score);
     void snakeChanged(int snakeSize, long score);
     void spawnWorm();
+    void escapeWorm();
     void lose();
     void quit();
     void finishGame(long score);

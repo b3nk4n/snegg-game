@@ -4,7 +4,7 @@ import com.badlogic.gdx.utils.Logger;
 
 public final class GameConfig {
     public static final int LOG_LEVEL = Logger.DEBUG;
-    public static final boolean DEBUG_MODE = true;
+    public static final boolean DEBUG_MODE = false;
 
     public static final float WIDTH = 720;
     public static final float HEIGHT = 1280;

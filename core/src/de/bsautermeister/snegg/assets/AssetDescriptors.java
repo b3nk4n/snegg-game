@@ -45,6 +45,12 @@ public final class AssetDescriptors {
                 new AssetDescriptor<Sound>(AssetPaths.Sounds.WORM_SPAWN2, Sound.class);
         AssetDescriptor<Sound> WORM_SPAWN3 =
                 new AssetDescriptor<Sound>(AssetPaths.Sounds.WORM_SPAWN3, Sound.class);
+        AssetDescriptor<Sound> DIGGING1 =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.DIGGING1, Sound.class);
+        AssetDescriptor<Sound> DIGGING2 =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.DIGGING2, Sound.class);
+        AssetDescriptor<Sound> DIGGING3 =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.DIGGING3, Sound.class);
     }
 
     public static final AssetDescriptor[] ALL = {
@@ -52,7 +58,8 @@ public final class AssetDescriptors {
       Atlas.LOADING, Atlas. GAMEPLAY,
       Skins.UI,
       Sounds.COLLECT1, Sounds.COLLECT2, Sounds.COLLECT3, Sounds.COLLECT4,
-      Sounds.LOSE, Sounds.WORM_SPAWN1, Sounds.WORM_SPAWN2, Sounds.WORM_SPAWN3
+      Sounds.LOSE, Sounds.WORM_SPAWN1, Sounds.WORM_SPAWN2, Sounds.WORM_SPAWN3,
+      Sounds.DIGGING1, Sounds.DIGGING2, Sounds.DIGGING3
     };
 
     private AssetDescriptors() {}

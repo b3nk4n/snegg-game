@@ -189,6 +189,12 @@ public class GameController implements Updateable, BinarySerializable {
                 spawnWorm();
             }
             worm.update(delta);
+
+            if (worm.isExpired()) {
+                worm.collect();
+                gameListener.escapeWorm();
+            }
+
         } else if (state.isGameOverPending()) {
             gameOverTimer += delta;
             if (gameOverTimer >= GAME_OVER_WAIT_TIME) {

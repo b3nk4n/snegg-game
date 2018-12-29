@@ -28,6 +28,7 @@ public class GameScreen extends ScreenBase {
     private Sound[] collectSounds;
     private Sound loseSound;
     private Sound[] wormSpawnSounds;
+    private Sound[] wormEscapeSounds;
 
     private boolean navigateToMenuScreen;
 
@@ -57,6 +58,11 @@ public class GameScreen extends ScreenBase {
             @Override
             public void spawnWorm() {
                 playRandomSound(wormSpawnSounds);
+            }
+
+            @Override
+            public void escapeWorm() {
+                playRandomSound(wormEscapeSounds);
             }
 
             @Override
@@ -95,6 +101,11 @@ public class GameScreen extends ScreenBase {
             getAsset(AssetDescriptors.Sounds.WORM_SPAWN1),
             getAsset(AssetDescriptors.Sounds.WORM_SPAWN2),
             getAsset(AssetDescriptors.Sounds.WORM_SPAWN3)
+        };
+        wormEscapeSounds = new Sound[] {
+            getAsset(AssetDescriptors.Sounds.DIGGING1),
+            getAsset(AssetDescriptors.Sounds.DIGGING2),
+            getAsset(AssetDescriptors.Sounds.DIGGING3)
         };
 
         controller = new GameController(gameListener);
