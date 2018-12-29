@@ -17,10 +17,14 @@ public final class AssetPaths {
     }
 
     public interface Sounds {
-        String COIN = "sounds/coin.wav";
+        String COLLECT1 = "sounds/clucking0.wav";
+        String COLLECT2 = "sounds/clucking1.wav";
+        String COLLECT3 = "sounds/clucking2.wav";
+        String COLLECT4 = "sounds/clucking3.wav";
         String LOSE = "sounds/lose.wav";
-        String FRUIT = "sounds/fruit.wav";
-        String FRUIT_SPAWN = "sounds/spawn.wav";
+        String WORM_SPAWN1 = "sounds/spawn0.wav";
+        String WORM_SPAWN2 = "sounds/spawn1.wav";
+        String WORM_SPAWN3 = "sounds/spawn2.wav";
     }
 
     public interface Music {

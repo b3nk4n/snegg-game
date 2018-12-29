@@ -3,12 +3,13 @@ package de.bsautermeister.snegg.screen.game;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.MathUtils;
 
+import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.common.GameServiceManager;
-import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
@@ -24,10 +25,9 @@ public class GameScreen extends ScreenBase {
     private final GameListener gameListener;
     private final GameStats gameStats;
 
-    private Sound coinSound;
+    private Sound[] collectSounds;
     private Sound loseSound;
-    private Sound fruitSound;
-    private Sound spawnFruitSound;
+    private Sound[] wormSpawnSounds;
 
     private boolean navigateToMenuScreen;
 
@@ -40,13 +40,13 @@ public class GameScreen extends ScreenBase {
         gameListener = new GameListener() {
             @Override
             public void hitCoin(long score) {
-                coinSound.play();
+                playRandomSound(collectSounds);
             }
 
             @Override
             public void hitFruit(long score) {
                 gameStats.incrementFruitCounter();
-                fruitSound.play();
+                playRandomSound(collectSounds);
             }
 
             @Override
@@ -56,7 +56,7 @@ public class GameScreen extends ScreenBase {
 
             @Override
             public void spawnFruit() {
-                spawnFruitSound.play();
+                playRandomSound(wormSpawnSounds);
             }
 
             @Override
@@ -73,15 +73,29 @@ public class GameScreen extends ScreenBase {
             public void finishGame(long score) {
                 gameServiceManager.submitScore(score);
             }
+
+            private void playRandomSound(Sound[] sounds) {
+                int rndIdx = MathUtils.random(collectSounds.length - 1);
+                collectSounds[rndIdx].play();
+            }
         };
     }
 
     @Override
     public void show() {
-        coinSound = getAsset(AssetDescriptors.Sounds.COIN);
+
+        collectSounds = new Sound[] {
+            getAsset(AssetDescriptors.Sounds.COLLECT1),
+            getAsset(AssetDescriptors.Sounds.COLLECT2),
+            getAsset(AssetDescriptors.Sounds.COLLECT3),
+            getAsset(AssetDescriptors.Sounds.COLLECT4)
+        };
         loseSound = getAsset(AssetDescriptors.Sounds.LOSE);
-        fruitSound = getAsset(AssetDescriptors.Sounds.FRUIT);
-        spawnFruitSound = getAsset(AssetDescriptors.Sounds.FRUIT_SPAWN);
+        wormSpawnSounds = new Sound[] {
+            getAsset(AssetDescriptors.Sounds.WORM_SPAWN1),
+            getAsset(AssetDescriptors.Sounds.WORM_SPAWN2),
+            getAsset(AssetDescriptors.Sounds.WORM_SPAWN3)
+        };
 
         controller = new GameController(gameListener);
         renderer = new GameRenderer(getBatch(), getAssetManager(), controller);

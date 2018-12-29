@@ -29,21 +29,30 @@ public final class AssetDescriptors {
     }
 
     public interface Sounds {
-        AssetDescriptor<Sound> COIN =
-                new AssetDescriptor<Sound>(AssetPaths.Sounds.COIN, Sound.class);
+        AssetDescriptor<Sound> COLLECT1 =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.COLLECT1, Sound.class);
+        AssetDescriptor<Sound> COLLECT2 =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.COLLECT2, Sound.class);
+        AssetDescriptor<Sound> COLLECT3 =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.COLLECT3, Sound.class);
+        AssetDescriptor<Sound> COLLECT4 =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.COLLECT4, Sound.class);
         AssetDescriptor<Sound> LOSE =
                 new AssetDescriptor<Sound>(AssetPaths.Sounds.LOSE, Sound.class);
-        AssetDescriptor<Sound> FRUIT =
-                new AssetDescriptor<Sound>(AssetPaths.Sounds.FRUIT, Sound.class);
-        AssetDescriptor<Sound> FRUIT_SPAWN =
-                new AssetDescriptor<Sound>(AssetPaths.Sounds.FRUIT_SPAWN, Sound.class);
+        AssetDescriptor<Sound> WORM_SPAWN1 =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.WORM_SPAWN1, Sound.class);
+        AssetDescriptor<Sound> WORM_SPAWN2 =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.WORM_SPAWN2, Sound.class);
+        AssetDescriptor<Sound> WORM_SPAWN3 =
+                new AssetDescriptor<Sound>(AssetPaths.Sounds.WORM_SPAWN3, Sound.class);
     }
 
     public static final AssetDescriptor[] ALL = {
       Fonts.SMALL, Fonts.BIG,
       Atlas.LOADING, Atlas. GAMEPLAY,
       Skins.UI,
-      Sounds.COIN, Sounds.LOSE, Sounds.FRUIT, Sounds.FRUIT_SPAWN
+      Sounds.COLLECT1, Sounds.COLLECT2, Sounds.COLLECT3, Sounds.COLLECT4,
+      Sounds.LOSE, Sounds.WORM_SPAWN1, Sounds.WORM_SPAWN2, Sounds.WORM_SPAWN3
     };
 
     private AssetDescriptors() {}
