@@ -13,7 +13,7 @@ background
   index: -1
 bg-overlay
   rotate: false
-  xy: 134, 193
+  xy: 724, 1343
   size: 5, 5
   orig: 5, 5
   offset: 0, 0
@@ -70,6 +70,13 @@ head-killed
 worm
   rotate: false
   xy: 68, 68
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+worm-hole
+  rotate: false
+  xy: 134, 134
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

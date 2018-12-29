@@ -23,20 +23,20 @@ import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.common.GameState;
-import de.bsautermeister.snegg.GameConfig;
-import de.bsautermeister.snegg.text.AnimatedText;
 import de.bsautermeister.snegg.model.BodyPart;
 import de.bsautermeister.snegg.model.Egg;
-import de.bsautermeister.snegg.model.Worm;
 import de.bsautermeister.snegg.model.GameObject;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
-import de.bsautermeister.snegg.text.StatusTextQueue;
+import de.bsautermeister.snegg.model.Worm;
 import de.bsautermeister.snegg.screen.menu.GameOverOverlay;
 import de.bsautermeister.snegg.screen.menu.PauseOverlay;
+import de.bsautermeister.snegg.text.AnimatedText;
+import de.bsautermeister.snegg.text.StatusTextQueue;
 import de.bsautermeister.snegg.util.GdxUtils;
 import de.bsautermeister.snegg.util.ViewportUtils;
 import de.bsautermeister.snegg.util.debug.DebugCameraController;
@@ -67,6 +67,7 @@ public class GameRenderer implements Disposable {
     private TextureRegion[] headHappyRegions;
     private TextureRegion eggRegion;
     private TextureRegion wormRegion;
+    private TextureRegion wormHoleRegion;
 
     private AnimatedText animatedText;
 
@@ -107,6 +108,7 @@ public class GameRenderer implements Disposable {
         bodyRegion = gamePlayAtlas.findRegion(RegionNames.BODY);
         eggRegion = gamePlayAtlas.findRegion(RegionNames.EGG);
         wormRegion = gamePlayAtlas.findRegion(RegionNames.WORM);
+        wormHoleRegion = gamePlayAtlas.findRegion(RegionNames.WORM_HOLE);
 
         pauseOverlay = new PauseOverlay(skin, controller.getCallback());
         gameOverOverlay = new GameOverOverlay(skin, controller.getCallback());
@@ -166,7 +168,19 @@ public class GameRenderer implements Disposable {
     private void drawWorm() {
         Worm worm = controller.getWorm();
         if (!worm.isCollected()) {
-            batch.draw(wormRegion, worm.getX(), worm.getY(), worm.getWidth(), worm.getHeight());
+            SnakeHead head = controller.getSnake().getHead();
+
+            Vector2 lookDirection = new Vector2(
+                    head.getCenterX() - worm.getCenterX(),
+                    head.getCenterY() - worm.getCenterY());
+
+            batch.draw(wormHoleRegion, worm.getX(), worm.getY(), worm.getWidth(), worm.getHeight());
+            batch.draw(wormRegion,
+                    worm.getX(), worm.getY(),
+                    worm.getWidth() / 2, worm.getHeight() / 2,
+                    worm.getWidth(), worm.getHeight(),
+                    1.0f, 1.0f,
+                    lookDirection.angle() + 90f);
         }
     }
 

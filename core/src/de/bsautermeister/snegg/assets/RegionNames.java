@@ -17,6 +17,7 @@ public class RegionNames {
     public static final String BODY = "body";
     public static final String EGG = "egg";
     public static final String WORM = "worm";
+    public static final String WORM_HOLE = "worm-hole";
 
     public static final String TITLE = "title";
     public static final String PAUSE = "pause";
