@@ -10,6 +10,7 @@ public class RegionNames {
     public static final String LOADING_FRAME_BACKGROUND = "frame-bg";
 
     public static final String BACKGROUND = "background";
+    public static final String BACKGROUND_OVERLAY = "bg-overlay";
     public static final String HEAD = "head";
     public static final String HEAD_KILLED = "head-killed";
     public static final String[] HEAD_HAPPY = {"head-happy1", "head-happy2", "head-happy3"};

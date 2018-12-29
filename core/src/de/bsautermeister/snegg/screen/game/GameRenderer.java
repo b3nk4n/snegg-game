@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -41,6 +42,12 @@ import de.bsautermeister.snegg.util.GdxUtils;
 import de.bsautermeister.snegg.util.ViewportUtils;
 import de.bsautermeister.snegg.util.debug.DebugCameraController;
 
+import static com.badlogic.gdx.graphics.GL20.GL_BLEND;
+import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
+import static com.badlogic.gdx.graphics.GL20.GL_DEPTH_BUFFER_BIT;
+import static com.badlogic.gdx.graphics.GL20.GL_ONE_MINUS_SRC_ALPHA;
+import static com.badlogic.gdx.graphics.GL20.GL_SRC_ALPHA;
+
 public class GameRenderer implements Disposable {
     private static final Logger LOG = new Logger(GameRenderer.class.getName(), GameConfig.LOG_LEVEL);
 
@@ -59,6 +66,7 @@ public class GameRenderer implements Disposable {
     private GlyphLayout layout;
 
     private TextureRegion backgroundRegion;
+    private TextureRegion backgroundOverlayRegion;
     private TextureRegion bodyRegion;
     private TextureRegion headRegion;
     private TextureRegion headKilledRegion;
@@ -96,6 +104,7 @@ public class GameRenderer implements Disposable {
 
         TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.Atlas.GAMEPLAY);
         backgroundRegion = gamePlayAtlas.findRegion(RegionNames.BACKGROUND);
+        backgroundOverlayRegion = gamePlayAtlas.findRegion(RegionNames.BACKGROUND_OVERLAY);
         headRegion = gamePlayAtlas.findRegion(RegionNames.HEAD);
         headKilledRegion = gamePlayAtlas.findRegion(RegionNames.HEAD_KILLED);
         headHappyRegions = new TextureRegion[RegionNames.HEAD_HAPPY.length];
@@ -148,10 +157,17 @@ public class GameRenderer implements Disposable {
         drawCoin();
         drawFruit();
         drawSnake();
+        drawOverlay();
     }
 
     private void drawBackground() {
         batch.draw(backgroundRegion, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
+    }
+
+    private void drawOverlay() {
+        if (controller.getState().isPaused() || controller.getState().isGameOver()) {
+            batch.draw(backgroundOverlayRegion, 0f, 0f, GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT);
+        }
     }
 
     private void drawFruit() {

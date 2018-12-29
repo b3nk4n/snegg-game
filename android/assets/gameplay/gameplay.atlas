@@ -1,68 +1,75 @@
 
 gameplay.png
-size: 1024,512
+size: 1024,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 background
   rotate: false
-  xy: 2, 2
-  size: 800, 480
-  orig: 800, 480
+  xy: 2, 200
+  size: 720, 1280
+  orig: 720, 1280
+  offset: 0, 0
+  index: -1
+bg-overlay
+  rotate: false
+  xy: 134, 193
+  size: 5, 5
+  orig: 5, 5
   offset: 0, 0
   index: -1
 body
   rotate: false
-  xy: 804, 418
+  xy: 2, 134
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 coin
   rotate: false
-  xy: 804, 352
+  xy: 724, 1416
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 head
   rotate: false
-  xy: 870, 418
+  xy: 2, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 head-happy1
   rotate: false
-  xy: 804, 286
+  xy: 68, 134
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 head-happy2
   rotate: false
-  xy: 870, 352
+  xy: 724, 1350
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 head-happy3
   rotate: false
-  xy: 936, 418
+  xy: 790, 1416
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 head-killed
   rotate: false
-  xy: 804, 220
+  xy: 2, 2
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 orange
   rotate: false
-  xy: 870, 286
+  xy: 68, 68
   size: 64, 64
   orig: 64, 64
   offset: 0, 0

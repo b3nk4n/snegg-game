@@ -27,7 +27,6 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
 
     public GameServiceManager(GameServices gameServices) {
         this.gameServices = gameServices;
-        String n = GameServiceManager.class.getName();
         this.prefs = Gdx.app.getPreferences(GameServiceManager.class.getName());
     }
 
