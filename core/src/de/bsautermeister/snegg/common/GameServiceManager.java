@@ -68,17 +68,17 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
         });
     }
 
-    public void checkAndUnlockAchievement(int currentCollectedFruits, int currentSnakeSize) {
+    public void checkAndUnlockAchievement(int currentCollectedWorms, int currentSnakeSize) {
         if (checkAchievementCanBeUnlocked(Achievements.Keys.POLOGNAISE_25, currentSnakeSize, 25)) {
             unlockAchievement(Achievements.Keys.POLOGNAISE_25);
         } else if (checkAchievementCanBeUnlocked(Achievements.Keys.POLOGNAISE_50, currentSnakeSize, 50)) {
             unlockAchievement(Achievements.Keys.POLOGNAISE_50);
-        } else if (checkAchievementCanBeUnlocked(Achievements.Keys.FRUITS_10, currentCollectedFruits, 10)) {
-            unlockAchievement(Achievements.Keys.FRUITS_10);
-        } else if (checkAchievementCanBeUnlocked(Achievements.Keys.FRUITS_25, currentCollectedFruits, 25)) {
-            unlockAchievement(Achievements.Keys.FRUITS_25);
-        } else if (checkAchievementCanBeUnlocked(Achievements.Keys.FRUITS_100, currentCollectedFruits, 100)) {
-            unlockAchievement(Achievements.Keys.FRUITS_100);
+        } else if (checkAchievementCanBeUnlocked(Achievements.Keys.WORMS_10, currentCollectedWorms, 10)) {
+            unlockAchievement(Achievements.Keys.WORMS_10);
+        } else if (checkAchievementCanBeUnlocked(Achievements.Keys.WORMS_25, currentCollectedWorms, 25)) {
+            unlockAchievement(Achievements.Keys.WORMS_25);
+        } else if (checkAchievementCanBeUnlocked(Achievements.Keys.WORMS_100, currentCollectedWorms, 100)) {
+            unlockAchievement(Achievements.Keys.WORMS_100);
         }
     }
 

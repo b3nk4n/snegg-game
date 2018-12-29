@@ -33,13 +33,13 @@ public final class GameConfig {
     public static final float DIFFICULTY_LOWERING_MOVE_TIME_FACTOR = 0.00025f;
 
     public static final float COLLECTIBLE_SIZE = 1f;
-    public static final int COIN_SCORE = 25;
-    public static final int FRUIT_START_SCORE = 100;
-    public static final int FRUIT_END_SCORE = 10;
-    public static final int FRUIT_SPAWN_INTERVAL = 5;
-    public static final float FRUIT_MIN_SPAWN_DELAY = 1f;
-    public static final float FRUIT_MAX_SPAWN_DELAY = 5f;
-    public static final float FRUIT_LIFETIME = 15f;
+    public static final int EGG_SCORE = 25;
+    public static final int WORM_START_SCORE = 100;
+    public static final int WORM_END_SCORE = 10;
+    public static final int WORM_SPAWN_INTERVAL = 5;
+    public static final float WORM_MIN_SPAWN_DELAY = 2f;
+    public static final float WORM_MAX_SPAWN_DELAY = 10f;
+    public static final float WORM_LIFETIME = 10f;
 
     private static final float MARGIN_TOP = 0f;
     private static final float MARGIN_OTHER = 0f;

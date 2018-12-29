@@ -39,23 +39,23 @@ public class GameScreen extends ScreenBase {
 
         gameListener = new GameListener() {
             @Override
-            public void hitCoin(long score) {
+            public void hitEgg(long score) {
                 playRandomSound(collectSounds);
             }
 
             @Override
-            public void hitFruit(long score) {
-                gameStats.incrementFruitCounter();
+            public void hitWorm(long score) {
+                gameStats.incrementWormCounter();
                 playRandomSound(collectSounds);
             }
 
             @Override
             public void snakeChanged(int snakeSize, long score) {
-                gameServiceManager.checkAndUnlockAchievement(gameStats.getFruitCounter(), snakeSize);
+                gameServiceManager.checkAndUnlockAchievement(gameStats.getWormCounter(), snakeSize);
             }
 
             @Override
-            public void spawnFruit() {
+            public void spawnWorm() {
                 playRandomSound(wormSpawnSounds);
             }
 

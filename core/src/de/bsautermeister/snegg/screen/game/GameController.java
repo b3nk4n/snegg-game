@@ -24,9 +24,9 @@ import de.bsautermeister.snegg.input.DirectionGestureDetector;
 import de.bsautermeister.snegg.input.DirectionGestureListener;
 import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.model.BodyPart;
-import de.bsautermeister.snegg.model.Coin;
+import de.bsautermeister.snegg.model.Egg;
 import de.bsautermeister.snegg.model.Direction;
-import de.bsautermeister.snegg.model.Fruit;
+import de.bsautermeister.snegg.model.Worm;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
 import de.bsautermeister.snegg.text.StatusText;
@@ -48,10 +48,10 @@ public class GameController implements Updateable, BinarySerializable {
     private float snakeMoveTimer;
     private Snake snake;
 
-    private int collectedCoins;
-    private Coin coin;
-    private Fruit fruit;
-    private float fruitSpanDelayTimer;
+    private int collectedEggs;
+    private Egg egg;
+    private Worm worm;
+    private float wormSpanDelayTimer;
 
     private GameListener gameListener;
 
@@ -72,8 +72,8 @@ public class GameController implements Updateable, BinarySerializable {
     public GameController(final GameListener gameListener) {
         this.gameListener = gameListener;
         snake = new Snake();
-        coin = new Coin();
-        fruit = new Fruit();
+        egg = new Egg();
+        worm = new Worm();
 
         statusTextQueue = new StatusTextQueue(GameConfig.TEXT_ANIMATION_DURATION);
 
@@ -139,17 +139,17 @@ public class GameController implements Updateable, BinarySerializable {
         state = GameState.PLAYING;
         stateBeforePause = GameState.UNDEFINED;
         gameScore.reset();
-        collectedCoins = 0;
-        fruitSpanDelayTimer = Float.MAX_VALUE;
+        collectedEggs = 0;
+        wormSpanDelayTimer = Float.MAX_VALUE;
         gameTime = 0f;
         currentMoveTime = GameConfig.MOVE_TIME;
         snakeMoveTimer = 0f;
         snake.reset();
         gameOverTimer = 0f;
         hasPublishedHighscoreMessage = false;
-        fruit.reset();
-        coin.reset();
-        spawnCoin();
+        worm.reset();
+        egg.reset();
+        spawnEgg();
         LOG.debug("SNAKE: y: " + snake.getHead().getY());
     }
 
@@ -181,14 +181,14 @@ public class GameController implements Updateable, BinarySerializable {
 
             snake.update(delta);
 
-            coin.update(delta);
+            egg.update(delta);
 
-            fruitSpanDelayTimer -= delta;
-            if (fruitSpanDelayTimer <= 0) {
-                fruitSpanDelayTimer = Float.MAX_VALUE;
-                spawnFruit();
+            wormSpanDelayTimer -= delta;
+            if (wormSpanDelayTimer <= 0) {
+                wormSpanDelayTimer = Float.MAX_VALUE;
+                spawnWorm();
             }
-            fruit.update(delta);
+            worm.update(delta);
         } else if (state.isGameOverPending()) {
             gameOverTimer += delta;
             if (gameOverTimer >= GAME_OVER_WAIT_TIME) {
@@ -204,8 +204,8 @@ public class GameController implements Updateable, BinarySerializable {
 
     private void checkCollision() {
         SnakeHead head = snake.getHead();
-        checkHeadCoinCollision(head, coin);
-        checkHeadFruitCollision(head, fruit);
+        checkHeadEggCollision(head, egg);
+        checkHeadWormCollision(head, worm);
         for (BodyPart bodyPart : snake.getBodyParts()) {
             checkHeadBodyPartCollision(head, bodyPart);
         }
@@ -228,40 +228,40 @@ public class GameController implements Updateable, BinarySerializable {
         }
     }
 
-    private void checkHeadCoinCollision(SnakeHead head, Coin coin) {
+    private void checkHeadEggCollision(SnakeHead head, Egg egg) {
         Rectangle headBounds = head.getCollisionBounds();
-        Rectangle coinBounds = coin.getCollisionBounds();
+        Rectangle eggBounds = egg.getCollisionBounds();
 
-        boolean overlap = Intersector.overlaps(headBounds, coinBounds);
+        boolean overlap = Intersector.overlaps(headBounds, eggBounds);
 
-        if (!coin.isCollected() && overlap) {
+        if (!egg.isCollected() && overlap) {
             snake.insertBodyPart();
             snake.makeHappy();
-            long newScore = gameScore.incrementScore(coin.getScore());
-            spawnCoin();
-            gameListener.hitCoin(newScore);
+            long newScore = gameScore.incrementScore(egg.getScore());
+            spawnEgg();
+            gameListener.hitEgg(newScore);
             snakeChanged(newScore);
 
-            collectedCoins++;
-            if (collectedCoins % GameConfig.FRUIT_SPAWN_INTERVAL == 0) {
-                fruitSpanDelayTimer = MathUtils.random(
-                        GameConfig.FRUIT_MIN_SPAWN_DELAY,
-                        GameConfig.FRUIT_MAX_SPAWN_DELAY);
+            collectedEggs++;
+            if (collectedEggs % GameConfig.WORM_SPAWN_INTERVAL == 0) {
+                wormSpanDelayTimer = MathUtils.random(
+                        GameConfig.WORM_MIN_SPAWN_DELAY,
+                        GameConfig.WORM_MAX_SPAWN_DELAY);
             }
         }
     }
 
-    private void checkHeadFruitCollision(SnakeHead head, Fruit fruit) {
+    private void checkHeadWormCollision(SnakeHead head, Worm worm) {
         Rectangle headBounds = head.getCollisionBounds();
-        Rectangle fruitBounds = fruit.getCollisionBounds();
+        Rectangle wormBounds = worm.getCollisionBounds();
 
-        boolean overlap = Intersector.overlaps(headBounds, fruitBounds);
+        boolean overlap = Intersector.overlaps(headBounds, wormBounds);
 
-        if (!fruit.isCollected() && overlap) {
+        if (!worm.isCollected() && overlap) {
             snake.makeHappy();
-            long newScore = gameScore.incrementScore(fruit.getScore());
-            fruit.collect();
-            gameListener.hitFruit(gameScore.getScore());
+            long newScore = gameScore.incrementScore(worm.getScore());
+            worm.collect();
+            gameListener.hitWorm(gameScore.getScore());
             snakeChanged(newScore);
         }
     }
@@ -326,17 +326,17 @@ public class GameController implements Updateable, BinarySerializable {
         }
     }
 
-    private void spawnCoin() {
+    private void spawnEgg() {
         Vector2 pos = getRandomFreePosition();
-        coin.release();
-        coin.setXY(pos.x, pos.y);
+        egg.release();
+        egg.setXY(pos.x, pos.y);
     }
 
-    private void spawnFruit() {
+    private void spawnWorm() {
         Vector2 pos = getRandomFreePosition();
-        fruit.release();
-        fruit.setXY(pos.x, pos.y);
-        gameListener.spawnFruit();
+        worm.release();
+        worm.setXY(pos.x, pos.y);
+        gameListener.spawnWorm();
     }
 
     private Vector2 getRandomFreePosition() {
@@ -370,11 +370,11 @@ public class GameController implements Updateable, BinarySerializable {
             }
         }
 
-        if (coin.getX() == x && coin.getY() == y) {
+        if (egg.getX() == x && egg.getY() == y) {
             return true;
         }
 
-        if (fruit.getX() == x && fruit.getY() == y) {
+        if (worm.getX() == x && worm.getY() == y) {
             return true;
         }
 
@@ -385,12 +385,12 @@ public class GameController implements Updateable, BinarySerializable {
         return snake;
     }
 
-    public Coin getCoin() {
-        return coin;
+    public Egg getEgg() {
+        return egg;
     }
 
-    public Fruit getFruit() {
-        return fruit;
+    public Worm getWorm() {
+        return worm;
     }
 
     public GameState getState() {
@@ -451,9 +451,9 @@ public class GameController implements Updateable, BinarySerializable {
         out.writeFloat(gameTime);
         out.writeFloat(currentMoveTime);
         out.writeFloat(gameOverTimer);
-        out.writeInt(collectedCoins);
-        coin.write(out);
-        fruit.write(out);
+        out.writeInt(collectedEggs);
+        egg.write(out);
+        worm.write(out);
         snake.write(out);
         gameScore.write(out);
         statusTextQueue.write(out);
@@ -466,9 +466,9 @@ public class GameController implements Updateable, BinarySerializable {
         gameTime = in.readFloat();
         currentMoveTime = in.readFloat();
         gameOverTimer = in.readFloat();
-        collectedCoins = in.readInt();
-        coin.read(in);
-        fruit.read(in);
+        collectedEggs = in.readInt();
+        egg.read(in);
+        worm.read(in);
         snake.read(in);
         gameScore.read(in);
         statusTextQueue.read(in);

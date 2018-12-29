@@ -25,7 +25,7 @@ body
   orig: 64, 64
   offset: 0, 0
   index: -1
-coin
+egg
   rotate: false
   xy: 724, 1416
   size: 64, 64
@@ -67,7 +67,7 @@ head-killed
   orig: 64, 64
   offset: 0, 0
   index: -1
-orange
+worm
   rotate: false
   xy: 68, 68
   size: 64, 64

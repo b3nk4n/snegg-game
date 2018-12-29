@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -30,8 +29,8 @@ import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.text.AnimatedText;
 import de.bsautermeister.snegg.model.BodyPart;
-import de.bsautermeister.snegg.model.Coin;
-import de.bsautermeister.snegg.model.Fruit;
+import de.bsautermeister.snegg.model.Egg;
+import de.bsautermeister.snegg.model.Worm;
 import de.bsautermeister.snegg.model.GameObject;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
@@ -41,12 +40,6 @@ import de.bsautermeister.snegg.screen.menu.PauseOverlay;
 import de.bsautermeister.snegg.util.GdxUtils;
 import de.bsautermeister.snegg.util.ViewportUtils;
 import de.bsautermeister.snegg.util.debug.DebugCameraController;
-
-import static com.badlogic.gdx.graphics.GL20.GL_BLEND;
-import static com.badlogic.gdx.graphics.GL20.GL_COLOR_BUFFER_BIT;
-import static com.badlogic.gdx.graphics.GL20.GL_DEPTH_BUFFER_BIT;
-import static com.badlogic.gdx.graphics.GL20.GL_ONE_MINUS_SRC_ALPHA;
-import static com.badlogic.gdx.graphics.GL20.GL_SRC_ALPHA;
 
 public class GameRenderer implements Disposable {
     private static final Logger LOG = new Logger(GameRenderer.class.getName(), GameConfig.LOG_LEVEL);
@@ -72,8 +65,8 @@ public class GameRenderer implements Disposable {
     private TextureRegion headKilledRegion;
     private TextureRegion currentHappyRegion;
     private TextureRegion[] headHappyRegions;
-    private TextureRegion coinRegion;
-    private TextureRegion orangeRegion;
+    private TextureRegion eggRegion;
+    private TextureRegion wormRegion;
 
     private AnimatedText animatedText;
 
@@ -112,8 +105,8 @@ public class GameRenderer implements Disposable {
             headHappyRegions[i] = gamePlayAtlas.findRegion(RegionNames.HEAD_HAPPY[i]);
         }
         bodyRegion = gamePlayAtlas.findRegion(RegionNames.BODY);
-        coinRegion = gamePlayAtlas.findRegion(RegionNames.COIN);
-        orangeRegion = gamePlayAtlas.findRegion(RegionNames.ORANGE);
+        eggRegion = gamePlayAtlas.findRegion(RegionNames.EGG);
+        wormRegion = gamePlayAtlas.findRegion(RegionNames.WORM);
 
         pauseOverlay = new PauseOverlay(skin, controller.getCallback());
         gameOverOverlay = new GameOverOverlay(skin, controller.getCallback());
@@ -154,8 +147,8 @@ public class GameRenderer implements Disposable {
 
     private void drawGame() {
         drawBackground();
-        drawCoin();
-        drawFruit();
+        drawEgg();
+        drawWorm();
         drawSnake();
         drawOverlay();
     }
@@ -170,17 +163,17 @@ public class GameRenderer implements Disposable {
         }
     }
 
-    private void drawFruit() {
-        Fruit fruit = controller.getFruit();
-        if (!fruit.isCollected()) {
-            batch.draw(orangeRegion, fruit.getX(), fruit.getY(), fruit.getWidth(), fruit.getHeight());
+    private void drawWorm() {
+        Worm worm = controller.getWorm();
+        if (!worm.isCollected()) {
+            batch.draw(wormRegion, worm.getX(), worm.getY(), worm.getWidth(), worm.getHeight());
         }
     }
 
-    private void drawCoin() {
-        Coin coin = controller.getCoin();
-        if (!coin.isCollected()) {
-            batch.draw(coinRegion, coin.getX(), coin.getY(), coin.getWidth(), coin.getHeight());
+    private void drawEgg() {
+        Egg egg = controller.getEgg();
+        if (!egg.isCollected()) {
+            batch.draw(eggRegion, egg.getX(), egg.getY(), egg.getWidth(), egg.getHeight());
         }
     }
 
@@ -380,11 +373,11 @@ public class GameRenderer implements Disposable {
         renderer.setColor(Color.GREEN);
         renderer.rect(headBounds.getX(), headBounds.getY(), headBounds.getWidth(), headBounds.getHeight());
 
-        Coin coin = controller.getCoin();
-        if (!coin.isCollected()) {
-            Rectangle coinBounds = coin.getCollisionBounds();
+        Egg egg = controller.getEgg();
+        if (!egg.isCollected()) {
+            Rectangle eggBounds = egg.getCollisionBounds();
             renderer.setColor(Color.BLUE);
-            renderer.rect(coinBounds.getX(), coinBounds.getY(), coinBounds.getWidth(), coinBounds.getHeight());
+            renderer.rect(eggBounds.getX(), eggBounds.getY(), eggBounds.getWidth(), eggBounds.getHeight());
         }
     }
 
