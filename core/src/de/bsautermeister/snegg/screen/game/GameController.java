@@ -64,6 +64,8 @@ public class GameController implements Updateable, BinarySerializable {
 
     private InputProcessor inputProcessor;
 
+    private boolean gameIsCanced;
+
     private boolean hasPublishedHighscoreMessage;
     StatusTextQueue statusTextQueue;
 
@@ -89,6 +91,7 @@ public class GameController implements Updateable, BinarySerializable {
             @Override
             public void quit() {
                 SneggGame.deleteSavedData();
+                gameIsCanced = true;
                 gameListener.quit();
                 gameListener.finishGame(gameScore.getScore());
             }
@@ -411,7 +414,7 @@ public class GameController implements Updateable, BinarySerializable {
     }
 
     public void save() {
-        if (getState().isAnyGameOverState()) {
+        if (getState().isAnyGameOverState() || gameIsCanced) {
             // don't save the game, when the player is game over, otherwise he would resume the game
             // which would end immediately afterwards
             return;

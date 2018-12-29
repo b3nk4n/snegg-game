@@ -97,9 +97,9 @@ public class LoadingScreen extends ScreenBase {
 
         // Make the background fill the screen
         screenBg.setSize(width, height);
-        // Place the logo in the middle of the screen and 100 px up
+        // Place the logo in the middle of the screen on top of the loading bar
         logo.setX((stage.getWidth() - logo.getWidth()) / 2);
-        logo.setY((stage.getHeight() - logo.getHeight()) / 2 + 100);
+        logo.setY((stage.getHeight() - logo.getHeight()) / 2 + 150);
 
         // Place the loading frame in the middle of the screen
         loadingFrame.setX((stage.getWidth() - loadingFrame.getWidth()) / 2);
