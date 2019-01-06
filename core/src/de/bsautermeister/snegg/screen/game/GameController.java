@@ -14,27 +14,26 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.SneggGame;
-import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.common.GameScore;
 import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.common.ScoreProvider;
 import de.bsautermeister.snegg.common.Updateable;
-import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.input.DirectionGestureDetector;
 import de.bsautermeister.snegg.input.DirectionGestureListener;
 import de.bsautermeister.snegg.listeners.GameListener;
 import de.bsautermeister.snegg.model.BodyPart;
-import de.bsautermeister.snegg.model.Egg;
 import de.bsautermeister.snegg.model.Direction;
-import de.bsautermeister.snegg.model.Worm;
+import de.bsautermeister.snegg.model.Egg;
 import de.bsautermeister.snegg.model.Snake;
 import de.bsautermeister.snegg.model.SnakeHead;
-import de.bsautermeister.snegg.text.StatusText;
-import de.bsautermeister.snegg.text.StatusTextQueue;
+import de.bsautermeister.snegg.model.Worm;
 import de.bsautermeister.snegg.screen.menu.OverlayCallback;
 import de.bsautermeister.snegg.serializer.BinarySerializable;
 import de.bsautermeister.snegg.serializer.BinarySerializer;
+import de.bsautermeister.snegg.text.StatusText;
+import de.bsautermeister.snegg.text.StatusTextQueue;
 
 
 public class GameController implements Updateable, BinarySerializable {
@@ -151,7 +150,12 @@ public class GameController implements Updateable, BinarySerializable {
         worm.reset();
         egg.reset();
         spawnEgg();
-        LOG.debug("SNAKE: y: " + snake.getHead().getY());
+
+        // show tutorial message in case this is the first game ever
+        long onlineHighscore = SneggGame.getGameServiceManager().getOnlineHighscore();
+        if (onlineHighscore == 0) {
+            publishMessage("SWIPE TO CONTROL THE CHICKEN");
+        }
     }
 
     @Override

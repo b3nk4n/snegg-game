@@ -1,5 +1,7 @@
 package de.bsautermeister.snegg.model;
 
+import com.badlogic.gdx.math.MathUtils;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +13,7 @@ public class BodyPart extends SmoothGameObject {
 
     private int eggIndex;
     private int faceIndex;
+    private float rotationOffset; // either 0, 90, 180 or 270;
 
     public BodyPart() {
         super(0.0f, 0.0f); // will be set at runtime
@@ -22,6 +25,8 @@ public class BodyPart extends SmoothGameObject {
     public void reset() {
         super.reset();
         justAdded = true;
+
+        rotationOffset = MathUtils.random(3) * 90f;
     }
 
     public void setIdentity(int eggIndex, int faceIndex) {
@@ -60,6 +65,7 @@ public class BodyPart extends SmoothGameObject {
         out.writeBoolean(justAdded);
         out.writeInt(eggIndex);
         out.writeInt(faceIndex);
+        out.writeFloat(rotationOffset);
     }
 
     @Override
@@ -68,5 +74,6 @@ public class BodyPart extends SmoothGameObject {
         justAdded = in.readBoolean();
         eggIndex = in.readInt();
         faceIndex = in.readInt();
+        rotationOffset = in.readFloat();
     }
 }
