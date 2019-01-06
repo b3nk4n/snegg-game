@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -99,7 +100,9 @@ public class LoadingScreen extends ScreenBase {
         screenBg.setSize(width, height);
         // Place the logo in the middle of the screen on top of the loading bar
         logo.setX((stage.getWidth() - logo.getWidth()) / 2);
-        logo.setY((stage.getHeight() - logo.getHeight()) / 2 + 150);
+        logo.setY((stage.getHeight() - logo.getHeight()) / 2 + 200);
+        logo.setOrigin(Align.center);
+        logo.setScale(0.9f);
 
         // Place the loading frame in the middle of the screen
         loadingFrame.setX((stage.getWidth() - loadingFrame.getWidth()) / 2);

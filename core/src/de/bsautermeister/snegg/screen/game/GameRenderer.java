@@ -60,13 +60,14 @@ public class GameRenderer implements Disposable {
 
     private TextureRegion backgroundRegion;
     private TextureRegion backgroundOverlayRegion;
-    private TextureRegion bodyRegion;
+    private TextureRegion[][] nestsRegions;
     private TextureRegion headRegion;
     private TextureRegion headKilledRegion;
     private TextureRegion currentHappyRegion;
     private TextureRegion[] headHappyRegions;
-    private TextureRegion eggRegion;
+    private TextureRegion[][] eggsRegions;
     private TextureRegion wormRegion;
+    private TextureRegion wormScaredRegion;
     private TextureRegion wormHoleRegion;
 
     private AnimatedText animatedText;
@@ -105,9 +106,20 @@ public class GameRenderer implements Disposable {
         for (int i = 0; i < RegionNames.HEAD_HAPPY.length; ++i) {
             headHappyRegions[i] = gamePlayAtlas.findRegion(RegionNames.HEAD_HAPPY[i]);
         }
-        bodyRegion = gamePlayAtlas.findRegion(RegionNames.BODY);
-        eggRegion = gamePlayAtlas.findRegion(RegionNames.EGG);
+        nestsRegions = new TextureRegion[RegionNames.NESTS.length][RegionNames.NESTS[0].length];
+        for (int i = 0; i < RegionNames.NESTS.length; ++i) {
+            for (int j = 0; j < RegionNames.NESTS[0].length; ++j) {
+                nestsRegions[i][j] = gamePlayAtlas.findRegion(RegionNames.NESTS[i][j]);
+            }
+        }
+        eggsRegions = new TextureRegion[RegionNames.EGGS.length][RegionNames.EGGS[0].length];
+        for (int i = 0; i < RegionNames.EGGS.length; ++i) {
+            for (int j = 0; j < RegionNames.EGGS[0].length; ++j) {
+                eggsRegions[i][j] = gamePlayAtlas.findRegion(RegionNames.EGGS[i][j]);
+            }
+        }
         wormRegion = gamePlayAtlas.findRegion(RegionNames.WORM);
+        wormScaredRegion = gamePlayAtlas.findRegion(RegionNames.WORM_SCARED);
         wormHoleRegion = gamePlayAtlas.findRegion(RegionNames.WORM_HOLE);
 
         pauseOverlay = new PauseOverlay(skin, controller.getCallback());
@@ -175,7 +187,17 @@ public class GameRenderer implements Disposable {
                     head.getCenterY() - worm.getCenterY());
 
             batch.draw(wormHoleRegion, worm.getX(), worm.getY(), worm.getWidth(), worm.getHeight());
-            batch.draw(wormRegion,
+
+            TextureRegion wormTexture;
+            float diffX = head.getX() - worm.getX();
+            float diffY = head.getY() - worm.getY();
+            if (diffX * diffX + diffY * diffY > GameConfig.WORM_SCARED_DISTANCE_SQUARED) {
+                wormTexture = wormRegion;
+            } else {
+                wormTexture = wormScaredRegion;
+            }
+
+            batch.draw(wormTexture,
                     worm.getX(), worm.getY(),
                     worm.getWidth() / 2, worm.getHeight() / 2,
                     worm.getWidth(), worm.getHeight(),
@@ -187,7 +209,9 @@ public class GameRenderer implements Disposable {
     private void drawEgg() {
         Egg egg = controller.getEgg();
         if (!egg.isCollected()) {
-            batch.draw(eggRegion, egg.getX(), egg.getY(), egg.getWidth(), egg.getHeight());
+            batch.draw(
+                    eggsRegions[egg.getEggIndex()][egg.getFaceIndex()],
+                    egg.getX(), egg.getY(), egg.getWidth(), egg.getHeight());
         }
     }
 
@@ -199,7 +223,7 @@ public class GameRenderer implements Disposable {
 
         Array<BodyPart> bodyParts= snake.getBodyParts();
         for (int i = bodyParts.size - 1; i >= 0; --i) {
-            GameObject currentObject = bodyParts.get(i);
+            BodyPart currentObject = bodyParts.get(i);
             GameObject previousObject = (i > 0) ? bodyParts.get(i - 1) : head;
 
             previous.set(previousObject.getCenterX(), previousObject.getCenterY());
@@ -220,15 +244,16 @@ public class GameRenderer implements Disposable {
             float bodyY = currentObject.getY();
             float cloneY = getWorldWrapY(bodyY);
 
+            TextureRegion nestRegion = nestsRegions[currentObject.getEggIndex()][currentObject.getFaceIndex()];
             if (cloneX != bodyX || cloneY != bodyY) {
-                batch.draw(bodyRegion,
+                batch.draw(nestRegion,
                         cloneX, cloneY,
                         currentObject.getWidth() / 2, currentObject.getHeight() / 2,
                         currentObject.getWidth(), currentObject.getHeight(),
                         1f, 1f,
                         rotation);
             }
-            batch.draw(bodyRegion,
+            batch.draw(nestRegion,
                     bodyX, bodyY,
                     currentObject.getWidth() / 2, currentObject.getHeight() / 2,
                     currentObject.getWidth(), currentObject.getHeight(),

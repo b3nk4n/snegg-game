@@ -31,16 +31,6 @@ public class PauseOverlay extends Table {
         Table buttonTable = new Table(getSkin());
         buttonTable.defaults().pad(20);
         buttonTable.center();
-        //buttonTable.setBackground(RegionNames.PANEL);
-
-        Button resumeButton = new Button(getSkin(), Styles.Button.RESUME);
-        resumeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                callback.resume();
-            }
-        });
-        buttonTable.add(resumeButton);
 
         Button quitButton = new Button(getSkin(), Styles.Button.QUIT);
         quitButton.addListener(new ClickListener() {
@@ -50,6 +40,15 @@ public class PauseOverlay extends Table {
             }
         });
         buttonTable.add(quitButton);
+
+        Button resumeButton = new Button(getSkin(), Styles.Button.RESUME);
+        resumeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                callback.resume();
+            }
+        });
+        buttonTable.add(resumeButton);
 
         add(titleImage).row();
         add(buttonTable);

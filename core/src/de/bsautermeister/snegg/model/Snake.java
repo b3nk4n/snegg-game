@@ -15,7 +15,7 @@ import de.bsautermeister.snegg.serializer.BinarySerializable;
 public class Snake implements Resettable, Updateable, BinarySerializable {
     private static final Logger LOG = new Logger(Snake.class.getName(), GameConfig.LOG_LEVEL);
 
-    // why the fuck to we still need this epsilon? why is there a glitch for world-wrap bottom/right without this?
+    // why the fuck do we still need this epsilon? why is there a glitch for world-wrap bottom/right without this?
     private static final float EPS = 0.0025f;
 
     private Direction lastDirection;
@@ -23,7 +23,7 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
 
     /**
      * Defines the maximum time the whole snake should require to move. This is due to the game is
-     * slowly increasing the speed. Conequently, the whole snake movement has to get faster, too.
+     * slowly increasing the speed. Consequently, the whole snake movement has to get faster, too.
      */
     private float maxTotalMoveTime;
 
@@ -45,7 +45,6 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
         direction = Direction.UP;
         lastDirection = Direction.UP;
         head.reset();
-        insertBodyPart();
         maxTotalMoveTime = GameConfig.MOVE_TIME;
     }
 
@@ -124,13 +123,14 @@ public class Snake implements Resettable, Updateable, BinarySerializable {
         return head;
     }
 
-    public void insertBodyPart() {
+    public void insertBodyPart(int eggIndex, int faceIndex) {
         if (length() >= GameConfig.MAX_SNAKE_LENGTH) {
             // ensure the snake is never getting to large for the whole game field
             return;
         }
 
         BodyPart bodyPart = new BodyPart();
+        bodyPart.setIdentity(eggIndex, faceIndex);
 
         float x, y;
         if (bodyParts.size == 0) {

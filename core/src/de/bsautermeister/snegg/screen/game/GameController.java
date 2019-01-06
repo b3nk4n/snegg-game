@@ -15,6 +15,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 import de.bsautermeister.snegg.SneggGame;
+import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.common.GameScore;
 import de.bsautermeister.snegg.common.GameState;
 import de.bsautermeister.snegg.common.ScoreProvider;
@@ -228,7 +229,6 @@ public class GameController implements Updateable, BinarySerializable {
 
         if (Intersector.overlaps(headBounds, bodyBounds)) {
             state = GameState.GAME_OVER_PENDING;
-            //gameScore.saveHighscore();
             gameListener.lose();
             gameListener.finishGame(gameScore.getScore());
         }
@@ -241,7 +241,7 @@ public class GameController implements Updateable, BinarySerializable {
         boolean overlap = Intersector.overlaps(headBounds, eggBounds);
 
         if (!egg.isCollected() && overlap) {
-            snake.insertBodyPart();
+            snake.insertBodyPart(egg.getEggIndex(), egg.getFaceIndex());
             snake.makeHappy();
             long newScore = gameScore.incrementScore(egg.getScore());
             spawnEgg();
@@ -328,12 +328,13 @@ public class GameController implements Updateable, BinarySerializable {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
-            snake.insertBodyPart();
+            snake.insertBodyPart(0, 0);
         }
     }
 
     private void spawnEgg() {
         Vector2 pos = getRandomFreePosition();
+        egg.reset();
         egg.release();
         egg.setXY(pos.x, pos.y);
     }

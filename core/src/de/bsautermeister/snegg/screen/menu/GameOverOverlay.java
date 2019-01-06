@@ -37,15 +37,6 @@ public class GameOverOverlay extends Table {
         buttonTable.defaults().pad(20);
         buttonTable.center();
 
-        Button resumeButton = new Button(getSkin(), Styles.Button.PLAY);
-        resumeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                callback.restart();
-            }
-        });
-        buttonTable.add(resumeButton);
-
         Button quitButton = new Button(getSkin(), Styles.Button.QUIT);
         quitButton.addListener(new ClickListener() {
             @Override
@@ -54,6 +45,15 @@ public class GameOverOverlay extends Table {
             }
         });
         buttonTable.add(quitButton);
+
+        Button resumeButton = new Button(getSkin(), Styles.Button.PLAY);
+        resumeButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                callback.restart();
+            }
+        });
+        buttonTable.add(resumeButton);
 
         add(titleImage).row();
         add(scoreLabel).row();

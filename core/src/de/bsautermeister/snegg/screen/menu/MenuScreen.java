@@ -5,9 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -16,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -66,29 +69,31 @@ public class MenuScreen extends ScreenBase {
         Container<Image> titleContainer = new Container<Image>(title);
         titleContainer.center();
         titleContainer.top();
-        titleContainer.padTop(100f);
+        titleContainer.padTop(75f);
         titleContainer.setFillParent(true);
         titleContainer.pack();
 
+        Button resumeOrPlayButton;
         if (canResumeGame) {
-            Button playButton = new Button(skin, Styles.Button.RESUME_BIG);
-            playButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    play();
-                }
-            });
-            table.add(playButton).row();
+            resumeOrPlayButton = new Button(skin, Styles.Button.RESUME_BIG);
         } else {
-            Button playButton = new Button(skin, Styles.Button.PLAY_BIG);
-            playButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    play();
-                }
-            });
-            table.add(playButton).row();
+            resumeOrPlayButton = new Button(skin, Styles.Button.PLAY_BIG);
         }
+
+        resumeOrPlayButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                play();
+            }
+        });
+        resumeOrPlayButton.setTransform(true);
+        resumeOrPlayButton.setOrigin(Align.center);
+        resumeOrPlayButton.addAction(
+                Actions.forever(
+                        Actions.sequence(
+                                Actions.scaleTo(1.1f, 1.1f, 3.0f, Interpolation.fade),
+                                Actions.scaleTo(1.0f, 1.0f, 3.0f, Interpolation.fade))));
+        table.add(resumeOrPlayButton).row();
 
         if (SneggGame.getGameServiceManager().isSupported()) {
             Table nestedTable = new Table(skin);

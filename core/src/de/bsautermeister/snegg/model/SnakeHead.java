@@ -5,7 +5,7 @@ import de.bsautermeister.snegg.GameConfig;
 public class SnakeHead extends SmoothGameObject {
 
     public SnakeHead() {
-        super(0f, 0f); // will be set at runtime
+        super(GameConfig.INITIAL_TRANS_DURATION, GameConfig.INITIAL_TRANS_DELAY);
         setSize(GameConfig.SNAKE_SIZE, GameConfig.SNAKE_SIZE);
         reset();
     }

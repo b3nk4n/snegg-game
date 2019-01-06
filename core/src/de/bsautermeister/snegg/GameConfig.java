@@ -40,6 +40,7 @@ public final class GameConfig {
     public static final float WORM_MIN_SPAWN_DELAY = 2f;
     public static final float WORM_MAX_SPAWN_DELAY = 10f;
     public static final float WORM_LIFETIME = 10f;
+    public static final float WORM_SCARED_DISTANCE_SQUARED = 2f * 2f;
 
     private static final float MARGIN_TOP = 0f;
     private static final float MARGIN_OTHER = 0f;
