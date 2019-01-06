@@ -72,6 +72,9 @@ public class MenuScreen extends ScreenBase {
         titleContainer.padTop(75f);
         titleContainer.setFillParent(true);
         titleContainer.pack();
+        titleContainer.setTransform(true);
+        titleContainer.setColor(1.0f, 1.0f, 1.0f, 0.0f);
+        titleContainer.addAction(Actions.alpha(1f, 0.5f, Interpolation.fade));
 
         Button resumeOrPlayButton;
         if (canResumeGame) {
@@ -88,17 +91,31 @@ public class MenuScreen extends ScreenBase {
         });
         resumeOrPlayButton.setTransform(true);
         resumeOrPlayButton.setOrigin(Align.center);
+        resumeOrPlayButton.setScale(0f);
         resumeOrPlayButton.addAction(
-                Actions.forever(
-                        Actions.sequence(
-                                Actions.scaleTo(1.1f, 1.1f, 3.0f, Interpolation.fade),
-                                Actions.scaleTo(1.0f, 1.0f, 3.0f, Interpolation.fade))));
+                Actions.sequence(
+                        Actions.parallel(
+                                Actions.alpha(1.0f, 0.5f, Interpolation.fade),
+                                Actions.scaleTo(1.1f, 1.1f, 0.5f, Interpolation.fade)),
+                        Actions.forever(
+                                Actions.sequence(
+                                        Actions.scaleTo(1.0f, 1.0f, 3.0f, Interpolation.fade),
+                                        Actions.scaleTo(1.1f, 1.1f, 3.0f, Interpolation.fade)))
+                ));
         table.add(resumeOrPlayButton).row();
 
         if (SneggGame.getGameServiceManager().isSupported()) {
             Table nestedTable = new Table(skin);
             nestedTable.defaults().pad(10);
             Button leaderboardsButton = new Button(skin, Styles.Button.LEADERBOARDS);
+            leaderboardsButton.setTransform(true);
+            leaderboardsButton.setOrigin(Align.center);
+            leaderboardsButton.setScale(0f);
+            leaderboardsButton.addAction(
+                    Actions.parallel(
+                            Actions.alpha(1.0f, 0.5f, Interpolation.fade),
+                            Actions.scaleTo(1f, 1f, 0.5f, Interpolation.fade))
+            );
             leaderboardsButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -108,6 +125,14 @@ public class MenuScreen extends ScreenBase {
             nestedTable.add(leaderboardsButton);
 
             Button reviewsButton = new Button(skin, Styles.Button.REVIEWS);
+            reviewsButton.setTransform(true);
+            reviewsButton.setOrigin(Align.center);
+            reviewsButton.setScale(0f);
+            reviewsButton.addAction(
+                    Actions.parallel(
+                            Actions.alpha(1.0f, 0.5f, Interpolation.fade),
+                            Actions.scaleTo(1f, 1f, 0.5f, Interpolation.fade))
+            );
             reviewsButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -117,6 +142,15 @@ public class MenuScreen extends ScreenBase {
             nestedTable.add(reviewsButton).padTop(80);
 
             Button achievementsButton = new Button(skin, Styles.Button.ACHIEVEMENTS);
+            achievementsButton.setTransform(true);
+            achievementsButton.setOrigin(Align.center);
+            achievementsButton.setScale(0f);
+            achievementsButton.setColor(1f, 1f, 1f, 0f);
+            achievementsButton.addAction(
+                    Actions.parallel(
+                            Actions.alpha(1.0f, 0.5f, Interpolation.fade),
+                            Actions.scaleTo(1f, 1f, 0.5f, Interpolation.fade))
+            );
             achievementsButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -131,6 +165,15 @@ public class MenuScreen extends ScreenBase {
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
             // only show quit button on Desktop
             Button quitButton = new Button(skin, Styles.Button.QUIT);
+            quitButton.setTransform(true);
+            quitButton.setOrigin(Align.center);
+            quitButton.setScale(0f);
+            quitButton.setColor(1f, 1f, 1f, 0f);
+            quitButton.addAction(
+                    Actions.parallel(
+                            Actions.alpha(1.0f, 0.5f),
+                            Actions.scaleTo(1.1f, 1.1f, 0.5f, Interpolation.fade))
+                    );
             quitButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -162,6 +205,9 @@ public class MenuScreen extends ScreenBase {
         footerTable.bottom();
         footerTable.setFillParent(true);
         footerTable.pack();
+        footerTable.setTransform(true);
+        footerTable.setColor(1.0f, 1.0f, 1.0f, 0.0f);
+        footerTable.addAction(Actions.alpha(1f, 0.5f, Interpolation.fade));
 
         stage.addActor(table);
         stage.addActor(titleContainer);
