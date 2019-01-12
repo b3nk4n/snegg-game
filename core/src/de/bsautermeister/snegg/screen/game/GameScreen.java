@@ -1,5 +1,6 @@
 package de.bsautermeister.snegg.screen.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Sound;
@@ -47,6 +48,7 @@ public class GameScreen extends ScreenBase {
             @Override
             public void hitWorm(long score) {
                 gameStats.incrementWormCounter();
+                Gdx.input.vibrate(250);
                 playRandomSound(collectSounds);
             }
 
@@ -67,6 +69,7 @@ public class GameScreen extends ScreenBase {
 
             @Override
             public void lose() {
+                Gdx.input.vibrate(1000);
                 loseSound.play();
             }
 
