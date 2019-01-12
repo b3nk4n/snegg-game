@@ -322,6 +322,10 @@ public class GameController implements Updateable, BinarySerializable {
     }
 
     private void pauseGame() {
+        if (state == GameState.PAUSED) {
+            return;
+        }
+
         stateBeforePause = state;
         state = GameState.PAUSED;
     }
@@ -430,6 +434,9 @@ public class GameController implements Updateable, BinarySerializable {
             // which would end immediately afterwards
             return;
         }
+
+        // pause the game, so that we resume in the paused state
+        pauseGame();
 
         final FileHandle handle = SneggGame.getSavedDataHandle();
         if (!BinarySerializer.write(this, handle.write(false))) {
