@@ -1,6 +1,7 @@
 package de.bsautermeister.snegg.services;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -23,12 +24,8 @@ public class GooglePlayGameServices implements GameServices {
 
     private final Activity activity;
 
-    private final String storeLink;
-
-    public GooglePlayGameServices(Activity activity, String storeLink) {
+    public GooglePlayGameServices(Activity activity) {
         this.activity = activity;
-
-        this.storeLink = storeLink;
 
         gameHelper = new GameHelper(activity, GameHelper.CLIENT_GAMES);
         gameHelper.enableDebugLog(true);
@@ -106,8 +103,17 @@ public class GooglePlayGameServices implements GameServices {
     @Override
     public void rateGame()
     {
-        if (storeLink != null) {
-            activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(storeLink)));
+        Uri uri = Uri.parse("market://details?id=" + activity.getPackageName());
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // To count with Play market back-stack, in order to get back to our application
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            activity.startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            activity.startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + activity.getPackageName())));
         }
     }
 
