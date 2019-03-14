@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 
 import com.badlogic.gdx.Gdx;
 import com.google.android.gms.games.Games;
@@ -135,25 +136,18 @@ public class GooglePlayGameServices implements GameServices {
     @Override
     public long loadCurrentHighscore(String leaderboardKey)
     {
-        if (isSignedIn()) {
-            Leaderboards.LoadPlayerScoreResult result = Games.Leaderboards.loadCurrentPlayerLeaderboardScore(
-                    gameHelper.getApiClient(),
-                    leaderboardKey,
-                    LeaderboardVariant.TIME_SPAN_ALL_TIME,
-                    LeaderboardVariant.COLLECTION_PUBLIC)
-                    .await(5, TimeUnit.SECONDS);
-
-            if (result != null && result.getStatus().isSuccess() && result.getScore() != null) {
-                return result.getScore().getRawScore();
-            }
-        }
-
-        return UNDEFINED_SCORE;
+        return loadCurrentHighscoreInternal(leaderboardKey, null);
     }
 
     @Override
     public void loadCurrentHighscore(String leaderboardKey, LoadHighscoreCallback callback)
     {
+        loadCurrentHighscoreInternal(leaderboardKey, callback);
+    }
+
+    private long loadCurrentHighscoreInternal(String leaderboardKey, LoadHighscoreCallback callback) {
+        String errorMessage = "Unknown error";
+
         if (isSignedIn()) {
             Leaderboards.LoadPlayerScoreResult result = Games.Leaderboards.loadCurrentPlayerLeaderboardScore(
                     gameHelper.getApiClient(),
@@ -162,12 +156,26 @@ public class GooglePlayGameServices implements GameServices {
                     LeaderboardVariant.COLLECTION_PUBLIC)
                     .await(5, TimeUnit.SECONDS);
 
-            if (result != null && result.getStatus().isSuccess() && result.getScore() != null) {
-                callback.success(result.getScore().getRawScore());
+            if (result != null) {
+              if (result.getStatus().isSuccess() && result.getScore() != null) {
+                  long score = result.getScore().getRawScore();
+
+                  if (callback != null) {
+                      callback.success(score);
+                  }
+
+                  return score;
+              } else {
+                  errorMessage = result.getStatus().getStatusMessage();
+              }
             }
         }
 
-        callback.error();
+        if (callback != null) {
+            callback.error(errorMessage);
+        }
+
+        return UNDEFINED_SCORE;
     }
 
     @Override
@@ -199,50 +207,52 @@ public class GooglePlayGameServices implements GameServices {
     @Override
     public Map<String, Boolean> loadAchievements(boolean forceReload)
     {
-        final Map<String,Boolean> achievementMap = new HashMap<>();
-
-        if (isSignedIn()) {
-            Achievements.LoadAchievementsResult result = Games.Achievements.load(
-                    gameHelper.getApiClient(),
-                    forceReload)
-                    .await(5, TimeUnit.SECONDS);
-
-            if (result != null && result.getStatus().isSuccess() && result.getAchievements() != null) {
-                AchievementBuffer achievementBuffer = result.getAchievements();
-
-                for(Achievement achievement : achievementBuffer) {
-                    achievementMap.put(achievement.getAchievementId(), achievement.getState() == Achievement.STATE_UNLOCKED);
-                }
-                achievementBuffer.release();
-            }
-        }
-
-        return achievementMap;
+        return loadAchievementsInternal(forceReload, null);
     }
 
     @Override
     public void loadAchievements(boolean forceReload, LoadAchievementsCallback callback)
     {
+        loadAchievementsInternal(forceReload, callback);
+    }
+
+    @NonNull
+    private Map<String, Boolean> loadAchievementsInternal(boolean forceReload, LoadAchievementsCallback callback) {
         final Map<String,Boolean> achievementMap = new HashMap<>();
+
+        String errorMessage = "Unknown error";
 
         if (isSignedIn()) {
             Achievements.LoadAchievementsResult result = Games.Achievements.load(
                     gameHelper.getApiClient(),
                     forceReload)
                     .await(5, TimeUnit.SECONDS);
+            if (result != null) {
+                if (result.getStatus().isSuccess() && result.getAchievements() != null) {
+                    AchievementBuffer achievementBuffer = result.getAchievements();
 
-            if (result != null && result.getStatus().isSuccess() && result.getAchievements() != null) {
-                AchievementBuffer achievementBuffer = result.getAchievements();
+                    for(Achievement achievement : achievementBuffer) {
+                        achievementMap.put(achievement.getAchievementId(), achievement.getState() == Achievement.STATE_UNLOCKED);
+                    }
+                    achievementBuffer.release();
 
-                for(Achievement achievement : achievementBuffer) {
-                    achievementMap.put(achievement.getAchievementId(), achievement.getState() == Achievement.STATE_UNLOCKED);
+                    if (callback != null) {
+                        callback.success(achievementMap);
+                    }
+
+                    return achievementMap;
+                } else {
+                    errorMessage = result.getStatus().getStatusMessage();
                 }
-                achievementBuffer.release();
-                callback.success(achievementMap);
             }
+
         }
 
-        callback.error();
+        if (callback != null) {
+            callback.error(errorMessage);
+        }
+
+        return achievementMap;
     }
 
     @Override
