@@ -51,7 +51,7 @@ public class DummyGameServices implements GameServices {
 
     @Override
     public void loadAchievements(boolean forceReload, LoadAchievementsCallback callback) {
-        callback.error();
+        callback.error("Not implemented");
     }
 
     @Override
@@ -66,7 +66,7 @@ public class DummyGameServices implements GameServices {
 
     @Override
     public void loadCurrentHighscore(String leaderboardKey, LoadHighscoreCallback callback) {
-        callback.error();
+        callback.error("Not implemented");
     }
 
     @Override

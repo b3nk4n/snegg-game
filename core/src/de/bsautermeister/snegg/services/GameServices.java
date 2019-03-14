@@ -17,11 +17,11 @@ public interface GameServices extends OnlineServices, PlatformDependentService {
 
     public interface LoadAchievementsCallback {
         void success(Map<String, Boolean> achievementsResult);
-        void error();
+        void error(String message);
     }
 
     public interface LoadHighscoreCallback {
         void success(long scoreResult);
-        void error();
+        void error(String message);
     }
 }

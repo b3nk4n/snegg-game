@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -22,12 +21,12 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.assets.Styles;
 import de.bsautermeister.snegg.common.GameApp;
-import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.game.GameScreen;
 import de.bsautermeister.snegg.screen.transition.ScreenTransitions;
@@ -189,7 +188,11 @@ public class MenuScreen extends ScreenBase {
 
         Table footerTable = new Table(skin);
         footerTable.bottom();
-        Label createdByLabel = new Label("Created with love by",
+
+        String createdByText = SneggGame.getGameServiceManager().hasOnlineAchievements() ?
+                "Created with love by" : "Created with mucho love by";
+
+        Label createdByLabel = new Label(createdByText,
                 skin, Styles.Label.FOOTER);
         Label createrNameLabel = new Label("Vanessa Kan & Benjamin Sautermeister",
                 skin, Styles.Label.FOOTER);

@@ -41,6 +41,8 @@ public class LoadingScreen extends ScreenBase {
 
     private Actor loadingBar;
 
+    private boolean isLoadingFinished = false;
+
     public LoadingScreen(GameApp game) {
         super(game);
     }
@@ -79,9 +81,6 @@ public class LoadingScreen extends ScreenBase {
         stage.addActor(loadingBarHidden);
         stage.addActor(loadingFrame);
         stage.addActor(logo);
-
-        // start loading game service content
-        SneggGame.getGameServiceManager().refresh();
 
         // Add everything to be loaded, for instance:
         loadAssets();
@@ -145,7 +144,13 @@ public class LoadingScreen extends ScreenBase {
         stage.act();
         stage.draw();
 
-        if (getAssetManager().update() && percent > 0.99f) {
+        if (getAssetManager().update() && percent > 0.99f && !isLoadingFinished) {
+            isLoadingFinished = true;
+
+            // loading game service content, as soon as the asses have been loaded, and the user is
+            // logged in
+            SneggGame.getGameServiceManager().refresh();
+
             setScreen(new MenuScreen(getGame()));
         }
     }

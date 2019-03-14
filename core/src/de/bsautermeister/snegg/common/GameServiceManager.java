@@ -48,8 +48,8 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
             }
 
             @Override
-            public void error() {
-                LOG.error("Failed to load user's online highscore");
+            public void error(String message) {
+                LOG.error("Failed to load user's online highscore: " + message);
             }
         });
     }
@@ -62,8 +62,8 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
             }
 
             @Override
-            public void error() {
-                LOG.error("Failed to load online achievements");
+            public void error(String message) {
+                LOG.error("Failed to load online achievements: " + message);
             }
         });
     }
@@ -106,6 +106,10 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
 
     public long getOnlineHighscore() {
         return onlineHighscore;
+    }
+
+    public boolean hasOnlineAchievements () {
+        return onlineAchievements != null ? onlineAchievements.size() > 0 : false;
     }
 
     @Override
