@@ -134,18 +134,24 @@ public class GooglePlayGameServices implements GameServices {
     }
 
     @Override
-    public long loadCurrentHighscore(String leaderboardKey)
+    public long loadCurrentHighscoreAsync(String leaderboardKey)
     {
         return loadCurrentHighscoreInternal(leaderboardKey, null);
     }
 
     @Override
-    public void loadCurrentHighscore(String leaderboardKey, LoadHighscoreCallback callback)
+    public void loadCurrentHighscoreAsync(final String leaderboardKey, final LoadHighscoreCallback callback)
     {
-        loadCurrentHighscoreInternal(leaderboardKey, callback);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadCurrentHighscoreInternal(leaderboardKey, callback);
+            }
+        }).start();
+
     }
 
-    private long loadCurrentHighscoreInternal(String leaderboardKey, LoadHighscoreCallback callback) {
+    private long loadCurrentHighscoreInternal(String leaderboardKey, final LoadHighscoreCallback callback) {
         String errorMessage = "Unknown error";
 
         if (isSignedIn()) {
@@ -158,10 +164,15 @@ public class GooglePlayGameServices implements GameServices {
 
             if (result != null) {
               if (result.getStatus().isSuccess() && result.getScore() != null) {
-                  long score = result.getScore().getRawScore();
+                  final long score = result.getScore().getRawScore();
 
                   if (callback != null) {
-                      callback.success(score);
+                      Gdx.app.postRunnable(new Runnable() {
+                          @Override
+                          public void run() {
+                              callback.success(score);
+                          }
+                      });
                   }
 
                   return score;
@@ -172,7 +183,13 @@ public class GooglePlayGameServices implements GameServices {
         }
 
         if (callback != null) {
-            callback.error(errorMessage);
+            final String finalErrorMessage = errorMessage;
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    callback.error(finalErrorMessage);
+                }
+            });
         }
 
         return UNDEFINED_SCORE;
@@ -205,19 +222,24 @@ public class GooglePlayGameServices implements GameServices {
     }
 
     @Override
-    public Map<String, Boolean> loadAchievements(boolean forceReload)
+    public Map<String, Boolean> loadAchievementsAsync(boolean forceReload)
     {
         return loadAchievementsInternal(forceReload, null);
     }
 
     @Override
-    public void loadAchievements(boolean forceReload, LoadAchievementsCallback callback)
+    public void loadAchievementsAsync(final boolean forceReload, final LoadAchievementsCallback callback)
     {
-        loadAchievementsInternal(forceReload, callback);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadAchievementsInternal(forceReload, callback);
+            }
+        }).start();
     }
 
     @NonNull
-    private Map<String, Boolean> loadAchievementsInternal(boolean forceReload, LoadAchievementsCallback callback) {
+    private Map<String, Boolean> loadAchievementsInternal(boolean forceReload, final LoadAchievementsCallback callback) {
         final Map<String,Boolean> achievementMap = new HashMap<>();
 
         String errorMessage = "Unknown error";
@@ -237,7 +259,12 @@ public class GooglePlayGameServices implements GameServices {
                     achievementBuffer.release();
 
                     if (callback != null) {
-                        callback.success(achievementMap);
+                        Gdx.app.postRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.success(achievementMap);
+                            }
+                        });
                     }
 
                     return achievementMap;
@@ -245,11 +272,16 @@ public class GooglePlayGameServices implements GameServices {
                     errorMessage = result.getStatus().getStatusMessage();
                 }
             }
-
         }
 
         if (callback != null) {
-            callback.error(errorMessage);
+            final String finalErrorMessage = errorMessage;
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    callback.error(finalErrorMessage);
+                }
+            });
         }
 
         return achievementMap;

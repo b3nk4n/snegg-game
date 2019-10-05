@@ -39,7 +39,7 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
         final long highscoreFallback = prefs.getLong(HIGHSCORE_FALLBACK_KEY, GameServices.UNDEFINED_SCORE);
         onlineHighscore = highscoreFallback;
 
-        gameServices.loadCurrentHighscore(Leaderboards.Keys.LEADERBOARD, new GameServices.LoadHighscoreCallback() {
+        gameServices.loadCurrentHighscoreAsync(Leaderboards.Keys.LEADERBOARD, new GameServices.LoadHighscoreCallback() {
             @Override
             public void success(long scoreResult) {
                 onlineHighscore = Math.max(scoreResult, highscoreFallback);
@@ -55,7 +55,7 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
     }
 
     private void refreshAchievements() {
-        gameServices.loadAchievements(false, new GameServices.LoadAchievementsCallback() {
+        gameServices.loadAchievementsAsync(false, new GameServices.LoadAchievementsCallback() {
             @Override
             public void success(Map<String, Boolean> achievementsResult) {
                 onlineAchievements = achievementsResult;

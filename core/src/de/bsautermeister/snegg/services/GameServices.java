@@ -9,11 +9,11 @@ public interface GameServices extends OnlineServices, PlatformDependentService {
     void stop();
 
     void unlockAchievement(String key);
-    Map<String, Boolean> loadAchievements(boolean forceReload);
-    void loadAchievements(boolean forceReload, LoadAchievementsCallback callback);
+    Map<String, Boolean> loadAchievementsAsync(boolean forceReload);
+    void loadAchievementsAsync(boolean forceReload, LoadAchievementsCallback callback);
     void submitScore(String leaderboardKey, long highScore);
-    long loadCurrentHighscore(String leaderboardKey);
-    void loadCurrentHighscore(String leaderboardKey, LoadHighscoreCallback callback);
+    long loadCurrentHighscoreAsync(String leaderboardKey);
+    void loadCurrentHighscoreAsync(String leaderboardKey, LoadHighscoreCallback callback);
 
     public interface LoadAchievementsCallback {
         void success(Map<String, Boolean> achievementsResult);

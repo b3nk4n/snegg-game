@@ -45,12 +45,12 @@ public class DummyGameServices implements GameServices {
     }
 
     @Override
-    public Map<String, Boolean> loadAchievements(boolean forceReload) {
+    public Map<String, Boolean> loadAchievementsAsync(boolean forceReload) {
         return new HashMap<String, Boolean>();
     }
 
     @Override
-    public void loadAchievements(boolean forceReload, LoadAchievementsCallback callback) {
+    public void loadAchievementsAsync(boolean forceReload, LoadAchievementsCallback callback) {
         callback.error("Not implemented");
     }
 
@@ -60,12 +60,12 @@ public class DummyGameServices implements GameServices {
     }
 
     @Override
-    public long loadCurrentHighscore(String leaderboardKey) {
+    public long loadCurrentHighscoreAsync(String leaderboardKey) {
         return UNDEFINED_SCORE;
     }
 
     @Override
-    public void loadCurrentHighscore(String leaderboardKey, LoadHighscoreCallback callback) {
+    public void loadCurrentHighscoreAsync(String leaderboardKey, LoadHighscoreCallback callback) {
         callback.error("Not implemented");
     }
 
