@@ -194,7 +194,7 @@ public class MenuScreen extends ScreenBase {
 
         Label createdByLabel = new Label(createdByText,
                 skin, Styles.Label.FOOTER);
-        Label createrNameLabel = new Label("Vanessa Kan & Benjamin Sautermeister",
+        Label createrNameLabel = new Label("Vanessa & Benjamin Kan",
                 skin, Styles.Label.FOOTER);
         Label musicByLabel = new Label("Music by",
                 skin, Styles.Label.FOOTER);

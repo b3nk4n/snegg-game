@@ -11,6 +11,10 @@ You can download the game from [Google Play Store](https://play.google.com/store
 ### Features
 - Online leaderboards and achievements
 
+## Technical Setup
+
+Use Java 11 to build and run the project.
+
 ## Acknowledgements
 
 Thanks to Scott Holmes for allowing us to use this his song in our non-commercial game. The song is free to use under [FREE Creative Commons License](https://scottholmesmusic.com/licensing/).
