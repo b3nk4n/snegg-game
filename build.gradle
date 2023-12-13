@@ -1,15 +1,14 @@
 buildscript {
-    
 
     repositories {
         mavenLocal()
         mavenCentral()
+        gradlePluginPortal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
-        jcenter()
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.6.4'
+        classpath 'com.android.tools.build:gradle:7.4.2'
     }
 }
 
@@ -20,41 +19,34 @@ allprojects {
     version = '1.0'
     ext {
         appName = "Snegg"
-        gdxVersion = '1.9.10'
-        roboVMVersion = '2.3.8'
-        box2DLightsVersion = '1.4'
-        ashleyVersion = '1.7.0'
-        aiVersion = '1.8.0'
+        gdxVersion = '1.12.1'
+        roboVMVersion = '2.3.20'
+        box2DLightsVersion = '1.5'
+        ashleyVersion = '1.7.4'
+        aiVersion = '1.8.2'
 
-        android_compile_version = 22
-        android_version = '22.0.1'
-        android_min_sdk_version = 9
-
-        appcompat_library_version = '22.2.0'
-        support_library_version = '22.2.0'
-        gms_library_version = '7.8.0'
+        gmsLibraryVersion = '7.8.0' // https://mvnrepository.com/artifact/com.google.android.gms/play-services-games
     }
 
     repositories {
         mavenLocal()
         mavenCentral()
-        jcenter()
         google()
+        gradlePluginPortal()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://jitpack.io" }
     }
 }
 
 project(":desktop") {
-    apply plugin: "java"
-
+    apply plugin: "java-library"
 
     dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-        
+        implementation project(":core")
+        api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+        api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        api "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
     }
 }
 
@@ -76,15 +68,9 @@ project(":android") {
 }
 
 project(":core") {
-    apply plugin: "java"
-
+    apply plugin: "java-library"
 
     dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        
+        api "com.badlogicgames.gdx:gdx:$gdxVersion"
     }
-}
-
-tasks.eclipse.doLast {
-    delete ".project"
 }
