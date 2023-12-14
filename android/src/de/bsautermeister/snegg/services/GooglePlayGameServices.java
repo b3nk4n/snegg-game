@@ -31,13 +31,12 @@ public class GooglePlayGameServices implements GameServices {
         gameHelper = new GameHelper(activity, GameHelper.CLIENT_GAMES);
         gameHelper.enableDebugLog(true);
 
-        GameHelper.GameHelperListener gameHelperListener = new GameHelper.GameHelperListener()
-        {
+        GameHelper.GameHelperListener gameHelperListener = new GameHelper.GameHelperListener() {
             @Override
             public void onSignInFailed(){ }
 
             @Override
-            public void onSignInSucceeded(){ }
+            public void onSignInSucceeded() { }
         };
 
         gameHelper.setup(gameHelperListener);
@@ -51,8 +50,7 @@ public class GooglePlayGameServices implements GameServices {
         gameHelper.onStop();
     }
 
-    public void handleActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void handleActivityResult(int requestCode, int resultCode, Intent data) {
         gameHelper.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -62,10 +60,8 @@ public class GooglePlayGameServices implements GameServices {
     }
 
     @Override
-    public void signIn()
-    {
-        try
-        {
+    public void signIn() {
+        try {
             activity.runOnUiThread(new Runnable()
             {
                 @Override
@@ -75,8 +71,7 @@ public class GooglePlayGameServices implements GameServices {
                 }
             });
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Gdx.app.log("MainActivity", "Log in failed: " + e.getMessage() + ".");
         }
     }
@@ -84,26 +79,16 @@ public class GooglePlayGameServices implements GameServices {
     @Override
     public void signOut()
     {
-        try
-        {
-            activity.runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    gameHelper.signOut();
-                }
-            });
+        try {
+            activity.runOnUiThread(() -> gameHelper.signOut());
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Gdx.app.log("MainActivity", "Log out failed: " + e.getMessage() + ".");
         }
     }
 
     @Override
-    public void rateGame()
-    {
+    public void rateGame() {
         Uri uri = Uri.parse("market://details?id=" + activity.getPackageName());
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         // To count with Play market back-stack, in order to get back to our application
@@ -119,14 +104,12 @@ public class GooglePlayGameServices implements GameServices {
     }
 
     @Override
-    public void unlockAchievement(String key)
-    {
+    public void unlockAchievement(String key) {
         Games.Achievements.unlock(gameHelper.getApiClient(), key);
     }
 
     @Override
-    public void submitScore(String leaderboardKey, long highScore)
-    {
+    public void submitScore(String leaderboardKey, long highScore) {
         if (isSignedIn()) {
             Games.Leaderboards.submitScore(
                     gameHelper.getApiClient(), leaderboardKey, highScore);
@@ -134,20 +117,13 @@ public class GooglePlayGameServices implements GameServices {
     }
 
     @Override
-    public long loadCurrentHighscoreAsync(String leaderboardKey)
-    {
+    public long loadCurrentHighscoreAsync(String leaderboardKey) {
         return loadCurrentHighscoreInternal(leaderboardKey, null);
     }
 
     @Override
-    public void loadCurrentHighscoreAsync(final String leaderboardKey, final LoadHighscoreCallback callback)
-    {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loadCurrentHighscoreInternal(leaderboardKey, callback);
-            }
-        }).start();
+    public void loadCurrentHighscoreAsync(final String leaderboardKey, final LoadHighscoreCallback callback) {
+        new Thread(() -> loadCurrentHighscoreInternal(leaderboardKey, callback)).start();
 
     }
 
@@ -196,8 +172,7 @@ public class GooglePlayGameServices implements GameServices {
     }
 
     @Override
-    public void showAchievements()
-    {
+    public void showAchievements() {
         if (isSignedIn()) {
             activity.startActivityForResult(
                     Games.Achievements.getAchievementsIntent(
@@ -208,8 +183,7 @@ public class GooglePlayGameServices implements GameServices {
     }
 
     @Override
-    public void showScore(String leaderboardKey)
-    {
+    public void showScore(String leaderboardKey) {
         if (isSignedIn()) {
             activity.startActivityForResult(
                     Games.Leaderboards.getLeaderboardIntent(
@@ -222,20 +196,13 @@ public class GooglePlayGameServices implements GameServices {
     }
 
     @Override
-    public Map<String, Boolean> loadAchievementsAsync(boolean forceReload)
-    {
+    public Map<String, Boolean> loadAchievementsAsync(boolean forceReload) {
         return loadAchievementsInternal(forceReload, null);
     }
 
     @Override
-    public void loadAchievementsAsync(final boolean forceReload, final LoadAchievementsCallback callback)
-    {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                loadAchievementsInternal(forceReload, callback);
-            }
-        }).start();
+    public void loadAchievementsAsync(final boolean forceReload, final LoadAchievementsCallback callback) {
+        new Thread(() -> loadAchievementsInternal(forceReload, callback)).start();
     }
 
     @NonNull
