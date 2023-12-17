@@ -2,24 +2,25 @@ package de.bsautermeister.snegg.screen.loading;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class LoadingBar extends Actor {
 
-    Animation animation;
+    Animation<TextureAtlas.AtlasRegion> animation;
     TextureRegion reg;
     float stateTime;
 
-    public LoadingBar(Animation animation) {
+    public LoadingBar(Animation<TextureAtlas.AtlasRegion> animation) {
         this.animation = animation;
-        reg = (TextureRegion) animation.getKeyFrame(0);
+        reg = animation.getKeyFrame(0);
     }
 
     @Override
     public void act(float delta) {
         stateTime += delta;
-        reg = (TextureRegion) animation.getKeyFrame(stateTime);
+        reg = animation.getKeyFrame(stateTime);
     }
 
     @Override

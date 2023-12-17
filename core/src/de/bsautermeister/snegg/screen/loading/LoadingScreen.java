@@ -1,25 +1,24 @@
 package de.bsautermeister.snegg.screen.loading;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.SneggGame;
 import de.bsautermeister.snegg.assets.AssetDescriptors;
 import de.bsautermeister.snegg.assets.AssetPaths;
 import de.bsautermeister.snegg.assets.RegionNames;
 import de.bsautermeister.snegg.common.GameApp;
-import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.menu.MenuScreen;
 import de.bsautermeister.snegg.util.GdxUtils;
@@ -27,7 +26,6 @@ import de.bsautermeister.snegg.util.GdxUtils;
 public class LoadingScreen extends ScreenBase {
     private static final Logger LOGGER = new Logger(LoadingScreen.class.getName(), GameConfig.LOG_LEVEL);
 
-    private Viewport viewport;
     private Stage stage;
 
     private Image logo;
@@ -49,7 +47,7 @@ public class LoadingScreen extends ScreenBase {
 
     @Override
     public void show() {
-        viewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
+        Viewport viewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
 
         // Tell the manager to load assets for the loading screen
         getAssetManager().load(AssetDescriptors.Atlas.LOADING);
@@ -70,7 +68,7 @@ public class LoadingScreen extends ScreenBase {
         loadingBg = new Image(atlas.findRegion(RegionNames.LOADING_FRAME_BACKGROUND));
 
         // Add the loading bar animation
-        Animation anim = new Animation<TextureAtlas.AtlasRegion>(0.05f, atlas.findRegions(RegionNames.LOADING_ANIMATION));
+        Animation<TextureAtlas.AtlasRegion> anim = new Animation<>(0.05f, atlas.findRegions(RegionNames.LOADING_ANIMATION));
         anim.setPlayMode(Animation.PlayMode.LOOP_REVERSED);
         loadingBar = new LoadingBar(anim);
 
@@ -87,57 +85,56 @@ public class LoadingScreen extends ScreenBase {
     }
 
     private void loadAssets() {
-        for (AssetDescriptor assetDescriptor : AssetDescriptors.ALL) {
+        for (AssetDescriptor<?> assetDescriptor : AssetDescriptors.ALL) {
             getAssetManager().load(assetDescriptor);
         }
     }
 
     @Override
     public void resize(int width, int height) {
-        // Set our screen to always be XXX x 480 in size
         stage.getViewport().update(width , height, true);
 
         // Make the background fill the screen
-        screenBg.setSize(width, height);
+        screenBg.setSize(stage.getWidth() , stage.getHeight() );
+
         // Place the logo in the middle of the screen on top of the loading bar
         logo.setX((stage.getWidth() - logo.getWidth()) / 2);
         logo.setY((stage.getHeight() - logo.getHeight()) / 2 + 80);
         logo.setOrigin(Align.center);
-        logo.setScale(0.9f);
 
         // Place the loading frame in the middle of the screen
         loadingFrame.setX((stage.getWidth() - loadingFrame.getWidth()) / 2);
         loadingFrame.setY((stage.getHeight() - loadingFrame.getHeight()) / 2);
 
-        // Place the loading bar at the same spot as the frame, adjusted a few px
+        // Place the loading bar at the same spot as the frame
         loadingBar.setX(loadingFrame.getX() + 15);
         loadingBar.setY(loadingFrame.getY() + 5);
 
-        // Place the image that will hide the bar on top of the bar, adjusted a few px
+        // Place the image that will hide the bar on top of the bar
         loadingBarHidden.setX(loadingBar.getX() + 35);
         loadingBarHidden.setY(loadingBar.getY() - 3);
         // The start position and how far to move the hidden loading bar
-        startX = loadingBarHidden.getX();
-        endX = 440;
+        startX = loadingFrame.getX();
+        endX = loadingFrame.getWidth() - loadingBarHidden.getWidth();
 
         // The rest of the hidden bar
-        loadingBg.setSize(450, 50);
+        loadingBg.setSize(loadingFrame.getWidth(), loadingFrame.getHeight());
         loadingBg.setX(loadingBarHidden.getX() + 30);
-        loadingBg.setY(loadingBarHidden.getY() + 3);
+        loadingBg.setY(loadingBarHidden.getY() - 2);
     }
 
     @Override
     public void render(float delta) {
         // Clear the screen
-        GdxUtils.clearScreen();
+        GdxUtils.clearScreen(Color.BLACK);
 
         // Interpolate the percentage to make it more smooth
         percent = Interpolation.linear.apply(percent, getAssetManager().getProgress(), 0.05f);
 
         // Update positions (and size) to match the percentage
         loadingBarHidden.setX(startX + endX * percent);
-        loadingBg.setX(loadingBarHidden.getX() + 30);
-        loadingBg.setWidth(450 - 450 * percent);
+        loadingBg.setX(loadingBarHidden.getX() + loadingBarHidden.getWidth());
+        loadingBg.setWidth((loadingFrame.getWidth() - loadingBarHidden.getWidth()) * (1 - percent));
         loadingBg.invalidate();
 
         // Show the loading screen
