@@ -14,8 +14,6 @@ buildscript {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:${appcompatLibraryVersion}"
-    implementation "com.android.support:support-v4:${supportLibraryVersion}"
     api "com.google.android.gms:play-services-games:${gmsLibraryVersion}"
     api "com.google.android.gms:play-services-plus:${gmsLibraryVersion}"
     api "com.google.android.gms:play-services-appstate:${gmsLibraryVersion}"
