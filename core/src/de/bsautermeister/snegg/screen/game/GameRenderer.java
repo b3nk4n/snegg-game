@@ -14,13 +14,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bsautermeister.snegg.GameConfig;
@@ -42,8 +41,6 @@ import de.bsautermeister.snegg.util.ViewportUtils;
 import de.bsautermeister.snegg.util.debug.DebugCameraController;
 
 public class GameRenderer implements Disposable {
-    private static final Logger LOG = new Logger(GameRenderer.class.getName(), GameConfig.LOG_LEVEL);
-
     private static final float PADDING = 24.0f;
 
     private final SpriteBatch batch;
@@ -69,10 +66,7 @@ public class GameRenderer implements Disposable {
     private TextureRegion wormRegion;
     private TextureRegion wormScaredRegion;
     private TextureRegion wormHoleRegion;
-
     private AnimatedText animatedText;
-
-    private Skin skin;
     private Stage hudStage;
     private PauseOverlay pauseOverlay;
     private GameOverOverlay gameOverOverlay;
@@ -88,13 +82,13 @@ public class GameRenderer implements Disposable {
 
     private void init() {
         camera = new OrthographicCamera();
-        viewport = new FitViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
-        hudViewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
+        viewport = new StretchViewport(GameConfig.WORLD_WIDTH, GameConfig.WORLD_HEIGHT, camera);
+        hudViewport = new StretchViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
         renderer = new ShapeRenderer();
 
         font = assetManager.get(AssetDescriptors.Fonts.BIG);
 
-        skin = assetManager.get(AssetDescriptors.Skins.UI);
+        Skin skin = assetManager.get(AssetDescriptors.Skins.UI);
         layout = new GlyphLayout();
 
         TextureAtlas gamePlayAtlas = assetManager.get(AssetDescriptors.Atlas.GAMEPLAY);
@@ -125,7 +119,7 @@ public class GameRenderer implements Disposable {
         pauseOverlay = new PauseOverlay(skin, controller.getCallback());
         gameOverOverlay = new GameOverOverlay(skin, controller.getCallback());
 
-        animatedText = new AnimatedText(hudViewport, batch, skin , 32);
+        animatedText = new AnimatedText(hudViewport, batch, skin, 32);
 
         hudStage = new Stage(hudViewport, batch);
         hudStage.addActor(pauseOverlay);
@@ -138,19 +132,22 @@ public class GameRenderer implements Disposable {
         debugCameraController.setStartPosition(GameConfig.WORLD_CENTER_X, GameConfig.WORLD_CENTER_Y);
     }
 
-    public void render(float delta) {
+    public void render(float delta, boolean usedInFbo) {
         debugCameraController.handleDebugInput(delta);
         debugCameraController.applyTo(camera);
 
         GdxUtils.clearScreen();
 
-        renderGame();
+        renderGame(usedInFbo);
         renderHud();
         renderDebug();
     }
 
-    private void renderGame() {
-        viewport.apply();
+    private void renderGame(boolean usedInFbo) {
+        if (!usedInFbo) {
+            viewport.apply();
+        }
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         
@@ -202,7 +199,7 @@ public class GameRenderer implements Disposable {
                     worm.getWidth() / 2, worm.getHeight() / 2,
                     worm.getWidth(), worm.getHeight(),
                     1.0f, 1.0f,
-                    lookDirection.angle() + 90f);
+                    lookDirection.angleDeg() + 90f);
         }
     }
 
@@ -215,8 +212,8 @@ public class GameRenderer implements Disposable {
         }
     }
 
-    private Vector2 previous = new Vector2();
-    private Vector2 current = new Vector2();
+    private final Vector2 previous = new Vector2();
+    private final Vector2 current = new Vector2();
     private void drawSnake() {
         Snake snake = controller.getSnake();
         SnakeHead head = snake.getHead();
@@ -229,10 +226,10 @@ public class GameRenderer implements Disposable {
             previous.set(previousObject.getCenterX(), previousObject.getCenterY());
             current.set(currentObject.getCenterX(), currentObject.getCenterY());
             Vector2 direction = previous.sub(current);
-            float rotation = direction.angle() + 90f;
+            float rotation = direction.angleDeg() + 90f;
 
             if (direction.len2() >= 2f) {
-                // hack: if a bodypart is more than 1 unit away, it must be on the other side,
+                // hack: if a body part is more than 1 unit away, it must be on the other side,
                 //       so we simply rotate it by 180° to point into the right direction
                 rotation += 180f;
             }
@@ -431,14 +428,6 @@ public class GameRenderer implements Disposable {
     public void dispose() {
         renderer.dispose();
         font.dispose();
-    }
-
-    public static Vector3 projectToWorld(float x, float y) {
-        return camera.unproject(new Vector3(x, y, 0));
-    }
-
-    public static Vector3 projectToScreen(float x, float y) {
-        return camera.project(new Vector3(x, y, 0));
     }
 
     public InputProcessor getInputProcessor() {

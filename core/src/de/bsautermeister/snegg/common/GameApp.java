@@ -27,8 +27,8 @@ public abstract class GameApp implements ApplicationListener {
         setScreen(screen, null);
     }
 
-    public void setScreen(ScreenBase screen, ScreenTransition transtion) {
-        transitionContext.setScreen(screen, transtion);
+    public void setScreen(ScreenBase screen, ScreenTransition transition) {
+        transitionContext.setScreen(screen, transition);
     }
 
     public ScreenBase getScreen() {

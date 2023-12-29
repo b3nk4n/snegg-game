@@ -30,7 +30,7 @@ public class TransitionContext {
         this.batch = batch;
     }
 
-    public void setScreen(ScreenBase screen, ScreenTransition transtion) {
+    public void setScreen(ScreenBase screen, ScreenTransition transition) {
         if (transitionInProgress) {
             return;
         }
@@ -39,7 +39,7 @@ public class TransitionContext {
             return;
         }
 
-        this.transtion = transtion;
+        this.transtion = transition;
 
         // screen size
         int width = Gdx.graphics.getWidth();
@@ -94,13 +94,13 @@ public class TransitionContext {
         // render current screen to buffer
         if (currentScreen != null) {
             currentFrameBuffer.begin();
-            currentScreen.render(0);
+            currentScreen.render(0, true);
             currentFrameBuffer.end();
         }
 
         // render next screen to buffer
         nextFrameBuffer.begin();
-        nextScreen.render(0);
+        nextScreen.render(0,true);
         nextFrameBuffer.end();
     }
 
@@ -134,6 +134,7 @@ public class TransitionContext {
         Texture nextScreenTexture = nextFrameBuffer.getColorBufferTexture();
 
         // render transition to screen
+        transitionViewport.apply();
         batch.setProjectionMatrix(transitionViewport.getCamera().combined);
         transtion.render(batch, currentScreenTexture, nextScreenTexture, progress);
     }

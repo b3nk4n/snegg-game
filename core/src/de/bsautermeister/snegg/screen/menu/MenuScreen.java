@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import de.bsautermeister.snegg.GameConfig;
@@ -46,7 +47,7 @@ public class MenuScreen extends ScreenBase {
 
     @Override
     public void show() {
-        viewport = new FitViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
+        viewport = new StretchViewport(GameConfig.HUD_WIDTH, GameConfig.HUD_HEIGHT);
         stage = new Stage(viewport, getBatch());
         skin = getAsset(AssetDescriptors.Skins.UI);
         atlas = getAsset(AssetDescriptors.Atlas.GAMEPLAY);
@@ -234,7 +235,16 @@ public class MenuScreen extends ScreenBase {
 
     @Override
     public void render(float delta) {
+        render(delta, false);
+    }
+
+    @Override
+    public void render(float delta, boolean usedInFbo) {
         GdxUtils.clearScreen();
+
+        if (!usedInFbo) {
+            stage.getViewport().apply();
+        }
 
         stage.act();
         stage.draw();

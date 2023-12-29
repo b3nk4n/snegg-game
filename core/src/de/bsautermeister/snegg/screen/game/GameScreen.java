@@ -123,11 +123,17 @@ public class GameScreen extends ScreenBase {
 
     @Override
     public void render(float delta) {
+        render(delta, false);
+    }
+
+    @Override
+    public void render(float delta, boolean usedInFbo) {
         controller.update(delta);
-        renderer.render(delta);
+        renderer.render(delta, usedInFbo);
 
         if (navigateToMenuScreen) {
-            setScreen(new MenuScreen(getGame()), ScreenTransitions.FADE);
+            // TODO somehow screen transitions don't work here when going back to the main menu
+            setScreen(new MenuScreen(getGame()));
         }
     }
 
