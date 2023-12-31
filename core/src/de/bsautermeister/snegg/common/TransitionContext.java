@@ -8,26 +8,29 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import de.bsautermeister.snegg.FrameBufferManager;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.transition.ScreenTransition;
 
 public class TransitionContext {
 
     private float transitionTime;
-    private ScreenTransition transtion;
+    private ScreenTransition transition;
     private boolean renderedToTexture;
     private boolean transitionInProgress;
-    private Viewport transitionViewport;
+    private final Viewport transitionViewport;
     private ScreenBase currentScreen;
     private ScreenBase nextScreen;
+    private final FrameBufferManager frameBufferManager;
     private FrameBuffer currentFrameBuffer;
     private FrameBuffer nextFrameBuffer;
 
-    private SpriteBatch batch;
+    private final SpriteBatch batch;
 
     TransitionContext(SpriteBatch batch) {
         transitionViewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         this.batch = batch;
+        frameBufferManager = new FrameBufferManager();
     }
 
     public void setScreen(ScreenBase screen, ScreenTransition transition) {
@@ -39,7 +42,7 @@ public class TransitionContext {
             return;
         }
 
-        this.transtion = transition;
+        this.transition = transition;
 
         // screen size
         int width = Gdx.graphics.getWidth();
@@ -93,19 +96,19 @@ public class TransitionContext {
     private void renderScreensToTexture() {
         // render current screen to buffer
         if (currentScreen != null) {
-            currentFrameBuffer.begin();
+            frameBufferManager.begin(currentFrameBuffer);
             currentScreen.render(0, true);
-            currentFrameBuffer.end();
+            frameBufferManager.end();
         }
 
         // render next screen to buffer
-        nextFrameBuffer.begin();
+        frameBufferManager.begin(nextFrameBuffer);
         nextScreen.render(0,true);
-        nextFrameBuffer.end();
+        frameBufferManager.end();
     }
 
     private void updateTransition() {
-        if (transtion == null || isTransitionFinished()) {
+        if (transition == null || isTransitionFinished()) {
             if (currentScreen != null) {
                 currentScreen.hide();
             }
@@ -116,7 +119,7 @@ public class TransitionContext {
             // switch screens and reset
             currentScreen = nextScreen;
             nextScreen = null;
-            transtion = null;
+            transition = null;
             currentFrameBuffer.dispose();
             currentFrameBuffer = null;
             nextFrameBuffer.dispose();
@@ -136,7 +139,7 @@ public class TransitionContext {
         // render transition to screen
         transitionViewport.apply();
         batch.setProjectionMatrix(transitionViewport.getCamera().combined);
-        transtion.render(batch, currentScreenTexture, nextScreenTexture, progress);
+        transition.render(batch, currentScreenTexture, nextScreenTexture, progress);
     }
 
     public void resize(int width, int height) {
@@ -191,6 +194,6 @@ public class TransitionContext {
     }
 
     private float getDuration() {
-        return transtion == null ? 0 : transtion.getDuration();
+        return transition == null ? 0 : transition.getDuration();
     }
 }

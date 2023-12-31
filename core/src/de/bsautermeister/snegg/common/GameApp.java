@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import de.bsautermeister.snegg.screen.ScreenBase;
 import de.bsautermeister.snegg.screen.transition.ScreenTransition;
 
-
 public abstract class GameApp implements ApplicationListener {
     private AssetManager assetManager;
     private SpriteBatch batch;
