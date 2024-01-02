@@ -67,9 +67,13 @@ public class GameServiceManager {
         gameServiceClient.fetchAchievements(new IFetchAchievementsResponseListener() {
             @Override
             public void onFetchAchievementsResponse(Array<IAchievement> achievements) {
-                for (IAchievement achievement : achievements) {
-                    // TODO do we need to map the ID back to the unspecific key here once we use the mappers?
-                    onlineAchievements.put(achievement.getAchievementId(), achievement.isUnlocked());
+                for (String achievementKey : Achievements.ALL_KEYS) {
+                    for (IAchievement achievement : achievements) {
+                        // Check via IAchievement#isAchievementId is needed to respect the key mappings
+                        if (achievement.isAchievementId(achievementKey)) {
+                            onlineAchievements.put(achievementKey, achievement.isUnlocked());
+                        }
+                    }
                 }
             }
         });
@@ -116,7 +120,7 @@ public class GameServiceManager {
     }
 
     public boolean hasOnlineAchievements () {
-        return onlineAchievements != null ? onlineAchievements.size() > 0 : false;
+        return onlineAchievements.size() > 0;
     }
 
     public boolean isSupported() {

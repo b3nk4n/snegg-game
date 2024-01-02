@@ -8,7 +8,8 @@ import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 
-import de.bsautermeister.snegg.listeners.RateGameListener;
+import de.bsautermeister.snegg.service.GpgsAchievementMapper;
+import de.bsautermeister.snegg.service.GpgsLeaderboardMapper;
 import de.golfgl.gdxgamesvcs.GpgsClient;
 
 public class AndroidLauncher extends AndroidApplication {
@@ -20,8 +21,8 @@ public class AndroidLauncher extends AndroidApplication {
 		config.useImmersiveMode = true;
 
 		GpgsClient gpgsClient = new GpgsClient()
-				//.setGpgsLeaderboardIdMapper(new GpgsLeaderboardMapper())
-				//.setGpgsAchievementIdMapper(new GpgsAchievementMapper())
+				.setGpgsLeaderboardIdMapper(new GpgsLeaderboardMapper())
+				.setGpgsAchievementIdMapper(new GpgsAchievementMapper())
 				.initialize(this, false);
 
 		initialize(new SneggGame(gpgsClient, this::rateInPlayStore), config);
