@@ -8,8 +8,9 @@ import de.bsautermeister.snegg.assets.AssetPaths;
 import de.bsautermeister.snegg.audio.MusicPlayer;
 import de.bsautermeister.snegg.common.GameApp;
 import de.bsautermeister.snegg.common.GameServiceManager;
+import de.bsautermeister.snegg.listeners.RateGameListener;
 import de.bsautermeister.snegg.screen.loading.LoadingScreen;
-import de.bsautermeister.snegg.services.GameServices;
+import de.golfgl.gdxgamesvcs.IGameServiceClient;
 
 public class SneggGame extends GameApp {
 
@@ -17,11 +18,10 @@ public class SneggGame extends GameApp {
 
 	private static MusicPlayer musicPlayer;
 
-	private final GameServices gameServices;
 	private static GameServiceManager gameServiceManager;
 
-	public SneggGame(GameServices gameServices) {
-		this.gameServices = gameServices;
+	public SneggGame(IGameServiceClient gameServiceClient, RateGameListener rateGameListener) {
+		super(gameServiceClient, rateGameListener);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class SneggGame extends GameApp {
 		musicPlayer = new MusicPlayer();
 		musicPlayer.setup(AssetPaths.Music.BACKGROUND_AUDIO, GameConfig.MUSIC_VOLUME);
 
-		gameServiceManager = new GameServiceManager(gameServices);
+		gameServiceManager = new GameServiceManager(getGameServiceClient());
 
 		setScreen(new LoadingScreen(this));
 	}

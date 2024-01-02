@@ -2,6 +2,7 @@ package de.bsautermeister.snegg.common;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 
 import java.util.HashMap;
@@ -9,24 +10,34 @@ import java.util.Map;
 
 import de.bsautermeister.snegg.GameConfig;
 import de.bsautermeister.snegg.services.Achievements;
-import de.bsautermeister.snegg.services.GameServices;
 import de.bsautermeister.snegg.services.Leaderboards;
-import de.bsautermeister.snegg.services.OnlineServices;
-import de.bsautermeister.snegg.services.PlatformDependentService;
+import de.golfgl.gdxgamesvcs.GameServiceException;
+import de.golfgl.gdxgamesvcs.IGameServiceClient;
+import de.golfgl.gdxgamesvcs.MockGameServiceClient;
+import de.golfgl.gdxgamesvcs.NoGameServiceClient;
+import de.golfgl.gdxgamesvcs.achievement.IAchievement;
+import de.golfgl.gdxgamesvcs.achievement.IFetchAchievementsResponseListener;
+import de.golfgl.gdxgamesvcs.leaderboard.IFetchLeaderBoardEntriesResponseListener;
+import de.golfgl.gdxgamesvcs.leaderboard.ILeaderBoardEntry;
 
-public class GameServiceManager implements OnlineServices, PlatformDependentService {
+public class GameServiceManager {
     private static final Logger LOG = new Logger(GameServiceManager.class.getSimpleName(), GameConfig.LOG_LEVEL);
 
     private static final String HIGHSCORE_FALLBACK_KEY = "highscore";
+    private static final long UNDEFINED_SCORE = -1;
 
-    private final GameServices gameServices;
+    private final IGameServiceClient gameServiceClient;
 
     private final Preferences prefs;
-    private long onlineHighscore = GameServices.UNDEFINED_SCORE;
-    private Map<String, Boolean> onlineAchievements = new HashMap<String, Boolean>();
+    private long onlineHighscore = UNDEFINED_SCORE;
 
-    public GameServiceManager(GameServices gameServices) {
-        this.gameServices = gameServices;
+    /**
+     * Map of unlocked achievements by specific-key.
+     */
+    private final Map<String, Boolean> onlineAchievements = new HashMap<>();
+
+    public GameServiceManager(IGameServiceClient gameServiceClient) {
+        this.gameServiceClient = gameServiceClient;
         this.prefs = Gdx.app.getPreferences(GameServiceManager.class.getName());
     }
 
@@ -36,34 +47,30 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
     }
 
     private void refreshUserHighscore() {
-        final long highscoreFallback = prefs.getLong(HIGHSCORE_FALLBACK_KEY, GameServices.UNDEFINED_SCORE);
+        final long highscoreFallback = prefs.getLong(HIGHSCORE_FALLBACK_KEY, UNDEFINED_SCORE);
         onlineHighscore = highscoreFallback;
 
-        gameServices.loadCurrentHighscoreAsync(Leaderboards.Keys.LEADERBOARD, new GameServices.LoadHighscoreCallback() {
-            @Override
-            public void success(long scoreResult) {
-                onlineHighscore = Math.max(scoreResult, highscoreFallback);
-
-                LOG.debug("Loaded users online highscore: " + onlineHighscore);
-            }
-
-            @Override
-            public void error(String message) {
-                LOG.error("Failed to load user's online highscore: " + message);
-            }
-        });
+        gameServiceClient.fetchLeaderboardEntries(Leaderboards.Keys.LEADERBOARD, 1, true,
+                new IFetchLeaderBoardEntriesResponseListener() {
+                    @Override
+                    public void onLeaderBoardResponse(Array<ILeaderBoardEntry> leaderBoard) {
+                        if (!leaderBoard.isEmpty()) {
+                            ILeaderBoardEntry entry = leaderBoard.get(0);
+                            int scoreValue = (int) entry.getSortValue();
+                            onlineHighscore = Math.max(scoreValue, highscoreFallback);
+                        }
+                    }
+                });
     }
 
     private void refreshAchievements() {
-        gameServices.loadAchievementsAsync(false, new GameServices.LoadAchievementsCallback() {
+        gameServiceClient.fetchAchievements(new IFetchAchievementsResponseListener() {
             @Override
-            public void success(Map<String, Boolean> achievementsResult) {
-                onlineAchievements = achievementsResult;
-            }
-
-            @Override
-            public void error(String message) {
-                LOG.error("Failed to load online achievements: " + message);
+            public void onFetchAchievementsResponse(Array<IAchievement> achievements) {
+                for (IAchievement achievement : achievements) {
+                    // TODO do we need to map the ID back to the unspecific key here once we use the mappers?
+                    onlineAchievements.put(achievement.getAchievementId(), achievement.isUnlocked());
+                }
             }
         });
     }
@@ -90,11 +97,11 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
 
     private void unlockAchievement(String achievementKey) {
         onlineAchievements.put(achievementKey, true);
-        gameServices.unlockAchievement(achievementKey);
+        gameServiceClient.unlockAchievement(achievementKey);
     }
 
     public void submitScore(long score) {
-        gameServices.submitScore(Leaderboards.Keys.LEADERBOARD, score);
+        gameServiceClient.submitToLeaderboard(Leaderboards.Keys.LEADERBOARD, score, null);
 
         if (score > onlineHighscore) {
             onlineHighscore = score;
@@ -112,39 +119,29 @@ public class GameServiceManager implements OnlineServices, PlatformDependentServ
         return onlineAchievements != null ? onlineAchievements.size() > 0 : false;
     }
 
-    @Override
     public boolean isSupported() {
-        return gameServices.isSupported();
+        return !(gameServiceClient instanceof MockGameServiceClient || gameServiceClient instanceof NoGameServiceClient);
     }
 
-
-    @Override
-    public void signIn() {
-        gameServices.signIn();
-    }
-
-    @Override
-    public boolean isSignedIn() {
-        return gameServices.isSignedIn();
-    }
-
-    @Override
-    public void signOut() {
-        gameServices.signOut();
-    }
-
-    @Override
-    public void rateGame() {
-        gameServices.rateGame();
-    }
-
-    @Override
     public void showAchievements() {
-        gameServices.showAchievements();
+        try {
+            gameServiceClient.showAchievements();
+        } catch (GameServiceException.NoSessionException nse) {
+            LOG.info("Signing in");
+            gameServiceClient.logIn();
+        } catch (GameServiceException e) {
+            LOG.error("Showing achievements failed", e);
+        }
     }
 
-    @Override
     public void showScore(String leaderboardKey) {
-        gameServices.showScore(leaderboardKey);
+        try {
+            gameServiceClient.showLeaderboards(leaderboardKey);
+        } catch (GameServiceException.NoSessionException nse) {
+            LOG.info("Signing in");
+            gameServiceClient.logIn();
+        } catch (GameServiceException e) {
+            LOG.error("Showing leaderboards failed", e);
+        }
     }
 }

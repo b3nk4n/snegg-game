@@ -136,7 +136,9 @@ public class MenuScreen extends ScreenBase {
             reviewsButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    SneggGame.getGameServiceManager().rateGame();
+                    if (getGame().getRateGameListener() != null) {
+                        getGame().getRateGameListener().rateGame();
+                    }
                 }
             });
             nestedTable.add(reviewsButton).padTop(80);

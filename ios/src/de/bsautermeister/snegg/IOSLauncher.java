@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
 
-import de.bsautermeister.snegg.services.DummyGameServices;
+import de.golfgl.gdxgamesvcs.NoGameServiceClient;
 
 public class IOSLauncher extends IOSApplication.Delegate {
     @Override
@@ -14,7 +14,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         config.orientationLandscape = false;
         config.orientationPortrait = true;
-        return new IOSApplication(new SneggGame(new DummyGameServices()), config);
+        return new IOSApplication(new SneggGame(new NoGameServiceClient(), null), config);
     }
 
     public static void main(String[] argv) {
