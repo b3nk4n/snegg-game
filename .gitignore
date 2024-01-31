@@ -127,3 +127,4 @@ Thumbs.db
 
 ## Game Specific
 *.dat
+/android/release/*
